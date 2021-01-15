@@ -14,6 +14,9 @@ namespace MeetingCalender
         private IEnumerable<Attendee> _attendees;
         private readonly IList<TimeSlot> _availableMeetingSlots;
 
+        /// <summary>
+        /// Gets the list of <see cref="Attendees"/>.
+        /// </summary>
         public IEnumerable<Attendee> Attendees => _attendees;
 
         /// <summary>
@@ -23,12 +26,12 @@ namespace MeetingCalender
         /// <param name="endTime">The upper bound of allowed meeting hours.</param>
         public Calender(DateTime startTime, DateTime endTime)
         {
-            _startTime = new DateTime(startTime.Year, startTime.Month, startTime.Day, startTime.Hour, startTime.Minute, 0);
-            _endTime = new DateTime(endTime.Year, endTime.Month, endTime.Day, endTime.Hour, endTime.Minute, 0);
+            _startTime = startTime.CalibrateToMinutes();
+            _endTime = endTime.CalibrateToMinutes();
 
             if (_startTime >= _endTime)
                 throw new ArgumentException("The allowed meeting hours end time must be greater than the start time.", nameof(endTime));
-
+            
             _availableMeetingSlots = new List<TimeSlot>();
         }
 
@@ -65,11 +68,20 @@ namespace MeetingCalender
         /// Returns the first time slot available for the requested meeting duration.
         /// </summary>
         /// <param name="meetingDuration">The meeting duration in minutes.</param>
-        /// <returns>A time slot</returns>
+        /// <returns>A time slot or null</returns>
         public TimeSlot GetFirstAvailableSlot(int meetingDuration)
         {
             var availableMeetingSlots = GetAllAvailableTimeSlots();
-            return availableMeetingSlots.OrderBy(o => o.AvailableDuration).FirstOrDefault(t => t.AvailableDuration >= meetingDuration);
+
+            var meetingSlots = availableMeetingSlots.ToArray();
+            if (meetingSlots.Any())
+            {
+                return meetingSlots.Length == 1 ? 
+                    meetingSlots.First() : 
+                    meetingSlots.OrderBy(o => o.AvailableDuration).ThenBy(i=>i.StartTime)
+                        .FirstOrDefault(t => t.AvailableDuration >= meetingDuration);
+            }
+            return null;
         }
 
         /// <summary>
@@ -78,24 +90,40 @@ namespace MeetingCalender
         /// <returns>A list of <see cref="TimeSlot"/></returns>
         public IEnumerable<TimeSlot> GetAllAvailableTimeSlots()
         {
-            var meetingHoursByMinutes = GetTimeSeriesByMinutes(_startTime, _endTime);
+            //Do not calculate available meeting slots for past - Performance improvement
+            if (_endTime <= DateTime.Now.CalibrateToMinutes())
+            {
+                return _availableMeetingSlots;
+            }
+
+            //Calculate the availability only from NOW onwards - Performance improvement
+            var startTime = (_startTime >= DateTime.Now) ? _startTime : DateTime.Now.CalibrateToMinutes();
+            var meetingHoursByMinutes = GetTimeSeriesByMinutes(startTime, _endTime);
 
             //Map the meeting timings for each attendees
             if (_attendees != null && _attendees.Any())
             {
-                _attendees.AsParallel().ForEach(attendee =>
+                _attendees.AsParallel().ForAll(attendee =>
                 {
-                    attendee.MeetingInfo.AsParallel().ForEach(scheduledMeeting =>
+                    attendee.MeetingInfo.AsParallel().ForAll(scheduledMeeting =>
                     {
-                        var timeSeries = GetTimeSeriesByMinutes(scheduledMeeting.StartTime, scheduledMeeting.EndTime, true);
-                        timeSeries.AsParallel().ForEach(item =>
+                        // if the meeting is not over yet, then only include in the calculation - Performance improvement
+                        if (scheduledMeeting.EndTime > DateTime.Now)
                         {
-                            if (meetingHoursByMinutes.TryGetValue(item.Key, out bool prevValue))
+                            //Consider the scheduled meeting durations within the time frame of Calender- Performance improvement
+                            var timeSeries = GetTimeSeriesByMinutes(
+                                (scheduledMeeting.StartTime >= _startTime) ? scheduledMeeting.StartTime : _startTime,
+                                (scheduledMeeting.EndTime <= _endTime) ? scheduledMeeting.EndTime : _endTime
+                                    , true);
+                            timeSeries.AsParallel().ForAll(item =>
                             {
-                                //Use OR operator to merge all meeting duration of attendees
-                                meetingHoursByMinutes.TryUpdate(item.Key, prevValue || item.Value, prevValue);
-                            }
-                        });
+                                if (meetingHoursByMinutes.TryGetValue(item.Key, out bool prevValue))
+                                {
+                                    //Use OR operator to merge all meeting duration of attendees
+                                    meetingHoursByMinutes.TryUpdate(item.Key, prevValue || item.Value, prevValue);
+                                }
+                            });
+                        }
                     });
                 });
 
@@ -106,7 +134,8 @@ namespace MeetingCalender
             }
             else
             {
-                _availableMeetingSlots.Add(new TimeSlot(meetingHoursByMinutes.First().Key, meetingHoursByMinutes.Last().Key));
+                var meetingHoursByMinutesList = meetingHoursByMinutes.OrderBy(i => i.Key).ToList();
+                _availableMeetingSlots.Add(new TimeSlot(meetingHoursByMinutesList.First().Key, meetingHoursByMinutesList.Last().Key));
             }
 
             return _availableMeetingSlots;

@@ -1,4 +1,5 @@
 ﻿using System;
+using MeetingCalender.Extensions;
 
 namespace MeetingCalender
 {
@@ -6,7 +7,14 @@ namespace MeetingCalender
     {
         private readonly DateTime _startTime;
         private readonly DateTime _endTime;
+
+        /// <summary>
+        /// Gets the start time of a <see cref="TimeSlot"/>.
+        /// </summary>
         public DateTime StartTime => _startTime;
+        /// <summary>
+        /// Gets the end time of a <see cref="TimeSlot"/>.
+        /// </summary>
         public DateTime EndTime => _endTime;
 
         public int AvailableDuration => (int)EndTime.Subtract(StartTime).TotalMinutes;
@@ -18,8 +26,8 @@ namespace MeetingCalender
         /// <param name="endTime">The <see cref="DateTime"/> where the time slot ends.</param>
         public TimeSlot(DateTime startTime, DateTime endTime)
         {
-            _startTime = new DateTime(startTime.Year, startTime.Month, startTime.Day, startTime.Hour, startTime.Minute, 0);
-            _endTime = new DateTime(endTime.Year, endTime.Month, endTime.Day, endTime.Hour, endTime.Minute, 0);
+            _startTime = startTime.CalibrateToMinutes();
+            _endTime = endTime.CalibrateToMinutes();
 
             if (_startTime > _endTime) throw new ArgumentException("The End time must be greater than the start time.", nameof(endTime));
         }
