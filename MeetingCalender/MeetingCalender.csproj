@@ -9,8 +9,8 @@
     <RepositoryUrl>https://github.com/AntaryamiBasuri/MeetingCalender</RepositoryUrl>
     <Authors>AntaryamiBasuri</Authors>
     <RepositoryType>public</RepositoryType>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageLicenseExpression>LGPL</PackageLicenseExpression>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>MeetingCalender</PackageTags>
     <PackageReleaseNotes>Dev version</PackageReleaseNotes>
     <AssemblyVersion>0.2.0.0</AssemblyVersion>
