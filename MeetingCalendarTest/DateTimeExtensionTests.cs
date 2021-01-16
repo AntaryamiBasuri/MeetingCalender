@@ -1,8 +1,8 @@
-﻿using MeetingCalender.Extensions;
+﻿using MeetingCalendar.Extensions;
 using NUnit.Framework;
 using System;
 
-namespace MeetingCalenderTest
+namespace MeetingCalendarTest
 {
     [TestFixture]
     [Author("A Basuri", "a.basuri2002@gmail.com")]
@@ -53,7 +53,7 @@ namespace MeetingCalenderTest
 
             Assert.That(actual, Is.EqualTo(expected));
             Assert.That(DateTime.Compare(actual, expected), Is.Zero);
-            Assert.That(actual.Kind, Is.EqualTo(actual.Kind));
+            Assert.That(actual.Kind, Is.EqualTo(expected.Kind));
         }
     }
 }

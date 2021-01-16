@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * Author: Antaryami Basuri
+ * Email: a.basuri2002@gmail.com
+ */
 
-namespace MeetingCalender
+using System.Collections.Generic;
+
+namespace MeetingCalendar
 {
     public class Attendee
     {

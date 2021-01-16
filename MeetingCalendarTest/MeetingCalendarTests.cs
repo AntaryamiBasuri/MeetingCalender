@@ -1,22 +1,21 @@
-using MeetingCalender;
-using MeetingCalender.Extensions;
-using MeetingCalender.Interfaces;
+using MeetingCalendar;
+using MeetingCalendar.Extensions;
+using MeetingCalendar.Interfaces;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MeetingCalenderTest
+namespace MeetingCalendarTest
 {
     [TestFixture]
     [Author("A Basuri", "a.basuri2002@gmail.com")]
-    public class MeetingCalenderTests
+    public class MeetingCalendarTests
     {
-        private ICalender _meetingCalender;
+        private ICalendar _meetingCalender;
         [SetUp]
         public void Setup()
         {
-
             //Get the allowed meeting hours
             var startTime = DateTime.Now;
             var endTime = startTime.AddHours(3);
@@ -35,7 +34,7 @@ namespace MeetingCalenderTest
                 })
             };
 
-            _meetingCalender = new Calender(startTime, endTime, attendeesWithMeetingTimings);
+            _meetingCalender = new Calendar(startTime, endTime, attendeesWithMeetingTimings);
         }
 
         [Test]
@@ -55,7 +54,7 @@ namespace MeetingCalenderTest
         [Test]
         public void AddNewAttendeesToMeeting()
         {
-            var meetingCalender = new Calender(DateTime.Now, DateTime.Now.AddDays(1));
+            var meetingCalender = new Calendar(DateTime.Now, DateTime.Now.AddDays(1));
             meetingCalender.AddAttendees(new List<Attendee>()
             {
                 new Attendee("Person4", new List<MeetingInfo>
@@ -64,8 +63,9 @@ namespace MeetingCalenderTest
                     new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
                 })
             });
-
+            
             Assert.That(meetingCalender.Attendees.Count(), Is.EqualTo(1));
+            Assert.That(meetingCalender.Attendees.First().AttendeeName, Is.EqualTo("Person4"));
         }
 
         [Test]
@@ -84,6 +84,25 @@ namespace MeetingCalenderTest
         }
 
         [Test]
+        public void AppendNewAttendeesToMeeting_When_AttendeeList_Is_Null()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                _meetingCalender.AddAttendees(null);
+                _meetingCalender.AppendAttendees(new List<Attendee>()
+                {
+                    new Attendee("Person3", new List<MeetingInfo>
+                    {
+                        new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
+                        new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
+                    })
+                });
+
+            });
+            Assert.That(_meetingCalender.Attendees.Count(), Is.EqualTo(1));
+        }
+
+        [Test]
         public void TimeSlotFor200MinutesNotAvailableForRequestedDuration()
         {
             var availableSlot = _meetingCalender.GetFirstAvailableSlot(200);
@@ -95,7 +114,7 @@ namespace MeetingCalenderTest
         {
             var startTime = DateTime.Now;
             var endTime = startTime.AddHours(8);
-            var meetingCalender = new Calender(startTime, endTime, new List<Attendee>
+            var meetingCalender = new Calendar(startTime, endTime, new List<Attendee>
             {
                 new Attendee("Person1", new List<MeetingInfo>
                 {
@@ -113,7 +132,7 @@ namespace MeetingCalenderTest
             var endTime = DateTime.Now;
             var startTime = endTime.AddHours(-8);
 
-            var meetingCalender = new Calender(startTime, endTime, new List<Attendee>());
+            var meetingCalender = new Calendar(startTime, endTime, new List<Attendee>());
 
             var availableSlot = meetingCalender.GetFirstAvailableSlot(1);
             Assert.That(availableSlot, Is.Null);
@@ -123,7 +142,7 @@ namespace MeetingCalenderTest
         public void AvailableTimeSlotShouldBeGreaterThanEqualsToCurrentTime()
         {
             var now = DateTime.Now;
-            var meetingCalender = new Calender(now.AddHours(-1), now.AddHours(1));
+            var meetingCalender = new Calendar(now.AddHours(-1), now.AddHours(1));
 
             meetingCalender.AddAttendees(new List<Attendee>());
             var firstAvailableTimeSlot = meetingCalender.GetFirstAvailableSlot(10);
@@ -139,7 +158,7 @@ namespace MeetingCalenderTest
             var meetingStartTime = DateTime.Now.AddMinutes(-15);
             var meetingEndTime = DateTime.Now.AddMinutes(15);
 
-            var meetingCalender = new Calender(startTime, endTime, new List<Attendee>
+            var meetingCalender = new Calendar(startTime, endTime, new List<Attendee>
             {
                 new Attendee("Person1", new List<MeetingInfo>
                 {

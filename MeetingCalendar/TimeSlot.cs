@@ -1,7 +1,12 @@
-﻿using System;
-using MeetingCalender.Extensions;
+﻿/*
+ * Author: Antaryami Basuri
+ * Email: a.basuri2002@gmail.com
+ */
 
-namespace MeetingCalender
+using System;
+using MeetingCalendar.Extensions;
+
+namespace MeetingCalendar
 {
     public class TimeSlot
     {
@@ -17,7 +22,7 @@ namespace MeetingCalender
         /// </summary>
         public DateTime EndTime => _endTime;
 
-        public int AvailableDuration => (int)EndTime.Subtract(StartTime).TotalMinutes;
+        public double AvailableDuration => EndTime.Subtract(StartTime).TotalMinutes;
 
         /// <summary>
         /// Initializes a new instance of <see cref="TimeSlot"/>

@@ -1,6 +1,11 @@
-﻿using System;
+﻿/*
+ * Author: Antaryami Basuri
+ * Email: a.basuri2002@gmail.com
+ */
 
-namespace MeetingCalender
+using System;
+
+namespace MeetingCalendar
 {
     public class MeetingInfo: TimeSlot
     {

@@ -1,50 +1,54 @@
-﻿using MeetingCalender.Extensions;
-using MeetingCalender.Interfaces;
+﻿/*
+ * Author: Antaryami Basuri
+ * Email: a.basuri2002@gmail.com
+ */
+
+using MeetingCalendar.Extensions;
+using MeetingCalendar.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MeetingCalender
+namespace MeetingCalendar
 {
-    public class Calender : ICalender
+    public class Calendar : ICalendar
     {
         private readonly DateTime _startTime;
         private readonly DateTime _endTime;
-        private IEnumerable<Attendee> _attendees;
         private readonly IList<TimeSlot> _availableMeetingSlots;
 
         /// <summary>
         /// Gets the list of <see cref="Attendees"/>.
         /// </summary>
-        public IEnumerable<Attendee> Attendees => _attendees;
+        public IEnumerable<Attendee> Attendees { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="Calender"/>
+        /// Initializes a new instance of <see cref="Calendar"/>
         /// </summary>
         /// <param name="startTime">The lower bound of allowed meeting hours.</param>
         /// <param name="endTime">The upper bound of allowed meeting hours.</param>
-        public Calender(DateTime startTime, DateTime endTime)
+        public Calendar(DateTime startTime, DateTime endTime)
         {
             _startTime = startTime.CalibrateToMinutes();
             _endTime = endTime.CalibrateToMinutes();
 
             if (_startTime >= _endTime)
                 throw new ArgumentException("The allowed meeting hours end time must be greater than the start time.", nameof(endTime));
-            
+
             _availableMeetingSlots = new List<TimeSlot>();
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="Calender"/>
+        /// Initializes a new instance of <see cref="Calendar"/>
         /// </summary>
         /// <param name="startTime">The lower bound of allowed meeting hours.</param>
         /// <param name="endTime">The upper bound of allowed meeting hours.</param>
         /// <param name="attendees">Attendees along with their <see cref="MeetingInfo"/></param>
-        public Calender(DateTime startTime, DateTime endTime, IEnumerable<Attendee> attendees)
+        public Calendar(DateTime startTime, DateTime endTime, IEnumerable<Attendee> attendees)
             : this(startTime, endTime)
         {
-            _attendees = attendees;
+            Attendees = attendees;
         }
 
         /// <summary>
@@ -52,7 +56,7 @@ namespace MeetingCalender
         /// </summary>
         public void AddAttendees(IEnumerable<Attendee> attendees)
         {
-            _attendees = attendees;
+            Attendees = attendees;
         }
 
         /// <summary>
@@ -61,7 +65,7 @@ namespace MeetingCalender
         /// <param name="additionalAttendees"></param>
         public void AppendAttendees(IEnumerable<Attendee> additionalAttendees)
         {
-            _attendees = _attendees.Concat(additionalAttendees);
+            Attendees = Attendees == null ? additionalAttendees : Attendees.Concat(additionalAttendees);
         }
 
         /// <summary>
@@ -76,9 +80,9 @@ namespace MeetingCalender
             var meetingSlots = availableMeetingSlots.ToArray();
             if (meetingSlots.Any())
             {
-                return meetingSlots.Length == 1 ? 
-                    meetingSlots.First() : 
-                    meetingSlots.OrderBy(o => o.AvailableDuration).ThenBy(i=>i.StartTime)
+                return meetingSlots.Length == 1 ?
+                    meetingSlots.First() :
+                    meetingSlots.OrderBy(o => o.AvailableDuration).ThenBy(i => i.StartTime)
                         .FirstOrDefault(t => t.AvailableDuration >= meetingDuration);
             }
             return null;
@@ -90,7 +94,7 @@ namespace MeetingCalender
         /// <returns>A list of <see cref="TimeSlot"/></returns>
         public IEnumerable<TimeSlot> GetAllAvailableTimeSlots()
         {
-            //Do not calculate available meeting slots for past - Performance improvement
+            //Do not calculate available meeting slots for past meetings - Performance improvement
             if (_endTime <= DateTime.Now.CalibrateToMinutes())
             {
                 return _availableMeetingSlots;
@@ -100,17 +104,17 @@ namespace MeetingCalender
             var startTime = (_startTime >= DateTime.Now) ? _startTime : DateTime.Now.CalibrateToMinutes();
             var meetingHoursByMinutes = GetTimeSeriesByMinutes(startTime, _endTime);
 
-            //Map the meeting timings for each attendees
-            if (_attendees != null && _attendees.Any())
+            //Map the meeting timings of each attendees
+            if (Attendees != null && Attendees.Any())
             {
-                _attendees.AsParallel().ForAll(attendee =>
+                Attendees.AsParallel().ForAll(attendee =>
                 {
                     attendee.MeetingInfo.AsParallel().ForAll(scheduledMeeting =>
                     {
                         // if the meeting is not over yet, then only include in the calculation - Performance improvement
                         if (scheduledMeeting.EndTime > DateTime.Now)
                         {
-                            //Consider the scheduled meeting durations within the time frame of Calender- Performance improvement
+                            //Consider the scheduled meeting durations within the time frame of Calendar- Performance improvement
                             var timeSeries = GetTimeSeriesByMinutes(
                                 (scheduledMeeting.StartTime >= _startTime) ? scheduledMeeting.StartTime : _startTime,
                                 (scheduledMeeting.EndTime <= _endTime) ? scheduledMeeting.EndTime : _endTime
@@ -170,7 +174,7 @@ namespace MeetingCalender
             }
         }
 
-        private ConcurrentDictionary<DateTime, bool> GetTimeSeriesByMinutes(DateTime seriesStartTime, DateTime seriesEndTime, bool isScheduled = false)
+        private static ConcurrentDictionary<DateTime, bool> GetTimeSeriesByMinutes(DateTime seriesStartTime, DateTime seriesEndTime, bool isScheduled = false)
         {
             var timeRange = new ConcurrentDictionary<DateTime, bool>();
             var temp = seriesStartTime;

@@ -1,8 +1,13 @@
-﻿using System;
+﻿/*
+ * Author: Antaryami Basuri
+ * Email: a.basuri2002@gmail.com
+ */
+
+using System;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MeetingCalenderTest")]
-namespace MeetingCalender.Extensions
+[assembly: InternalsVisibleTo("MeetingCalendarTest")]
+namespace MeetingCalendar.Extensions
 {
     /// <summary>
     /// Extension class for <see cref="DateTime"/> type.

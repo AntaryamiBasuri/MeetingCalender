@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * Author: Antaryami Basuri
+ * Email: a.basuri2002@gmail.com
+ */
 
-namespace MeetingCalender.Interfaces
+using System.Collections.Generic;
+
+namespace MeetingCalendar.Interfaces
 {
-    public interface ICalender
+    public interface ICalendar
     {
         /// <summary>
         /// Gets the list of attendees.
