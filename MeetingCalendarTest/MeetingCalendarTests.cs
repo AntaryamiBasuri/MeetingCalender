@@ -169,5 +169,57 @@ namespace MeetingCalendarTest
             var availableSlot = meetingCalender.GetFirstAvailableSlot(10);
             Assert.That(availableSlot.StartTime, Is.GreaterThanOrEqualTo(meetingEndTime.CalibrateToMinutes()));
         }
+        [Test]
+        public void GetFirstAvailableSlot_When_Attendees_Count_Greater_Than_Eight()
+        {
+            var startTime = DateTime.Now;
+            var endTime = startTime.AddHours(9);
+
+            var meetingStartTime = DateTime.Now.AddMinutes(-15);
+            var meetingEndTime = DateTime.Now.AddMinutes(15);
+
+            var meetingCalender = new Calendar(startTime, endTime, new List<Attendee>
+            {
+                new Attendee("Person1", new List<MeetingInfo>
+                {
+                    new MeetingInfo(meetingStartTime, meetingEndTime)
+                }),
+                new Attendee("Person2", new List<MeetingInfo>
+                {
+                    new MeetingInfo(meetingStartTime, meetingEndTime)
+                }),
+                new Attendee("Person3", new List<MeetingInfo>
+                {
+                    new MeetingInfo(meetingStartTime, meetingEndTime)
+                }),
+                new Attendee("Person4", new List<MeetingInfo>
+                {
+                    new MeetingInfo(meetingStartTime, meetingEndTime)
+                }),
+                new Attendee("Person5", new List<MeetingInfo>
+                {
+                    new MeetingInfo(meetingStartTime, meetingEndTime)
+                }),
+                new Attendee("Person6", new List<MeetingInfo>
+                {
+                    new MeetingInfo(meetingStartTime, meetingEndTime)
+                }),
+                new Attendee("Person7", new List<MeetingInfo>
+                {
+                    new MeetingInfo(meetingStartTime, meetingEndTime)
+                }),
+                new Attendee("Person8", new List<MeetingInfo>
+                {
+                    new MeetingInfo(meetingStartTime, meetingEndTime)
+                }),
+                new Attendee("Person9", new List<MeetingInfo>
+                {
+                    new MeetingInfo(meetingStartTime, meetingEndTime)
+                }),
+            });
+
+            var availableSlot = meetingCalender.GetFirstAvailableSlot(10);
+            Assert.That(availableSlot.StartTime, Is.GreaterThanOrEqualTo(meetingEndTime.CalibrateToMinutes()));
+        }
     }
 }

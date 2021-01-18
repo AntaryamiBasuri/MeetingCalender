@@ -1,20 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Description>A package that can provide information about available appointment slots within a specific time duration and zero or more attendees.</Description>
-    <Version>0.2.0</Version>
+    <Description>A package that can provide information about available appointment slots within a specific time duration for zero or more attendees.</Description>
+    <Version>1.1</Version>
     <Company />
-    <PackageProjectUrl>https://github.com/AntaryamiBasuri/MeetingCalender</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/AntaryamiBasuri/MeetingCalender</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</RepositoryUrl>
     <Authors>AntaryamiBasuri</Authors>
     <RepositoryType>public</RepositoryType>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>MeetingCalender</PackageTags>
+    <PackageTags>MeetingCalendar</PackageTags>
     <PackageReleaseNotes>Dev version</PackageReleaseNotes>
-    <AssemblyVersion>0.2.0.0</AssemblyVersion>
-    <FileVersion>0.2.0.0</FileVersion>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
   </PropertyGroup>
 
 </Project>

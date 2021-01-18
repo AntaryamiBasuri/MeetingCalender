@@ -18,6 +18,8 @@ namespace MeetingCalendar
         private readonly DateTime _endTime;
         private readonly IList<TimeSlot> _availableMeetingSlots;
 
+        private double CalendarWindowInMinutes => _endTime.Subtract(_startTime).TotalMinutes;
+
         /// <summary>
         /// Gets the list of <see cref="Attendees"/>.
         /// </summary>
@@ -47,26 +49,19 @@ namespace MeetingCalendar
         /// <param name="attendees">Attendees along with their <see cref="MeetingInfo"/></param>
         public Calendar(DateTime startTime, DateTime endTime, IEnumerable<Attendee> attendees)
             : this(startTime, endTime)
-        {
-            Attendees = attendees;
-        }
+            => Attendees = attendees;
 
         /// <summary>
         /// Add attendees to the calender.
         /// </summary>
-        public void AddAttendees(IEnumerable<Attendee> attendees)
-        {
-            Attendees = attendees;
-        }
+        public void AddAttendees(IEnumerable<Attendee> attendees) => Attendees = attendees;
 
         /// <summary>
         /// Appends additional attendees to existing attendees list.
         /// </summary>
         /// <param name="additionalAttendees"></param>
         public void AppendAttendees(IEnumerable<Attendee> additionalAttendees)
-        {
-            Attendees = Attendees == null ? additionalAttendees : Attendees.Concat(additionalAttendees);
-        }
+            => Attendees = (Attendees == null) ? additionalAttendees : Attendees.Concat<Attendee>(additionalAttendees);
 
         /// <summary>
         /// Returns the first time slot available for the requested meeting duration.
@@ -81,7 +76,7 @@ namespace MeetingCalendar
             if (meetingSlots.Any())
             {
                 return meetingSlots.Length == 1 ?
-                    meetingSlots.First() :
+                    meetingSlots.First(t => t.AvailableDuration >= meetingDuration) :
                     meetingSlots.OrderBy(o => o.AvailableDuration).ThenBy(i => i.StartTime)
                         .FirstOrDefault(t => t.AvailableDuration >= meetingDuration);
             }
@@ -107,31 +102,17 @@ namespace MeetingCalendar
             //Map the meeting timings of each attendees
             if (Attendees != null && Attendees.Any())
             {
-                Attendees.AsParallel().ForAll(attendee =>
+                if (Attendees.Count() < 8 || CalendarWindowInMinutes <= 480)
                 {
-                    attendee.MeetingInfo.AsParallel().ForAll(scheduledMeeting =>
-                    {
-                        // if the meeting is not over yet, then only include in the calculation - Performance improvement
-                        if (scheduledMeeting.EndTime > DateTime.Now)
-                        {
-                            //Consider the scheduled meeting durations within the time frame of Calendar- Performance improvement
-                            var timeSeries = GetTimeSeriesByMinutes(
-                                (scheduledMeeting.StartTime >= _startTime) ? scheduledMeeting.StartTime : _startTime,
-                                (scheduledMeeting.EndTime <= _endTime) ? scheduledMeeting.EndTime : _endTime
-                                    , true);
-                            timeSeries.AsParallel().ForAll(item =>
-                            {
-                                if (meetingHoursByMinutes.TryGetValue(item.Key, out bool prevValue))
-                                {
-                                    //Use OR operator to merge all meeting duration of attendees
-                                    meetingHoursByMinutes.TryUpdate(item.Key, prevValue || item.Value, prevValue);
-                                }
-                            });
-                        }
-                    });
-                });
+                    GetAllAvailableTimeSlots(meetingHoursByMinutes);
+                }
+                else
+                {
+                    GetAllAvailableTimeSlotsAsParallel(meetingHoursByMinutes);
+                }
 
-                if (meetingHoursByMinutes.Any(i => i.Value == false)) //if any slot available then only calculate 
+                //Calculate only if any slot is available.
+                if (meetingHoursByMinutes.Any(i => i.Value == false)) 
                 {
                     CalculateAvailableSlots(meetingHoursByMinutes.OrderBy(i => i.Key));
                 }
@@ -143,6 +124,62 @@ namespace MeetingCalendar
             }
 
             return _availableMeetingSlots;
+        }
+
+        private void GetAllAvailableTimeSlotsAsParallel(ConcurrentDictionary<DateTime, bool> meetingHoursByMinutes)
+        {
+            Attendees.ForEach(attendee =>
+            {
+                attendee.MeetingInfo.AsParallel().ForAll(scheduledMeeting =>
+                {
+                    // if the meeting is not over yet, then only include in the calculation - Performance improvement
+                    if (scheduledMeeting.EndTime > DateTime.Now)
+                    {
+                        //Consider the scheduled meeting durations only within the time frame of Calendar- Performance improvement
+                        var timeSeries = GetTimeSeriesByMinutes(
+                            (scheduledMeeting.StartTime >= _startTime) ? scheduledMeeting.StartTime : _startTime,
+                            (scheduledMeeting.EndTime <= _endTime) ? scheduledMeeting.EndTime : _endTime
+                            , true);
+                        //Merge the meeting duration of the attendee
+                        timeSeries.AsParallel().ForAll(item =>
+                        {
+                            //Update the value only when the minute has not been marked yet as unavailable- Performance improvement
+                            if (meetingHoursByMinutes.TryGetValue(item.Key, out bool prevValue) && !prevValue)
+                            {
+                                meetingHoursByMinutes.TryUpdate(item.Key, item.Value, false);
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+        private void GetAllAvailableTimeSlots(IDictionary<DateTime, bool> meetingHoursByMinutes)
+        {
+            Attendees.ForEach(attendee =>
+            {
+                attendee.MeetingInfo.ForEach(scheduledMeeting =>
+                {
+                    // if the meeting is not over yet, then only include in the calculation - Performance improvement
+                    if (scheduledMeeting.EndTime > DateTime.Now)
+                    {
+                        //Consider the scheduled meeting durations only within the time frame of Calendar- Performance improvement
+                        var timeSeries = GetTimeSeriesByMinutes(
+                            (scheduledMeeting.StartTime >= _startTime) ? scheduledMeeting.StartTime : _startTime,
+                            (scheduledMeeting.EndTime <= _endTime) ? scheduledMeeting.EndTime : _endTime
+                            , true);
+                        //Merge the meeting duration of the attendee
+                        timeSeries.ForEach(item =>
+                        {
+                            //Update the value only when the minute has not been marked yet as unavailable - Performance improvement
+                            if (meetingHoursByMinutes.TryGetValue(item.Key, out bool prevValue) && !prevValue)
+                            {
+                                meetingHoursByMinutes[item.Key] = item.Value;
+                            }
+                        });
+                    }
+                });
+            });
         }
 
         private void CalculateAvailableSlots(IEnumerable<KeyValuePair<DateTime, bool>> scheduledHoursByMinutes, TimeSlot availableTimeSlot = null, bool searchVal = false)
