@@ -7,6 +7,9 @@ using System;
 
 namespace MeetingCalendar
 {
+    /// <summary>
+    /// Provides information about a <see cref="MeetingInfo"/> with a specific start time and end time.
+    /// </summary>
     public class MeetingInfo: TimeSlot
     {
         //NOTE:This class has been created to carry some additional info about the meeting

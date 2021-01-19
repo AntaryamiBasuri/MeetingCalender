@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace MeetingCalendar.Interfaces
 {
+    /// <summary>
+    /// Interface for <see cref="Calendar"/>
+    /// </summary>
     public interface ICalendar
     {
         /// <summary>

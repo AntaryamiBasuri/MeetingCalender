@@ -12,6 +12,9 @@ using System.Linq;
 
 namespace MeetingCalendar
 {
+    /// <summary>
+    /// Provides a <see cref="Calendar"/>
+    /// </summary>
     public class Calendar : ICalendar
     {
         private readonly DateTime _startTime;
@@ -21,7 +24,7 @@ namespace MeetingCalendar
         private double CalendarWindowInMinutes => _endTime.Subtract(_startTime).TotalMinutes;
 
         /// <summary>
-        /// Gets the list of <see cref="Attendees"/>.
+        /// Gets the list of <see cref="Attendee"/>.
         /// </summary>
         public IEnumerable<Attendee> Attendees { get; set; }
 
@@ -61,7 +64,7 @@ namespace MeetingCalendar
         /// </summary>
         /// <param name="additionalAttendees"></param>
         public void AppendAttendees(IEnumerable<Attendee> additionalAttendees)
-            => Attendees = (Attendees == null) ? additionalAttendees : Attendees.Concat<Attendee>(additionalAttendees);
+            => Attendees = (Attendees == null) ? additionalAttendees : Attendees.Concat(additionalAttendees);
 
         /// <summary>
         /// Returns the first time slot available for the requested meeting duration.
@@ -76,7 +79,7 @@ namespace MeetingCalendar
             if (meetingSlots.Any())
             {
                 return meetingSlots.Length == 1 ?
-                    meetingSlots.First(t => t.AvailableDuration >= meetingDuration) :
+                    meetingSlots.FirstOrDefault(t => t.AvailableDuration >= meetingDuration) :
                     meetingSlots.OrderBy(o => o.AvailableDuration).ThenBy(i => i.StartTime)
                         .FirstOrDefault(t => t.AvailableDuration >= meetingDuration);
             }

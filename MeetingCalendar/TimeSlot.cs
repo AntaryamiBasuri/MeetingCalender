@@ -8,6 +8,9 @@ using MeetingCalendar.Extensions;
 
 namespace MeetingCalendar
 {
+    /// <summary>
+    /// Provides a <see cref="TimeSlot"/> with a specific start time and end time.
+    /// </summary>
     public class TimeSlot
     {
         private readonly DateTime _startTime;

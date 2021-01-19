@@ -15,7 +15,7 @@ namespace MeetingCalendar.Extensions
     internal static class DateTimeExtensions
     {
         /// <summary>
-        /// Calibrates the datetime to minutes by discarding its seconds and milliseconds component.
+        /// Calibrates the datetime without its seconds and milliseconds component.
         /// </summary>
         /// <param name="dateTime">The date time instance</param>
         /// <returns>A new calibrated datetime instance.</returns>

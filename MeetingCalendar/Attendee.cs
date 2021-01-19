@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace MeetingCalendar
 {
+    /// <summary>
+    /// Provides information about an <see cref="Attendee"/> along with its meeting details.
+    /// </summary>
     public class Attendee
     {
         public string AttendeeName { get; }
