@@ -14,15 +14,15 @@ namespace MeetingCalendarTest
 	public class MeetingCalendarExceptionTests
 	{
 		[Test]
-		public void Constructor_Throws_Exception_When_Calender_StartTime_Is_Invalid()
+		public void Constructor_Throws_Exception_When_Calendar_StartTime_Is_Invalid()
 			=> Assert.Throws<ArgumentException>(() => { _ = new Calendar(DateTime.MinValue, DateTime.Now); });
 
 		[Test]
-		public void Constructor_Throws_Exception_When_Calender_EndTime_Is_Invalid()
+		public void Constructor_Throws_Exception_When_Calendar_EndTime_Is_Invalid()
 			=> Assert.Throws<ArgumentException>(() => { _ = new Calendar(DateTime.Now, DateTime.MaxValue); });
 
 		[Test]
-		public void Constructor_Throws_Exception_When_Calender_StartTime_Is_GreaterThan_EndTime()
+		public void Constructor_Throws_Exception_When_Calendar_StartTime_Is_GreaterThan_EndTime()
 			=> Assert.Throws<ArgumentException>(() => { _ = new Calendar(DateTime.Now.AddMinutes(10), DateTime.Now); });
 	}
 }

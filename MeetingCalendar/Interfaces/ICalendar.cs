@@ -18,7 +18,7 @@ namespace MeetingCalendar.Interfaces
 		IEnumerable<Attendee> Attendees { get; }
 
 		/// <summary>
-		/// Add attendees to the calender.
+		/// Add attendees to the calendar.
 		/// </summary>
 		void AddAttendees(IEnumerable<Attendee> attendees);
 

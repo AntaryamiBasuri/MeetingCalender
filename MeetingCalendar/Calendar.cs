@@ -81,7 +81,7 @@ namespace MeetingCalendar
 		#region Public methods
 
 		/// <summary>
-		/// Add attendees to the calender.
+		/// Add attendees to the calendar.
 		/// </summary>
 		public void AddAttendees(IEnumerable<Attendee> attendees) => Attendees = attendees;
 
@@ -172,7 +172,7 @@ namespace MeetingCalendar
 					if (scheduledMeeting.EndTime <= DateTime.Now) return;
 
 					//Consider the scheduled meeting durations only within the time frame of Calendar- Performance improvement
-					var timeSeries = GetTimeSeriesWithInCalenderTimeFrame(scheduledMeeting);
+					var timeSeries = GetTimeSeriesWithInCalendarTimeFrame(scheduledMeeting);
 					//Merge the meeting duration of the attendee
 					timeSeries.ForEach(item =>
 					{
@@ -193,7 +193,7 @@ namespace MeetingCalendar
 					// if the meeting is not over yet, then only include in the calculation - Performance improvement
 					if (scheduledMeeting.EndTime <= DateTime.Now) return;
 					//Consider the scheduled meeting durations only within the time frame of Calendar- Performance improvement
-					var timeSeries = GetTimeSeriesWithInCalenderTimeFrame(scheduledMeeting);
+					var timeSeries = GetTimeSeriesWithInCalendarTimeFrame(scheduledMeeting);
 					//Merge the meeting duration of the attendee
 					timeSeries.AsParallel().ForAll(item =>
 					{
@@ -206,7 +206,7 @@ namespace MeetingCalendar
 				});
 			});
 
-		private IEnumerable<KeyValuePair<DateTime, bool>> GetTimeSeriesWithInCalenderTimeFrame(TimeSlot scheduledMeeting)
+		private IEnumerable<KeyValuePair<DateTime, bool>> GetTimeSeriesWithInCalendarTimeFrame(TimeSlot scheduledMeeting)
 		{
 			return GetTimeSeriesByMinutes(
 				(scheduledMeeting.StartTime >= _startTime) ? scheduledMeeting.StartTime : _startTime,
