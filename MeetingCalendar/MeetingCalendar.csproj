@@ -13,21 +13,20 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>MeetingCalendar</PackageTags>
     <PackageReleaseNotes>
-      This library includes:
+This library includes:
       •  A readonly property to get the list of attendees
       •  A method to add attendees to the calendar
       •  A method to append additional attendees to the calendar
       •  A method to get the first time slot available for a requested meeting duration
       •  A method to find all available meeting slots
       •  Documentated code
-      •  Optimised code
-      •  Unit test with code coverage above 99%
+      •  Unit tested code with code coverage above 99%
 
-      The code repository includes:
+The code repository includes:
       •  The library project
       •  A demo console application
       •  A unit test project
-    </PackageReleaseNotes>
+</PackageReleaseNotes>
     <AssemblyVersion>0.5.0.0</AssemblyVersion>
     <FileVersion>0.5.0.0</FileVersion>
     <PackageId>MeetingCalender</PackageId>
