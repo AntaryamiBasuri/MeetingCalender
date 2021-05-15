@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Description>A package that can provide information about available appointment slots within a specific time duration for zero or more attendees.</Description>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <Company />
     <PackageProjectUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</RepositoryUrl>
@@ -19,16 +19,16 @@ This library includes:
       •  A method to append additional attendees to the calendar
       •  A method to get the first time slot available for a requested meeting duration
       •  A method to find all available meeting slots
-      •  Documentated code
+      •  Documented code
       •  Unit tested code with code coverage above 99%
 
 The code repository includes:
-      •  The library project
-      •  A demo console application
+      •  A library project
       •  A unit test project
-</PackageReleaseNotes>
-    <AssemblyVersion>0.5.0.0</AssemblyVersion>
-    <FileVersion>0.5.0.0</FileVersion>
+      •  A demo console application
+    </PackageReleaseNotes>
+    <AssemblyVersion>0.6.0.0</AssemblyVersion>
+    <FileVersion>0.6.0.0</FileVersion>
     <PackageId>MeetingCalender</PackageId>
   </PropertyGroup>
 
