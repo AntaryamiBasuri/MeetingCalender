@@ -11,14 +11,18 @@ namespace MeetingCalendarTest
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]
-	public class TimeSlotTests
+	public class TimeSlotExceptionTests
 	{
 		[Test]
-		public void AvailableDuration_Is_Zero_When_StartTime_And_EndTime_Are_Equal()
-			=> Assert.That(new TimeSlot(DateTime.Now, DateTime.Now).AvailableDuration, Is.Zero);
+		public void Constructor_Throws_Exception_When_TimeSlot_StartTime_Is_Invalid()
+			=> Assert.Throws<ArgumentException>(() => { _ = new TimeSlot(DateTime.MinValue, DateTime.Now); });
 
 		[Test]
-		public void AvailableDuration_Is_GreaterThan_Zero_When_EndTime_Is_Greater_Than_StartTime()
-			=> Assert.That(new TimeSlot(DateTime.Now, DateTime.Now.AddHours(1)).AvailableDuration, Is.GreaterThan(0));
+		public void Constructor_Throws_Exception_When_TimeSlot_EndTime_Is_Invalid()
+			=> Assert.Throws<ArgumentException>(() => { _ = new TimeSlot(DateTime.Now, DateTime.MaxValue); });
+
+		[Test]
+		public void Constructor_Throws_Exception_When_TimeSlot_StartTime_Is_GreaterThan_EndTime()
+			=> Assert.Throws<ArgumentException>(() => { _ = new TimeSlot(DateTime.Now.AddMinutes(10), DateTime.Now); });
 	}
 }

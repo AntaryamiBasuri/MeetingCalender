@@ -25,7 +25,7 @@ namespace MeetingCalendar
 		/// </summary>
 		public DateTime EndTime { get; }
 
-		public double AvailableDuration => EndTime.Subtract(StartTime).TotalMinutes;
+		public double AvailableDuration => StartTime.Equals(EndTime) ? 0 : EndTime.Subtract(StartTime).TotalMinutes + 1;
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="TimeSlot"/>
