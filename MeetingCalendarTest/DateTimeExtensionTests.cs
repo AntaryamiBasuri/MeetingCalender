@@ -60,5 +60,12 @@ namespace MeetingCalendarTest
 			Assert.That(DateTime.Compare(actual, expected), Is.Zero);
 			Assert.That(actual.Kind, Is.EqualTo(expected.Kind));
 		}
+
+		[Test]
+		public void IsInvalidDate_Returns_True_When_DateTime_Is_DateTimeMinVal_DateTimeMaxVal()
+		{
+			Assert.That(DateTime.MinValue.IsInvalidDate(), Is.True);
+			Assert.That(DateTime.MaxValue.IsInvalidDate(), Is.True);
+		}
 	}
 }

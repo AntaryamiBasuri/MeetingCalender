@@ -25,13 +25,12 @@ namespace MeetingCalendar
 
 		#endregion Members
 
-		#region Private properties
+		#region Private computed properties
 
-		private static Func<DateTime, bool> IsInvalidDate => dateTime => dateTime == DateTime.MinValue || dateTime == DateTime.MaxValue;
-		private static DateTime FutureDatetime => DateTime.MaxValue.AddMinutes(-1);
+		private static DateTime FutureDateTime => DateTime.MaxValue.AddMinutes(-1);
 		private double CalendarWindowInMinutes => _endTime.Subtract(_startTime).TotalMinutes;
 
-		#endregion Private properties
+		#endregion Private computed properties
 
 		#region Public Properties
 
@@ -51,10 +50,10 @@ namespace MeetingCalendar
 		/// <param name="endTime">The upper bound of allowed meeting hours.</param>
 		public Calendar(DateTime startTime, DateTime endTime)
 		{
-			if (IsInvalidDate(startTime))
+			if (startTime.IsInvalidDate())
 				throw new ArgumentException("Invalid Calendar start time.", nameof(startTime));
 
-			if (IsInvalidDate(endTime))
+			if (endTime.IsInvalidDate())
 				throw new ArgumentException("Invalid Calendar end time.", nameof(endTime));
 
 			_startTime = startTime.CalibrateToMinutes();
@@ -176,10 +175,10 @@ namespace MeetingCalendar
 					//Merge the meeting duration of the attendee
 					timeSeries.ForEach(item =>
 					{
-						//Update the value only when the minute has not been marked yet as unavailable - Performance improvement
-						if (meetingHoursByMinutes.TryGetValue(item.Key, out bool prevValue) && !prevValue)
+						//Update the value only when the minute has not been marked yet, as unavailable - Performance improvement
+						if (meetingHoursByMinutes.TryGetValue(item.Key, out var prevValue) && !prevValue)
 						{
-							meetingHoursByMinutes[item.Key] = item.Value;
+							meetingHoursByMinutes[item.Key] = item.Value; //Sets to true - i.e. unavailable
 						}
 					});
 				});
@@ -197,11 +196,8 @@ namespace MeetingCalendar
 					//Merge the meeting duration of the attendee
 					timeSeries.AsParallel().ForAll(item =>
 					{
-						//Update the value only when the minute has not been marked yet as unavailable- Performance improvement
-						if (meetingHoursByMinutes.TryGetValue(item.Key, out bool prevValue) && !prevValue)
-						{
-							meetingHoursByMinutes.TryUpdate(item.Key, item.Value, false);
-						}
+						// Updates and sets the value to true - i.e. unavailable, only when the minute has not been marked yet - Performance improvement
+						meetingHoursByMinutes.TryUpdate(item.Key, item.Value, false);
 					});
 				});
 			});
@@ -231,7 +227,7 @@ namespace MeetingCalendar
 				}
 				else
 				{
-					availableTimeSlot = new TimeSlot(foundItem.Key, FutureDatetime);
+					availableTimeSlot = new TimeSlot(foundItem.Key, FutureDateTime);
 					CalculateAvailableSlots(subSet, availableTimeSlot, true);
 				}
 			}

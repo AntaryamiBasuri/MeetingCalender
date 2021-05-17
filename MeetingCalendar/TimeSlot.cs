@@ -13,8 +13,6 @@ namespace MeetingCalendar
 	/// </summary>
 	public class TimeSlot
 	{
-		private static Func<DateTime, bool> IsInvalidDate => dateTime => dateTime == DateTime.MinValue || dateTime == DateTime.MaxValue;
-
 		/// <summary>
 		/// Gets the start time of a <see cref="TimeSlot"/>.
 		/// </summary>
@@ -25,6 +23,9 @@ namespace MeetingCalendar
 		/// </summary>
 		public DateTime EndTime { get; }
 
+		/// <summary>
+		/// Gets the duration of a <see cref="TimeSlot"/>.
+		/// </summary>
 		public double AvailableDuration => StartTime.Equals(EndTime) ? 0 : EndTime.Subtract(StartTime).TotalMinutes + 1;
 
 		/// <summary>
@@ -34,10 +35,10 @@ namespace MeetingCalendar
 		/// <param name="endTime">The <see cref="DateTime"/> where the time slot ends.</param>
 		public TimeSlot(DateTime startTime, DateTime endTime)
 		{
-			if (IsInvalidDate(startTime))
+			if (startTime.IsInvalidDate())
 				throw new ArgumentException("Invalid TimeSlot start time.", nameof(startTime));
 
-			if (IsInvalidDate(endTime))
+			if (endTime.IsInvalidDate())
 				throw new ArgumentException("Invalid TimeSlot end time.", nameof(endTime));
 
 			StartTime = startTime.CalibrateToMinutes();

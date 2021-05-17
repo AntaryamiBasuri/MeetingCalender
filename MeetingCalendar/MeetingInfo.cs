@@ -12,7 +12,10 @@ namespace MeetingCalendar
 	/// </summary>
 	public class MeetingInfo : TimeSlot
 	{
-		//NOTE:This class has been created to carry some additional info about the meeting
+		/// <summary>
+		/// Gets or sets Id of the <see cref="MeetingInfo"/>.
+		/// </summary>
+		public Guid MeetingId { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="MeetingInfo"/>

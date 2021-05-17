@@ -245,6 +245,10 @@ namespace MeetingCalendarTest
 				{
 					new MeetingInfo(meetingStartTime, meetingStartTime.AddMinutes(10))
 				}),
+				new Attendee("Person11", "test@email.com", true, new List<MeetingInfo>
+				{
+					new MeetingInfo(meetingStartTime, meetingEndTime)
+				})
 			});
 
 			var availableSlot = meetingCalendar.GetFirstAvailableSlot(10);
