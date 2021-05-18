@@ -25,16 +25,15 @@ namespace MeetingCalendarTest
 			var meetingDetails = new MeetingDetails(DateTime.Now, DateTime.Now, meetingTitle, meetingAgenda,
 				new List<Attendee>()
 				{
-					new Attendee("Person1", new List<MeetingInfo>
+					new("Person1", new List<MeetingInfo>
 					{
-						new MeetingInfo(meetingStartTime, meetingEndTime)
+						new(meetingStartTime, meetingEndTime)
 					}),
-					new Attendee("Person2", new List<MeetingInfo>
+					new("Person2", new List<MeetingInfo>
 					{
-						new MeetingInfo(meetingStartTime, meetingEndTime)
+						new(meetingStartTime, meetingEndTime)
 					}),
-				},
-				null);
+				});
 
 			var newId = Guid.NewGuid();
 			meetingDetails.MeetingId = newId;
