@@ -6,6 +6,7 @@
 using MeetingCalendar;
 using MeetingCalendar.Extensions;
 using MeetingCalendar.Interfaces;
+using MeetingCalendar.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace MeetingCalendarTest
 		{
 			var availableSlot = _meetingCalendar.GetFirstAvailableSlot(1);
 			Assert.That(availableSlot, Is.Not.Null);
-			Assert.That(availableSlot.AvailableDuration, Is.GreaterThanOrEqualTo(1));
+			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(1));
 		}
 
 		[Test]
@@ -159,7 +160,7 @@ namespace MeetingCalendarTest
 			});
 
 			var availableSlot = meetingCalendar.GetFirstAvailableSlot(60);
-			Assert.That(availableSlot.AvailableDuration, Is.GreaterThan(0));
+			Assert.That(availableSlot.GetDuration(), Is.GreaterThan(0));
 		}
 
 		[Test]

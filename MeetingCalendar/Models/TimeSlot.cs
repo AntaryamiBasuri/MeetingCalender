@@ -6,7 +6,7 @@
 using MeetingCalendar.Extensions;
 using System;
 
-namespace MeetingCalendar
+namespace MeetingCalendar.Models
 {
 	/// <summary>
 	/// Provides a <see cref="TimeSlot"/> with a specific start time and end time.
@@ -22,11 +22,6 @@ namespace MeetingCalendar
 		/// Gets the end time of a <see cref="TimeSlot"/>.
 		/// </summary>
 		public DateTime EndTime { get; }
-
-		/// <summary>
-		/// Gets the duration of a <see cref="TimeSlot"/>.
-		/// </summary>
-		public double AvailableDuration => StartTime.Equals(EndTime) ? 0 : EndTime.Subtract(StartTime).TotalMinutes + 1;
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="TimeSlot"/>

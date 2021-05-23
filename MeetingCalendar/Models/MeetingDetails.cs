@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MeetingCalendar
+namespace MeetingCalendar.Models
 {
 	/// <summary>
 	/// Provides information about the details of a meeting.

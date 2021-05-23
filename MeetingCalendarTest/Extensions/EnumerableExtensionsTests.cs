@@ -7,11 +7,11 @@ using MeetingCalendar.Extensions;
 using NUnit.Framework;
 using System.Linq;
 
-namespace MeetingCalendarTest
+namespace MeetingCalendarTest.Extensions
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]
-	public class EnumerableExtensionTests
+	public class EnumerableExtensionsTests
 	{
 		[Test]
 		public void It_Invokes_Action_Foreach_Items_In_Collection()

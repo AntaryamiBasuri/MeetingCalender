@@ -5,7 +5,7 @@
 
 using System;
 
-namespace MeetingCalendar
+namespace MeetingCalendar.Models
 {
 	/// <summary>
 	/// Provides information about a <see cref="MeetingInfo"/> with a specific start time and end time.

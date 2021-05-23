@@ -7,7 +7,7 @@ using MeetingCalendar;
 using NUnit.Framework;
 using System;
 
-namespace MeetingCalendarTest
+namespace MeetingCalendarTest.Exceptions
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]

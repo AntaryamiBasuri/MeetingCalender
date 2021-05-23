@@ -3,6 +3,7 @@
  * Email: a.basuri2002@gmail.com
  */
 
+using MeetingCalendar.Models;
 using System.Collections.Generic;
 
 namespace MeetingCalendar.Interfaces
@@ -23,12 +24,12 @@ namespace MeetingCalendar.Interfaces
 		void AddAttendees(IEnumerable<Attendee> attendees);
 
 		/// <summary>
-		/// Appends additional attendees to existing attendees list.
+		/// Appends additional attendees to the existing attendees list.
 		/// </summary>
 		void AppendAttendees(IEnumerable<Attendee> additionalAttendees);
 
 		/// <summary>
-		/// Returns the first slot available for the requested meeting duration.
+		/// Returns the first available time slot for the requested meeting duration.
 		/// </summary>
 		/// <param name="meetingDuration">The meeting duration in minutes.</param>
 		/// <returns>A time slot</returns>

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Description>A package that can provide information about available appointment slots within a specific time duration for zero or more attendees.</Description>
-    <Version>2.0.0.0</Version>
+    <Version>2.1.0.0</Version>
     <Company />
     <PackageProjectUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</RepositoryUrl>
@@ -22,9 +22,20 @@ This library includes:
       •  Documented code
       •  Unit tested code with code coverage above 99%
 
+Version 2.1
+      •  Files reorganized
+      •  MeetingInfo property of Atendee class renamed to "Meetings"
+
+Version 2.0
+      •  Framework version upgraded from .NETStandard 2.1 to net5.0
+
+Version 1.x
+       •  Written from ground up using .NETStandard 2.1
+       •  No external dependencies
+
     </PackageReleaseNotes>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
     <PackageId>MeetingCalendar</PackageId>
   </PropertyGroup>
 

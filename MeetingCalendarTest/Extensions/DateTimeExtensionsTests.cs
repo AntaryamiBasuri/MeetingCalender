@@ -7,11 +7,11 @@ using MeetingCalendar.Extensions;
 using NUnit.Framework;
 using System;
 
-namespace MeetingCalendarTest
+namespace MeetingCalendarTest.Extensions
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]
-	public class DateTimeExtensionTests
+	public class DateTimeExtensionsTests
 	{
 		[Test]
 		public void DateTime_Comparision_Fails_When_DateTime_Subtraction_Used()

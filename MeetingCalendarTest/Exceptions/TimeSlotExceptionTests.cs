@@ -3,11 +3,11 @@
  * Email: a.basuri2002@gmail.com
  */
 
-using MeetingCalendar;
+using MeetingCalendar.Models;
 using NUnit.Framework;
 using System;
 
-namespace MeetingCalendarTest
+namespace MeetingCalendarTest.Exceptions
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]

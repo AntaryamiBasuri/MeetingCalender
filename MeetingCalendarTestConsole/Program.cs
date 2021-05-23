@@ -4,6 +4,7 @@
  */
 
 using MeetingCalendar;
+using MeetingCalendar.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +12,7 @@ using System.Linq;
 
 namespace MeetingCalendarTestConsole
 {
-	internal class Program
+	internal static class Program
 	{
 		private static void Main()
 		{
@@ -60,6 +61,7 @@ namespace MeetingCalendarTestConsole
 					sw.Start();
 					var firstAvailableMeetingSlot = meetingCalendar.GetFirstAvailableSlot(duration);
 					sw.Stop();
+
 					Console.WriteLine($"Number of Attendees in the meeting: { meetingCalendar.Attendees.Count() }");
 					Console.WriteLine($"Time taken to calculate: { sw.ElapsedMilliseconds }ms.");
 
