@@ -16,17 +16,17 @@ namespace MeetingCalendar.Extensions
 	internal static class DateTimeExtensions
 	{
 		/// <summary>
-		/// Calibrates the datetime without its seconds and milliseconds component.
+		/// Calibrates the date time without its seconds and milliseconds component.
 		/// </summary>
 		/// <param name="dateTime">The date time instance</param>
-		/// <returns>A new calibrated datetime instance.</returns>
+		/// <returns>A new calibrated date time instance.</returns>
 		internal static DateTime CalibrateToMinutes(this DateTime dateTime)
-			=> new(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, dateTime.Kind);
+			=> new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, dateTime.Kind);
 
 		/// <summary>
-		/// Validates a datetime
+		/// Validates a date time against Min & Max value of DateTime
 		/// </summary>
-		/// <param name="dateTime">The datetime</param>
+		/// <param name="dateTime">The date time</param>
 		/// <returns>True, if the value is not DateTime.MinValue or DateTime.MaxValue, true otherwise.</returns>
 		internal static bool IsInvalidDate(this DateTime dateTime)
 			=> dateTime == DateTime.MinValue || dateTime == DateTime.MaxValue;

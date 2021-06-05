@@ -42,5 +42,16 @@ namespace MeetingCalendar.Models
 			if (StartTime > EndTime)
 				throw new ArgumentException("The TimeSlot End time must be greater than the start time.", nameof(endTime));
 		}
+
+		/// <summary>
+		/// Deconstruct a <see cref="TimeSlot"/>.
+		/// </summary>
+		/// <param name="startTime">The start time</param>
+		/// <param name="endTime">The end time</param>
+		public void Deconstruct(out DateTime startTime, out DateTime endTime)
+		{
+			startTime = StartTime;
+			endTime = EndTime;
+		}
 	}
 }

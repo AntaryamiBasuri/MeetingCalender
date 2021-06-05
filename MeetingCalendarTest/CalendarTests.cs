@@ -16,7 +16,7 @@ namespace MeetingCalendarTest
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]
-	public class MeetingCalendarTests
+	public class CalendarTests
 	{
 		private ICalendar _meetingCalendar;
 
@@ -47,7 +47,18 @@ namespace MeetingCalendarTest
 		[Test]
 		public void TimeSlotAvailableForRequestedDuration()
 		{
+			var availableSlot = _meetingCalendar.FindFirstAvailableSlot(1);
+			Assert.That(availableSlot, Is.Not.Null);
+			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(1));
+		}
+
+		//TODO: Remove the test along with GetFirstAvailableSlot
+		[Test]
+		public void TimeSlotAvailableForRequestedDuration_Using_Obsolete_GetFirstAvailableSlot()
+		{
+#pragma warning disable CS0618 // Type or member is obsolete
 			var availableSlot = _meetingCalendar.GetFirstAvailableSlot(1);
+#pragma warning restore CS0618 // Type or member is obsolete
 			Assert.That(availableSlot, Is.Not.Null);
 			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(1));
 		}
@@ -109,14 +120,14 @@ namespace MeetingCalendarTest
 		}
 
 		[Test]
-		public void TimeSlotFor200MinutesNotAvailableForRequestedDuration()
+		public void FindFirstAvailableSlot_Returns_No_TimeSlot_For_200Minutes_Meeting_Duration()
 		{
-			var availableSlot = _meetingCalendar.GetFirstAvailableSlot(200);
+			var availableSlot = _meetingCalendar.FindFirstAvailableSlot(200);
 			Assert.That(availableSlot, Is.Null);
 		}
 
 		[Test]
-		public void GetFirstAvailableSlot_Returns_Null_When_NoSlot_Available()
+		public void FindFirstAvailableSlot_Returns_Null_When_NoSlot_Available()
 		{
 			var startTime = DateTime.Now;
 			var endTime = startTime.AddHours(8);
@@ -128,26 +139,127 @@ namespace MeetingCalendarTest
 				})
 			});
 
-			var availableSlot = meetingCalendar.GetFirstAvailableSlot(1);
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(1);
 			Assert.That(availableSlot, Is.Null);
 		}
 
 		[Test]
-		public void GetFirstAvailableSlot_Returns_Null_Beyond_Allowed_MeetingHours()
+		public void FindFirstAvailableSlot_Returns_Null_Beyond_Allowed_MeetingHours()
 		{
 			var endTime = DateTime.Now;
 			var startTime = endTime.AddHours(-8);
 
 			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>());
 
-			var availableSlot = meetingCalendar.GetFirstAvailableSlot(1);
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(1);
 			Assert.That(availableSlot, Is.Null);
+		}
+
+		[Test]
+		public void FindFirstAvailableSlot_Returns_TimeSlot_Within_Given_Time_Range()
+		{
+			var startTime = DateTime.Now.CalibrateToMinutes();
+			var endTime = startTime.AddHours(8);
+			var secondMeetingStartTime = startTime.AddHours(2.5);
+			var secondMeetingEndTime = startTime.AddHours(3.5);
+			
+			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
+			{
+				new("Person1", new List<MeetingInfo>
+				{
+					new(startTime.AddHours(1), startTime.AddHours(2)),
+					new(secondMeetingStartTime, secondMeetingEndTime),
+					//
+					new(startTime.AddHours(7), startTime.AddHours(7.5))
+				})
+			});
+
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(15, secondMeetingStartTime);
+			Assert.That(availableSlot, Is.Not.Null);
+			Assert.That(availableSlot.StartTime, Is.GreaterThanOrEqualTo(secondMeetingEndTime));
+		}
+
+		[Test]
+		public void FindFirstAvailableSlot_Returns_TimeSlot_Equals_To_Calendar_TimeFrame_When_Search_Range_Longer_Than_Calendar_TimeFrame()
+		{
+			var startTime = DateTime.Now.CalibrateToMinutes();
+			var endTime = startTime.AddHours(4);
+			var meetingCalendar = new Calendar(startTime, endTime);
+
+			const int meetingDuration = 120;
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(meetingDuration, startTime.AddHours(-1), endTime.AddHours(1));
+			Assert.That(availableSlot, Is.Not.Null);
+			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(meetingDuration));
+			//TODO:								Use Is.EqualTo(meetingCalendar.StartTime)
+			Assert.That(availableSlot.StartTime, Is.EqualTo(startTime));
+			Assert.That(availableSlot.EndTime, Is.EqualTo(endTime.AddMinutes(-1)));
+		}
+
+		[Test]
+		public void FindFirstAvailableSlot_Returns_TimeSlot_Equals_To_Search_Range_When_Range_Shorter_Than_Calendar_TimeFrame()
+		{
+			var startTime = DateTime.Now.CalibrateToMinutes();
+			var endTime = startTime.AddHours(4).CalibrateToMinutes();
+			var meetingCalendar = new Calendar(startTime, endTime);
+
+			var searchRangeStartTime = startTime.AddHours(1.5);
+			var searchEndTime = startTime.AddHours(3.75);
+
+			const int meetingDuration = 60;
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(meetingDuration, searchRangeStartTime, searchEndTime);
+			Assert.That(availableSlot, Is.Not.Null);
+			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(meetingDuration));
+			Assert.That(availableSlot.StartTime, Is.EqualTo(searchRangeStartTime));
+			Assert.That(availableSlot.EndTime, Is.EqualTo(searchEndTime));
+		}
+
+		[Test]
+		public void FindFirstAvailableSlot_Returns_TimeSlot_Having_EndTime_Shorter_Than_Calendar_EndTime_When_SearchRange_UB_Longer_Than_Calender_TimeFrame()
+		{
+			var startTime = DateTime.Now.CalibrateToMinutes();
+			var endTime = startTime.AddHours(4).CalibrateToMinutes();
+			var firstMeetingEndTime = startTime.AddHours(2);
+			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
+			{
+				new("Person1", new List<MeetingInfo>
+				{
+					new(startTime, firstMeetingEndTime),
+				})
+			});
+
+			var searchRangeStartTime = startTime.AddHours(1.5);
+			var searchEndTime = endTime.AddMinutes(-15);
+
+			const int meetingDuration = 60;
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(meetingDuration, searchRangeStartTime, searchEndTime);
+			Assert.That(availableSlot, Is.Not.Null);
+			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(meetingDuration));
+			Assert.That(availableSlot.StartTime, Is.EqualTo(firstMeetingEndTime));
+			Assert.That(availableSlot.EndTime, Is.EqualTo(searchEndTime));
+		}
+
+		[Test]
+		public void FindFirstAvailableSlot_Returns_TimeSlot_StartTime_Equals_To_Search_Range_Starting_Time_When_SearchRange_Is_Longer()
+		{
+			var startTime = DateTime.Now.CalibrateToMinutes();
+			var endTime = startTime.AddHours(4).CalibrateToMinutes();
+			var meetingCalendar = new Calendar(startTime, endTime);
+
+			var searchRangeStartTime = startTime.AddHours(1.5);
+
+			const int meetingDuration = 120;
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(meetingDuration, searchRangeStartTime, endTime.AddHours(1));
+			Assert.That(availableSlot, Is.Not.Null);
+			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(meetingDuration));
+			//TODO:								Use Is.EqualTo(meetingCalendar.StartTime)
+			Assert.That(availableSlot.StartTime, Is.EqualTo(searchRangeStartTime));
+			Assert.That(availableSlot.EndTime, Is.EqualTo(endTime.AddMinutes(-1)));
 		}
 
 		[Test]
 		public void GetFirstAvailableSlot_Returns_MeetingSlot_When_No_Meetings_Scheduled_Within_Allowed_MeetingHours()
 		{
-			var startTime = DateTime.Now;
+			var startTime = DateTime.Now.CalibrateToMinutes();
 			var endTime = startTime.AddHours(8);
 
 			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>()
@@ -159,8 +271,9 @@ namespace MeetingCalendarTest
 				})
 			});
 
-			var availableSlot = meetingCalendar.GetFirstAvailableSlot(60);
-			Assert.That(availableSlot.GetDuration(), Is.GreaterThan(0));
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(60);
+			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(60));
+			Assert.That(availableSlot.StartTime, Is.GreaterThanOrEqualTo(startTime));
 		}
 
 		[Test]
@@ -170,7 +283,7 @@ namespace MeetingCalendarTest
 			var meetingCalendar = new Calendar(now.AddHours(-1), now.AddHours(1));
 
 			meetingCalendar.AddAttendees(new List<Attendee>());
-			var firstAvailableTimeSlot = meetingCalendar.GetFirstAvailableSlot(10);
+			var firstAvailableTimeSlot = meetingCalendar.FindFirstAvailableSlot(10);
 			Assert.That(firstAvailableTimeSlot.StartTime, Is.GreaterThanOrEqualTo(now.CalibrateToMinutes()));
 		}
 
@@ -191,7 +304,7 @@ namespace MeetingCalendarTest
 				})
 			});
 
-			var availableSlot = meetingCalendar.GetFirstAvailableSlot(10);
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(10);
 			Assert.That(availableSlot.StartTime, Is.GreaterThanOrEqualTo(meetingEndTime.CalibrateToMinutes()));
 		}
 
@@ -252,7 +365,7 @@ namespace MeetingCalendarTest
 				})
 			});
 
-			var availableSlot = meetingCalendar.GetFirstAvailableSlot(10);
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(10);
 			Assert.That(availableSlot.StartTime, Is.GreaterThanOrEqualTo(meetingEndTime.CalibrateToMinutes()));
 		}
 	}

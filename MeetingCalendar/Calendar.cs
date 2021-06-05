@@ -36,6 +36,11 @@ namespace MeetingCalendar
 		#region Public Properties
 
 		/// <summary>
+		/// Gets the current date and time calibrated to minutes.
+		/// </summary>
+		public DateTime CurrentTime => DateTime.Now.CalibrateToMinutes();
+
+		/// <summary>
 		/// Gets the list of <see cref="Attendee"/>.
 		/// </summary>
 		public IEnumerable<Attendee> Attendees { get; private set; }
@@ -50,6 +55,7 @@ namespace MeetingCalendar
 		/// <param name="startTime">The lower bound of allowed meeting hours.</param>
 		/// <param name="endTime">The upper bound of allowed meeting hours.</param>
 		public Calendar(DateTime startTime, DateTime endTime)
+
 		{
 			if (startTime.IsInvalidDate())
 				throw new ArgumentException("Invalid Calendar start time.", nameof(startTime));
@@ -97,15 +103,46 @@ namespace MeetingCalendar
 		/// </summary>
 		/// <param name="meetingDuration">The meeting duration in minutes.</param>
 		/// <returns>A time slot or null</returns>
-		public TimeSlot GetFirstAvailableSlot(int meetingDuration)
+		[Obsolete("Use FindFirstAvailableSlot instead.")]
+		public TimeSlot GetFirstAvailableSlot(int meetingDuration) => FindFirstAvailableSlot(meetingDuration);
+
+		/// <summary>
+		/// Finds the first available time slot for the requested meeting duration.
+		/// </summary>
+		/// <param name="meetingDuration">The meeting duration in minutes.</param>
+		/// <returns>A time slot or null</returns>
+		public TimeSlot FindFirstAvailableSlot(int meetingDuration)
 		{
 			var availableMeetingSlots = GetAllAvailableTimeSlots();
 
+			return availableMeetingSlots.FindFirst(t => t.GetDuration() >= meetingDuration);
+		}
+
+		/// <summary>
+		/// Finds the first available time slot for the requested meeting duration within a specific time frame.
+		/// </summary>
+		/// <param name="meetingDuration">The meeting duration in minutes.</param>
+		/// <param name="fromTime">The lower bound date time for a search.</param>
+		/// <param name="toTime">The upper bound date time for a search.</param>
+		/// <exception cref="ArgumentException">
+		/// The argument exception, when toTime is less than fromTime OR
+		/// less than equal to current time.
+		/// </exception>
+		/// <returns>A time slot or null</returns>
+		public TimeSlot FindFirstAvailableSlot(int meetingDuration, DateTime fromTime, DateTime toTime = default)
+		{
+			ValidateSearchRange(meetingDuration, fromTime, toTime);
+
+			toTime = (toTime == default) ? _endTime :toTime;
+
+			var lowerBound = (fromTime >= _startTime) ? fromTime.CalibrateToMinutes() : _startTime;
+			var upperBound = (toTime >= _endTime) ? _endTime : toTime.CalibrateToMinutes();
+
+			var availableMeetingSlots = GetAllAvailableTimeSlots();
+
 			return availableMeetingSlots
-				.Where(t => t.GetDuration() >= meetingDuration)
-				.OrderBy(o => o.GetDuration())
-				.ThenBy(i => i.StartTime)
-				.FirstOrDefault();
+				.Select(t => TimeSlotMapper(t, lowerBound, upperBound))
+				.FindFirst(t => t.GetDuration() >= meetingDuration && t.StartTime >= lowerBound && t.EndTime <= upperBound);
 		}
 
 		/// <summary>
@@ -114,15 +151,18 @@ namespace MeetingCalendar
 		/// <returns>A list of <see cref="TimeSlot"/></returns>
 		public IEnumerable<TimeSlot> GetAllAvailableTimeSlots()
 		{
+			_availableMeetingSlots.Clear();
+
 			//Do not calculate available meeting slots for past meetings - Performance improvement
-			if (_endTime <= DateTime.Now.CalibrateToMinutes())
+			if (_endTime <= CurrentTime)
 			{
 				return _availableMeetingSlots;
 			}
 
 			//Calculate the availability only from NOW onwards - Performance improvement
-			var startTime = (_startTime >= DateTime.Now) ? _startTime : DateTime.Now.CalibrateToMinutes();
-			var meetingHoursByMinutes = GetTimeSeriesByMinutes(startTime, _endTime);
+			var startTime = (_startTime >= CurrentTime) ? _startTime : CurrentTime;
+			//TODO: Use Base as TimeSlot to avoid creating new TimeSLot
+			var meetingHoursByMinutes = new TimeSlot(startTime, _endTime).GetTimeSeriesByMinutes();
 
 			//Map the meeting timings of each attendees
 			if (Attendees != null && Attendees.Any())
@@ -162,52 +202,38 @@ namespace MeetingCalendar
 		private void GetAllAvailableTimeSlots(IDictionary<DateTime, bool> meetingHoursByMinutes) =>
 			Attendees.ForEach(attendee =>
 			{
-				attendee.Meetings.ForEach(scheduledMeeting =>
-				{
-					if (scheduledMeeting.IsOver()) return;
-
-					var timeSeries = GetTimeSeriesWithinCalendarTimeFrame(scheduledMeeting);
-					//Merge the meeting duration of the attendee
-					timeSeries.ForEach(item =>
-					{
-						//Update the value only when the minute has not been marked yet, as unavailable - Performance improvement
-						if (meetingHoursByMinutes.TryGetValue(item.Key, out var prevValue) && !prevValue)
-						{
-							meetingHoursByMinutes[item.Key] = item.Value; //Sets to true - i.e. unavailable
-						}
-					});
-				});
+				attendee.Meetings.Where(meeting => !meeting.IsOver())
+					.ForEach(scheduledMeeting =>
+						scheduledMeeting
+							.GetTimeSlotMappedToCalenderTimeFrame(_startTime, _endTime)
+							.GetTimeSeriesByMinutes(true)
+							.ForEach(item =>
+							{
+								//Update the value only when the minute has not been marked yet, as unavailable - Performance improvement
+								if (meetingHoursByMinutes.TryGetValue(item.Key, out var prevValue) && !prevValue)
+								{
+									meetingHoursByMinutes[item.Key] = item.Value; //Sets to true - i.e. unavailable
+								}
+							})
+					);
 			});
 
 		private void GetAllAvailableTimeSlotsAsParallel(ConcurrentDictionary<DateTime, bool> meetingHoursByMinutes) =>
 			Attendees.ForEach(attendee =>
 			{
-				attendee.Meetings.AsParallel().ForAll(scheduledMeeting =>
-				{
-					if (scheduledMeeting.IsOver()) return;
-
-					var timeSeries = GetTimeSeriesWithinCalendarTimeFrame(scheduledMeeting);
-					//Merge the meeting duration of the attendee
-					timeSeries.AsParallel().ForAll(item =>
-					{
-						// Updates and sets the value to true - i.e. unavailable, only when the minute has not been marked yet - Performance improvement
-						meetingHoursByMinutes.TryUpdate(item.Key, item.Value, false);
-					});
-				});
+				attendee.Meetings
+					.Where(meeting => !meeting.IsOver())
+					.AsParallel().ForAll(scheduledMeeting =>
+						scheduledMeeting
+							.GetTimeSlotMappedToCalenderTimeFrame(_startTime, _endTime)
+							.GetTimeSeriesByMinutes(true)
+							.AsParallel().ForAll(item =>
+							{
+								// Updates and sets the value to true - i.e. unavailable, only when the minute has not been marked yet - Performance improvement
+								meetingHoursByMinutes.TryUpdate(item.Key, item.Value, false);
+							})
+					);
 			});
-
-		/// <summary>
-		/// Calculates the scheduled meeting durations only within the time frame of Calendar
-		/// </summary>
-		/// <param name="scheduledMeeting"></param>
-		/// <returns></returns>
-		private IEnumerable<KeyValuePair<DateTime, bool>> GetTimeSeriesWithinCalendarTimeFrame(TimeSlot scheduledMeeting)
-		{
-			return GetTimeSeriesByMinutes(
-				(scheduledMeeting.StartTime >= _startTime) ? scheduledMeeting.StartTime : _startTime,
-				(scheduledMeeting.EndTime <= _endTime) ? scheduledMeeting.EndTime : _endTime,
-				true);
-		}
 
 		private void CalculateAvailableSlots(IEnumerable<KeyValuePair<DateTime, bool>> scheduledHoursByMinutes, TimeSlot availableTimeSlot = null, bool searchVal = false)
 		{
@@ -238,17 +264,48 @@ namespace MeetingCalendar
 			}
 		}
 
-		private static ConcurrentDictionary<DateTime, bool> GetTimeSeriesByMinutes(DateTime seriesStartTime, DateTime seriesEndTime, bool isScheduled = false)
+		/// <summary>
+		/// Validates search range parameters.
+		/// </summary>
+		/// <param name="meetingDuration"></param>
+		/// <param name="fromTime"></param>
+		/// <param name="toTime"></param>
+		private void ValidateSearchRange(int meetingDuration, DateTime fromTime, DateTime toTime)
 		{
-			var timeRange = new ConcurrentDictionary<DateTime, bool>();
-			var temp = seriesStartTime;
-			while (temp < seriesEndTime)
+			if (meetingDuration <= 0)
 			{
-				timeRange.TryAdd(temp, isScheduled);
-				temp = temp.AddMinutes(1);
+				throw new ArgumentException("The meeting duration can not be less than or equal to zero.",
+					nameof(meetingDuration));
 			}
 
-			return timeRange;
+			if (toTime != default &&
+				meetingDuration > toTime.CalibrateToMinutes().Subtract(fromTime.CalibrateToMinutes()).TotalMinutes)
+			{
+				throw new ArgumentException(
+					"The meeting duration can not be longer than the search range.Consider to increase the search range.",
+					nameof(meetingDuration));
+			}
+
+			if (toTime != default && toTime.CalibrateToMinutes() <= CurrentTime)
+			{
+				throw new ArgumentException("Search range upper limit can not be less than current time.", nameof(toTime));
+			}
+		}
+
+		/// <summary>
+		/// Projects a new time slot.
+		/// </summary>
+		/// <param name="timeSlot">The time slot.</param>
+		/// <param name="lowerBound">The search lower bound.</param>
+		/// <param name="upperBound">The search upper bound.</param>
+		/// <returns> A new time slot mapped to calendar LB and UB</returns>
+		private static TimeSlot TimeSlotMapper(TimeSlot timeSlot, DateTime lowerBound, DateTime upperBound)
+		{
+			var (startTime, endTime) = timeSlot;
+
+			return new TimeSlot(
+				((timeSlot.StartTime <= lowerBound && lowerBound < timeSlot.EndTime) ? lowerBound : startTime),
+				((timeSlot.StartTime < upperBound && upperBound < timeSlot.EndTime) ? upperBound : endTime));
 		}
 
 		#endregion Private methods

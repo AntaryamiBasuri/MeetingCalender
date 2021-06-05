@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Description>A package that can provide information about available appointment slots within a specific time duration for zero or more attendees.</Description>
-    <Version>2.1.0.0</Version>
+    <Version>0.9.1.0</Version>
     <Company />
     <PackageProjectUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</RepositoryUrl>
@@ -13,30 +13,25 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>MeetingCalendar</PackageTags>
     <PackageReleaseNotes>
+
 This library includes:
-      •  A readonly property to get the list of attendees
+      •  A read-only property to get the list of attendees
+      •  A read-only property to get the current date and time calibrated to minutes
       •  A method to add attendees to the Meeting Calendar
       •  A method to append additional attendees to the Meeting Calendar
-      •  A method to get the first available meeting slot for a requested meeting duration
+      •  A method to get the first available meeting slot for a requested meeting duration [obsolete]
+      •  The MeetingInfo property of Attendee class renamed to "Meetings"
       •  A method to find all available meeting slots
+      •  Overloaded methods to find a time slot for a given duration, optionally within a given time frame
       •  Documented code
       •  Unit tested code with code coverage above 99%
 
-Version 2.1
-      •  Files reorganized
-      •  MeetingInfo property of Atendee class renamed to "Meetings"
-
-Version 2.0
-      •  Framework version upgraded from .NETStandard 2.1 to net5.0
-
-Version 1.x
-       •  Written from ground up using .NETStandard 2.1
-       •  No external dependencies
+This library targets .NetStandard 2.1 framework. Visit https://www.nuget.org/packages/MeetingCalendar/ that targets .net5.0 framework.
 
     </PackageReleaseNotes>
-    <AssemblyVersion>2.1.0.0</AssemblyVersion>
-    <FileVersion>2.1.0.0</FileVersion>
-    <PackageId>MeetingCalendar</PackageId>
+    <AssemblyVersion>0.9.1.0</AssemblyVersion>
+    <FileVersion>0.9.1.0</FileVersion>
+    <PackageId>MeetingCalender</PackageId>
   </PropertyGroup>
 
 </Project>

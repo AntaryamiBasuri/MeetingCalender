@@ -59,7 +59,7 @@ namespace MeetingCalendarTestConsole
 				{
 					var sw = new Stopwatch();
 					sw.Start();
-					var firstAvailableMeetingSlot = meetingCalendar.GetFirstAvailableSlot(duration);
+					var firstAvailableMeetingSlot = meetingCalendar.FindFirstAvailableSlot(duration);
 					sw.Stop();
 
 					Console.WriteLine($"Number of Attendees in the meeting: { meetingCalendar.Attendees.Count() }");
