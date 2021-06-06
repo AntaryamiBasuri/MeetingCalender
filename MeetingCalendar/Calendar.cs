@@ -99,14 +99,6 @@ namespace MeetingCalendar
 			=> Attendees = Attendees?.Concat(additionalAttendees) ?? additionalAttendees;
 
 		/// <summary>
-		/// Returns the first available time slot for the requested meeting duration.
-		/// </summary>
-		/// <param name="meetingDuration">The meeting duration in minutes.</param>
-		/// <returns>A time slot or null</returns>
-		[Obsolete("Use FindFirstAvailableSlot instead.")]
-		public TimeSlot GetFirstAvailableSlot(int meetingDuration) => FindFirstAvailableSlot(meetingDuration);
-
-		/// <summary>
 		/// Finds the first available time slot for the requested meeting duration.
 		/// </summary>
 		/// <param name="meetingDuration">The meeting duration in minutes.</param>
@@ -133,7 +125,7 @@ namespace MeetingCalendar
 		{
 			ValidateSearchRange(meetingDuration, fromTime, toTime);
 
-			toTime = (toTime == default) ? _endTime :toTime;
+			toTime = (toTime == default) ? _endTime : toTime;
 
 			var lowerBound = (fromTime >= _startTime) ? fromTime.CalibrateToMinutes() : _startTime;
 			var upperBound = (toTime >= _endTime) ? _endTime : toTime.CalibrateToMinutes();

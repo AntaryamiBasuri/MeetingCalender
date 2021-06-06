@@ -52,17 +52,6 @@ namespace MeetingCalendarTest
 			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(1));
 		}
 
-		//TODO: Remove the test along with GetFirstAvailableSlot
-		[Test]
-		public void TimeSlotAvailableForRequestedDuration_Using_Obsolete_GetFirstAvailableSlot()
-		{
-#pragma warning disable CS0618 // Type or member is obsolete
-			var availableSlot = _meetingCalendar.GetFirstAvailableSlot(1);
-#pragma warning restore CS0618 // Type or member is obsolete
-			Assert.That(availableSlot, Is.Not.Null);
-			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(1));
-		}
-
 		[Test]
 		public void FetchAttendees()
 		{
@@ -117,6 +106,18 @@ namespace MeetingCalendarTest
 				});
 			});
 			Assert.That(_meetingCalendar.Attendees.Count(), Is.EqualTo(1));
+		}
+
+		[Test]
+		public void GetAllAvailableTimeSlots_Returns_No_TimeSlot_When_Calendar_Upper_Limit_Approaches_Current_Time()
+		{
+			var calendar = new Calendar(DateTime.Now.AddHours(-8), DateTime.Now.AddMinutes(1), new List<Attendee>()
+			{
+				new("Attendee1", new List<MeetingInfo>())
+			});
+
+			var source = calendar.GetAllAvailableTimeSlots().ToList();
+			Assert.That(source.Count, Is.Zero);
 		}
 
 		[Test]
@@ -190,7 +191,7 @@ namespace MeetingCalendarTest
 			var availableSlot = meetingCalendar.FindFirstAvailableSlot(meetingDuration, startTime.AddHours(-1), endTime.AddHours(1));
 			Assert.That(availableSlot, Is.Not.Null);
 			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(meetingDuration));
-			//TODO:								Use Is.EqualTo(meetingCalendar.StartTime)
+			//TODO:Use Is.EqualTo(meetingCalendar.StartTime)
 			Assert.That(availableSlot.StartTime, Is.EqualTo(startTime));
 			Assert.That(availableSlot.EndTime, Is.EqualTo(endTime.AddMinutes(-1)));
 		}
@@ -251,7 +252,7 @@ namespace MeetingCalendarTest
 			var availableSlot = meetingCalendar.FindFirstAvailableSlot(meetingDuration, searchRangeStartTime, endTime.AddHours(1));
 			Assert.That(availableSlot, Is.Not.Null);
 			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(meetingDuration));
-			//TODO:								Use Is.EqualTo(meetingCalendar.StartTime)
+			//TODO:	Use Is.EqualTo(meetingCalendar.StartTime)
 			Assert.That(availableSlot.StartTime, Is.EqualTo(searchRangeStartTime));
 			Assert.That(availableSlot.EndTime, Is.EqualTo(endTime.AddMinutes(-1)));
 		}

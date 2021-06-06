@@ -85,7 +85,7 @@ namespace MeetingCalendarTest.Extensions
 			});
 
 			var source = meetingCalendar.GetAllAvailableTimeSlots().ToList();
-			var actualStartTime = TimeSlotExtensions.FindFirst(source, t => t.GetDuration() >= 10).StartTime;
+			var actualStartTime = source.FindFirst(t => t.GetDuration() >= 10).StartTime;
 			Assert.That(actualStartTime, Is.EqualTo(expectedStartTime));
 		}
 
@@ -111,7 +111,7 @@ namespace MeetingCalendarTest.Extensions
 			});
 
 			var source = meetingCalendar.GetAllAvailableTimeSlots().ToList();
-			var actualStartTime = TimeSlotExtensions.FindFirst(source, t
+			var actualStartTime = source.FindFirst(t
 				=> t.StartTime >= startTime && t.EndTime <= startTime.AddHours(4.75) && t.GetDuration() >= 10).StartTime;
 			Assert.That(actualStartTime, Is.EqualTo(expectedStartTime));
 		}

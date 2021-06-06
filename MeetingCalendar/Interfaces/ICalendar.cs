@@ -35,19 +35,10 @@ namespace MeetingCalendar.Interfaces
 		void AppendAttendees(IEnumerable<Attendee> additionalAttendees);
 
 		/// <summary>
-		/// Returns the first available time slot for the requested meeting duration.
-		/// </summary>
-		/// <param name="meetingDuration">The meeting duration in minutes.</param>
-		/// <returns>A time slot</returns>
-		[Obsolete("Use FindFirstAvailableSlot instead.")]
-		TimeSlot GetFirstAvailableSlot(int meetingDuration);
-
-		/// <summary>
 		/// Finds the first available time slot for the requested meeting duration.
 		/// </summary>
 		/// <param name="meetingDuration">The meeting duration in minutes.</param>
 		/// <returns>A time slot or null</returns>
-
 		TimeSlot FindFirstAvailableSlot(int meetingDuration);
 
 		/// <summary>
