@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Description>A package that can provide information about available appointment slots within a specific time duration for zero or more attendees.</Description>
-    <Version>2.2.0.0</Version>
+    <Version>2.3.0.0</Version>
     <Company />
     <PackageProjectUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</RepositoryUrl>
@@ -14,24 +14,30 @@
     <PackageTags>MeetingCalendar</PackageTags>
     <PackageReleaseNotes>
 
-This library includes:
+This library includes a meeting calendar class having:
       •  A read-only property to get the list of attendees
-      •  A read-only property to get the current date and time calibrated to minutes
+      •  Read-only properties to get the current date-time, calendar start date-time and end date-time
       •  A method to add attendees to the Meeting Calendar
       •  A method to append additional attendees to the Meeting Calendar
       •  A method to find all available meeting slots
       •  A method to get the first available meeting slot for a requested meeting duration [Obsolete]
-      •  Overloaded methods to find a time slot for a given duration, optionally within a given time frame
+      •  Overloaded methods to find an available time slot for a given duration, within a given time frame
       •  Documented code
       •  Unit tested code with code coverage above 99%
 
+
+Version 2.3
+      •  Interfaces for all public methods and model classes
+      •  StartTime and EndTime read-only properties of ICalender introduced
+      •  Obsolete GetFirstAvailableSlot method removed
+
 Version 2.2
-      •  CurrentTime - A read-only property introduced to get the current date and time calibrated to minutes
-      •  GetFirstAvailableSlot -  Method marked as obsolete
-      •  FindFirstAvailableSlot -  Overloaded methods introduced to find a time slot for a given duration, optionally within a given time frame
+      •  CurrentTime - A read-only property introduced to get the current date-time calibrated to minutes
+      •  GetFirstAvailableSlot - Method marked as obsolete
+      •  FindFirstAvailableSlot - Overloaded methods to find an available time slot for a given duration
 
 Version 2.1
-      •  Files reorganized
+      •  Files re-organized
       •  MeetingInfo property of Attendee class renamed to "Meetings"
 
 Version 2.0
@@ -42,8 +48,8 @@ Version 1.x
        •  No external dependencies
 
     </PackageReleaseNotes>
-    <AssemblyVersion>2.2.0.0</AssemblyVersion>
-    <FileVersion>2.2.0.0</FileVersion>
+    <AssemblyVersion>2.3.0.0</AssemblyVersion>
+    <FileVersion>2.3.0.0</FileVersion>
     <PackageId>MeetingCalendar</PackageId>
   </PropertyGroup>
 
