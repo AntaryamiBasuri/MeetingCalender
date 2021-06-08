@@ -3,6 +3,7 @@
  * Email: a.basuri2002@gmail.com
  */
 
+using MeetingCalendar.Interfaces;
 using MeetingCalendar.Models;
 using NUnit.Framework;
 using System;
@@ -23,15 +24,15 @@ namespace MeetingCalendarTest.Models
 			var meetingEndTime = DateTime.Now.AddMinutes(45);
 
 			var meetingDetails = new MeetingDetails(DateTime.Now, DateTime.Now, meetingTitle, meetingAgenda,
-				new List<Attendee>()
+				new List<IAttendee>()
 				{
-					new("Person1", new List<MeetingInfo>
+					new Attendee("Person1", new List<IMeetingInfo>
 					{
-						new(meetingStartTime, meetingEndTime)
+						new MeetingInfo(meetingStartTime, meetingEndTime)
 					}),
-					new("Person2", new List<MeetingInfo>
+					new Attendee("Person2", new List<IMeetingInfo>
 					{
-						new(meetingStartTime, meetingEndTime)
+						new MeetingInfo(meetingStartTime, meetingEndTime)
 					}),
 				});
 

@@ -3,14 +3,15 @@
  * Email: a.basuri2002@gmail.com
  */
 
+using MeetingCalendar.Interfaces;
 using System;
 
 namespace MeetingCalendar.Models
 {
 	/// <summary>
-	/// Provides information about a <see cref="MeetingInfo"/> with a specific start time and end time.
+	/// Provides information about a meeting with a specific start time and end time.
 	/// </summary>
-	public class MeetingInfo : TimeSlot
+	public class MeetingInfo : TimeSlot, IMeetingInfo
 	{
 		/// <summary>
 		/// Gets or sets Id of the <see cref="MeetingInfo"/>.

@@ -4,6 +4,7 @@
  */
 
 using MeetingCalendar.Extensions;
+using MeetingCalendar.Interfaces;
 using System;
 
 namespace MeetingCalendar.Models
@@ -11,7 +12,7 @@ namespace MeetingCalendar.Models
 	/// <summary>
 	/// Provides a <see cref="TimeSlot"/> with a specific start time and end time.
 	/// </summary>
-	public class TimeSlot
+	public class TimeSlot : ITimeSlot
 	{
 		/// <summary>
 		/// Gets the start time of a <see cref="TimeSlot"/>.

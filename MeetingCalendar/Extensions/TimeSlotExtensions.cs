@@ -3,6 +3,7 @@
  * Email: a.basuri2002@gmail.com
  */
 
+using MeetingCalendar.Interfaces;
 using MeetingCalendar.Models;
 using System;
 using System.Collections.Concurrent;
@@ -15,29 +16,51 @@ using System.Runtime.CompilerServices;
 namespace MeetingCalendar.Extensions
 {
 	/// <summary>
-	/// Extension method for an <see cref="TimeSlot"/>
+	/// Extension method for an <see cref="ITimeSlot"/>
 	/// </summary>
 	internal static class TimeSlotExtensions
 	{
 		/// <summary>
-		/// Gets the duration of a <see cref="TimeSlot"/> in minutes.
+		/// Gets the duration of a <see cref="ITimeSlot"/> in minutes.
 		/// </summary>
-		internal static double GetDuration(this TimeSlot timeSlot)
+		internal static double GetDuration(this ITimeSlot timeSlot)
 			=> timeSlot.StartTime.Equals(timeSlot.EndTime) ? 0 : timeSlot.EndTime.Subtract(timeSlot.StartTime).TotalMinutes + 1;
+
+		/// <summary>
+		/// Maps a <see cref="TimeSlot"/> of a meeting to Time frame of the the calendar.
+		/// </summary>
+		/// <param name="timeSlot">The Meeting.</param>
+		/// <param name="calendarStartTime">The start time of the calendar.</param>
+		/// <param name="calendarEndTime">The end time of the calendar.</param>
+		/// <returns>A new Time slot mapped to calendar time frame</returns>
+		internal static TimeSlot GetTimeSlotMappedToCalenderTimeFrame(this ITimeSlot timeSlot, DateTime calendarStartTime, DateTime calendarEndTime)
+		{
+			//Outside of calendar time frame
+			if (timeSlot.EndTime <= calendarStartTime || timeSlot.StartTime >= calendarEndTime)
+			{
+				return null;
+			}
+
+			return new(
+				(timeSlot.StartTime >= calendarStartTime) ? timeSlot.StartTime : calendarStartTime,
+				(timeSlot.EndTime <= calendarEndTime) ? timeSlot.EndTime : calendarEndTime
+			);
+		}
 
 		/// <summary>
 		/// Calculates the scheduled meeting durations only within the time frame of Calendar
 		/// </summary>
-		/// <param name="timeSlot"></param>
-		/// <param name="isScheduled"></param>
+		/// <param name="timeSlot">The Time Slot</param>
+		/// <param name="isScheduled">The value indicating whether the time is marked as scheduled or not</param>
+		/// <param name="seriesStartTime">The start time of time series</param>
 		/// <returns></returns>
-		internal static ConcurrentDictionary<DateTime, bool> GetTimeSeriesByMinutes(this TimeSlot timeSlot, bool isScheduled = false)
+		internal static ConcurrentDictionary<DateTime, bool> GetTimeSeriesByMinutes(this ITimeSlot timeSlot, bool isScheduled = false, DateTime seriesStartTime = default)
 		{
 			var timeRange = new ConcurrentDictionary<DateTime, bool>();
 
 			if (timeSlot == null) return timeRange;
 
-			var temp = timeSlot.StartTime;
+			var temp = (seriesStartTime == default) ? timeSlot.StartTime : seriesStartTime;
 			while (temp < timeSlot.EndTime)
 			{
 				timeRange.TryAdd(temp, isScheduled);
@@ -53,9 +76,9 @@ namespace MeetingCalendar.Extensions
 		/// <param name="source">The source list.</param>
 		/// <param name="predicate">The search criteria.</param>
 		/// <returns>A time slot or null</returns>
-		internal static TimeSlot FindFirst(this IEnumerable<TimeSlot> source, Func<TimeSlot, bool> predicate)
+		internal static ITimeSlot FindFirst(this IEnumerable<ITimeSlot> source, Func<ITimeSlot, bool> predicate)
 		{
-			static bool IncludeAllPredicate(TimeSlot t) => true;
+			static bool IncludeAllPredicate(ITimeSlot t) => true;
 			var filter = predicate ?? IncludeAllPredicate;
 
 			return source?
@@ -63,9 +86,6 @@ namespace MeetingCalendar.Extensions
 				.OrderBy(o => o.GetDuration())
 				.ThenBy(i => i.StartTime)
 				.FirstOrDefault();
-
-			//TODO: Find the TImeSlot //.Where(t => DateTime.Now is between Start Time and End Time )
-			//TODO: Then Count the duration from Now till EndTime if it is greater than requested Duration then include else discard
 		}
 	}
 }

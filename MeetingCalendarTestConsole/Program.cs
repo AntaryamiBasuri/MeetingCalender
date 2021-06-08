@@ -4,6 +4,7 @@
  */
 
 using MeetingCalendar;
+using MeetingCalendar.Interfaces;
 using MeetingCalendar.Models;
 using System;
 using System.Collections.Generic;
@@ -22,33 +23,33 @@ namespace MeetingCalendarTestConsole
 
 			var attendeesWithMeetingTimings = new List<Attendee>
 			{
-				new("Person1", new List<MeetingInfo>
+				new("Person1", new List<IMeetingInfo>
 				{
-					new(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
-					new(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
+					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
+					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
 				}),
-				new("Person2", new List<MeetingInfo>
+				new("Person2", new List<IMeetingInfo>
 				{
-					new(DateTime.Now.AddMinutes(6),DateTime.Now.AddMinutes(10)),
-					new(DateTime.Now.AddMinutes(15),DateTime.Now.AddMinutes(20))
+					new MeetingInfo(DateTime.Now.AddMinutes(6),DateTime.Now.AddMinutes(10)),
+					new MeetingInfo(DateTime.Now.AddMinutes(15),DateTime.Now.AddMinutes(20))
 				}),
-				new("Person3", new List<MeetingInfo>
+				new("Person3", new List<IMeetingInfo>
 				{
-					new(DateTime.Now.AddMinutes(25),DateTime.Now.AddMinutes(27)),
-					new(DateTime.Now.AddMinutes(32),DateTime.Now.AddMinutes(48)),
-					new(DateTime.Now.AddMinutes(65),DateTime.Now.AddMinutes(120)),
-					new(DateTime.Now.AddMinutes(130),DateTime.Now.AddMinutes(160))
+					new MeetingInfo(DateTime.Now.AddMinutes(25),DateTime.Now.AddMinutes(27)),
+					new MeetingInfo(DateTime.Now.AddMinutes(32),DateTime.Now.AddMinutes(48)),
+					new MeetingInfo(DateTime.Now.AddMinutes(65),DateTime.Now.AddMinutes(120)),
+					new MeetingInfo(DateTime.Now.AddMinutes(130),DateTime.Now.AddMinutes(160))
 				}),
-				new("Person4", new List<MeetingInfo>
+				new("Person4", new List<IMeetingInfo>
 				{
-					new(DateTime.Now.AddMinutes(46),DateTime.Now.AddMinutes(50)),
-					new(DateTime.Now.AddMinutes(55),DateTime.Now.AddMinutes(60)),
-					new(DateTime.Now.AddMinutes(85),DateTime.Now.AddMinutes(150)),
-					new(DateTime.Now.AddMinutes(150),DateTime.Now.AddMinutes(180))
+					new MeetingInfo(DateTime.Now.AddMinutes(46),DateTime.Now.AddMinutes(50)),
+					new MeetingInfo(DateTime.Now.AddMinutes(55),DateTime.Now.AddMinutes(60)),
+					new MeetingInfo(DateTime.Now.AddMinutes(85),DateTime.Now.AddMinutes(150)),
+					new MeetingInfo(DateTime.Now.AddMinutes(150),DateTime.Now.AddMinutes(180))
 				})
 			};
 
-			var meetingCalendar = new Calendar(startTime, endTime, attendeesWithMeetingTimings);
+			ICalendar meetingCalendar = new Calendar(startTime, endTime, attendeesWithMeetingTimings);
 
 			while (true)
 			{

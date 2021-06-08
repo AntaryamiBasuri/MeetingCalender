@@ -3,6 +3,7 @@
  * Email: a.basuri2002@gmail.com
  */
 
+using MeetingCalendar.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +12,7 @@ namespace MeetingCalendar.Models
 	/// <summary>
 	/// Provides information about an <see cref="Attendee"/> along with its meeting details.
 	/// </summary>
-	public class Attendee
+	public class Attendee : IAttendee
 	{
 		/// <summary>
 		/// Gets or sets Id of the <see cref="Attendee"/>.
@@ -36,27 +37,27 @@ namespace MeetingCalendar.Models
 		/// <summary>
 		/// Gets or sets a list of <see cref="MeetingInfo"/> associated with the <see cref="Attendee"/>.
 		/// </summary>
-		public IList<MeetingInfo> Meetings { get; }
+		public IEnumerable<IMeetingInfo> Meetings { get; }
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Attendee"/>
+		/// Initializes a new instance of <see cref="IAttendee"/>
 		/// </summary>
-		/// <param name="attendeeName">The name of the <see cref="Attendee"/>.</param>
-		/// <param name="meetings">The list of <see cref="MeetingInfo"/>.</param>
-		public Attendee(string attendeeName, IList<MeetingInfo> meetings)
+		/// <param name="attendeeName">The name of the <see cref="IAttendee"/>.</param>
+		/// <param name="meetings">The list of <see cref="IMeetingInfo"/>.</param>
+		public Attendee(string attendeeName, IEnumerable<IMeetingInfo> meetings)
 		{
 			AttendeeName = attendeeName;
 			Meetings = meetings;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Attendee"/>
+		/// Initializes a new instance of <see cref="IAttendee"/>
 		/// </summary>
-		/// <param name="attendeeName">The name of the <see cref="Attendee"/>.</param>
-		/// <param name="isOptionalAttendee">The flag to mark the <see cref="Attendee"/> as optional, mandatory otherwise.</param>
-		/// <param name="meetings">A list of <see cref="MeetingInfo"/>.</param>
-		/// <param name="attendeeEmailId">THe email id of the <see cref="Attendee"/> </param>
-		public Attendee(string attendeeName, string attendeeEmailId, bool isOptionalAttendee, IList<MeetingInfo> meetings) :
+		/// <param name="attendeeName">The name of the <see cref="IAttendee"/>.</param>
+		/// <param name="isOptionalAttendee">The flag to mark the <see cref="IAttendee"/> as optional, mandatory otherwise.</param>
+		/// <param name="meetings">A list of <see cref="IMeetingInfo"/>.</param>
+		/// <param name="attendeeEmailId">THe email id of the <see cref="IAttendee"/> </param>
+		public Attendee(string attendeeName, string attendeeEmailId, bool isOptionalAttendee, IEnumerable<IMeetingInfo> meetings) :
 			this(attendeeName, meetings)
 		{
 			AttendeeEmailId = attendeeEmailId;

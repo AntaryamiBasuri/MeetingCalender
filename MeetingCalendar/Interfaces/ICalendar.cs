@@ -10,9 +10,9 @@ using System.Collections.Generic;
 namespace MeetingCalendar.Interfaces
 {
 	/// <summary>
-	/// Interface for <see cref="Calendar"/>
+	/// Interface for <see cref="ICalendar"/>
 	/// </summary>
-	public interface ICalendar
+	public interface ICalendar : ITimeSlot
 	{
 		/// <summary>
 		/// Gets the current date and time calibrated to minutes.
@@ -22,24 +22,24 @@ namespace MeetingCalendar.Interfaces
 		/// <summary>
 		/// Gets the list of attendees.
 		/// </summary>
-		IEnumerable<Attendee> Attendees { get; }
+		IEnumerable<IAttendee> Attendees { get; }
 
 		/// <summary>
 		/// Add attendees to the calendar.
 		/// </summary>
-		void AddAttendees(IEnumerable<Attendee> attendees);
+		void AddAttendees(IEnumerable<IAttendee> attendees);
 
 		/// <summary>
 		/// Appends additional attendees to the existing attendees list.
 		/// </summary>
-		void AppendAttendees(IEnumerable<Attendee> additionalAttendees);
+		void AppendAttendees(IEnumerable<IAttendee> additionalAttendees);
 
 		/// <summary>
 		/// Finds the first available time slot for the requested meeting duration.
 		/// </summary>
 		/// <param name="meetingDuration">The meeting duration in minutes.</param>
 		/// <returns>A time slot or null</returns>
-		TimeSlot FindFirstAvailableSlot(int meetingDuration);
+		ITimeSlot FindFirstAvailableSlot(int meetingDuration);
 
 		/// <summary>
 		/// Finds the first available time slot for the requested meeting duration within a specific time frame.
@@ -48,12 +48,12 @@ namespace MeetingCalendar.Interfaces
 		/// <param name="fromTime">The lower bound date time for a search.</param>
 		/// <param name="toTime">The upper bound date time for a search.</param>
 		/// <returns>A time slot or null</returns>
-		TimeSlot FindFirstAvailableSlot(int meetingDuration, DateTime fromTime, DateTime toTime = default);
+		ITimeSlot FindFirstAvailableSlot(int meetingDuration, DateTime fromTime, DateTime toTime = default);
 
 		/// <summary>
 		/// Find all available meeting slots.
 		/// </summary>
 		/// <returns>A list of <see cref="TimeSlot"/></returns>
-		IEnumerable<TimeSlot> GetAllAvailableTimeSlots();
+		IEnumerable<ITimeSlot> GetAllAvailableTimeSlots();
 	}
 }

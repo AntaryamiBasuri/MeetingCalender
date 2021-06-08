@@ -3,6 +3,7 @@
  * Email: a.basuri2002@gmail.com
  */
 
+using MeetingCalendar.Interfaces;
 using MeetingCalendar.Models;
 using NUnit.Framework;
 using System;
@@ -19,9 +20,9 @@ namespace MeetingCalendarTest.Models
 		{
 			var name = "Person11";
 			var email = "test@email.com";
-			var attendee = new Attendee(name, email, true, new List<MeetingInfo>
+			var attendee = new Attendee(name, email, true, new List<IMeetingInfo>
 			{
-				new(DateTime.Now, DateTime.Now.AddHours(1))
+				new MeetingInfo(DateTime.Now, DateTime.Now.AddHours(1))
 			});
 			var newId = Guid.NewGuid();
 			attendee.AttendeeId = newId;

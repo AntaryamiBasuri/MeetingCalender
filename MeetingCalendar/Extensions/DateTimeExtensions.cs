@@ -21,7 +21,7 @@ namespace MeetingCalendar.Extensions
 		/// <param name="dateTime">The date time instance</param>
 		/// <returns>A new calibrated date time instance.</returns>
 		internal static DateTime CalibrateToMinutes(this DateTime dateTime)
-			=> new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, dateTime.Kind);
+			=> new(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, dateTime.Kind);
 
 		/// <summary>
 		/// Validates a date time against Min & Max value of DateTime

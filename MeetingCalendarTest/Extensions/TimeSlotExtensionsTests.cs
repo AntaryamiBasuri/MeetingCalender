@@ -5,6 +5,7 @@
 
 using MeetingCalendar;
 using MeetingCalendar.Extensions;
+using MeetingCalendar.Interfaces;
 using MeetingCalendar.Models;
 using NUnit.Framework;
 using System;
@@ -69,24 +70,24 @@ namespace MeetingCalendarTest.Extensions
 			var startTime = DateTime.Now;
 			var endTime = startTime.AddHours(8);
 
-			var expectedStartTime = startTime.AddHours(4.75).CalibrateToMinutes();
+			var forthMeetingEndTime = startTime.AddHours(4.75);
 
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>()
+			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
 			{
-				new("Person10", new List<MeetingInfo>
+				new("Person10", new List<IMeetingInfo>
 				{
-					new(startTime.AddHours(1), startTime.AddHours(1.5)),
-					new(startTime.AddHours(2), startTime.AddHours(2.7)),
-					new(startTime.AddHours(3), startTime.AddHours(3.5)),
-					new(startTime.AddHours(4), startTime.AddHours(4.75)),
+					new MeetingInfo(startTime.AddHours(1), startTime.AddHours(1.5)),
+					new MeetingInfo(startTime.AddHours(2), startTime.AddHours(2.7)),
+					new MeetingInfo(startTime.AddHours(3), startTime.AddHours(3.5)),
+					new MeetingInfo(startTime.AddHours(4), forthMeetingEndTime),
 					//Here is the expected slot having least duration first
-					new(startTime.AddHours(5), startTime.AddHours(7.25))
+					new MeetingInfo(startTime.AddHours(5), startTime.AddHours(7.25))
 				})
 			});
 
 			var source = meetingCalendar.GetAllAvailableTimeSlots().ToList();
 			var actualStartTime = source.FindFirst(t => t.GetDuration() >= 10).StartTime;
-			Assert.That(actualStartTime, Is.EqualTo(expectedStartTime));
+			Assert.That(actualStartTime, Is.EqualTo(forthMeetingEndTime.CalibrateToMinutes()));
 		}
 
 		[Test]
@@ -95,25 +96,25 @@ namespace MeetingCalendarTest.Extensions
 			var startTime = DateTime.Now;
 			var endTime = startTime.AddHours(8);
 
-			var expectedStartTime = startTime.AddHours(2.7).CalibrateToMinutes();
+			var secondMeetingEndTime = startTime.AddHours(2.7);
 
 			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>()
 			{
-				new("Person10", new List<MeetingInfo>
+				new("Person10", new List<IMeetingInfo>
 				{
-					new(startTime.AddHours(1), startTime.AddHours(1.5)),
-					new(startTime.AddHours(2), startTime.AddHours(2.7)),
+					new MeetingInfo(startTime.AddHours(1), startTime.AddHours(1.5)),
+					new MeetingInfo(startTime.AddHours(2), secondMeetingEndTime),
 					//Here is the expected slot having least duration first
-					new(startTime.AddHours(3), startTime.AddHours(3.5)),
-					new(startTime.AddHours(4), startTime.AddHours(4.75)),
-					new(startTime.AddHours(5), startTime.AddHours(7.25))
+					new MeetingInfo(startTime.AddHours(3), startTime.AddHours(3.5)),
+					new MeetingInfo(startTime.AddHours(4), startTime.AddHours(4.75)),
+					new MeetingInfo(startTime.AddHours(5), startTime.AddHours(7.25))
 				})
 			});
 
 			var source = meetingCalendar.GetAllAvailableTimeSlots().ToList();
 			var actualStartTime = source.FindFirst(t
 				=> t.StartTime >= startTime && t.EndTime <= startTime.AddHours(4.75) && t.GetDuration() >= 10).StartTime;
-			Assert.That(actualStartTime, Is.EqualTo(expectedStartTime));
+			Assert.That(actualStartTime, Is.EqualTo(secondMeetingEndTime.CalibrateToMinutes()));
 		}
 	}
 }
