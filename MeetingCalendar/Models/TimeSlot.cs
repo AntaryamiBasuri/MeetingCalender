@@ -25,7 +25,7 @@ namespace MeetingCalendar.Models
 		public DateTime EndTime { get; }
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="TimeSlot"/>
+		/// Initializes a new instance of the <see cref="TimeSlot"/> class.
 		/// </summary>
 		/// <param name="startTime">The <see cref="DateTime"/> from where the time slot starts.</param>
 		/// <param name="endTime">The <see cref="DateTime"/> where the time slot ends.</param>
@@ -47,8 +47,8 @@ namespace MeetingCalendar.Models
 		/// <summary>
 		/// Deconstruct a <see cref="TimeSlot"/>.
 		/// </summary>
-		/// <param name="startTime">The start time</param>
-		/// <param name="endTime">The end time</param>
+		/// <param name="startTime">The start time.</param>
+		/// <param name="endTime">The end time.</param>
 		public void Deconstruct(out DateTime startTime, out DateTime endTime)
 		{
 			startTime = StartTime;

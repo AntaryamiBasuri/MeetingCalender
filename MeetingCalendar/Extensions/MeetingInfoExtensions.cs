@@ -13,14 +13,14 @@ using System.Runtime.CompilerServices;
 namespace MeetingCalendar.Extensions
 {
 	/// <summary>
-	/// Extension method for an <see cref="MeetingInfo"/>
+	/// Extension method for an <see cref="MeetingInfo"/>.
 	/// </summary>
 	internal static class MeetingInfoExtensions
 	{
 		/// <summary>
 		/// Evaluates whether the meeting is over or not.
 		/// </summary>
-		/// <param name="meeting"></param>
+		/// <param name="meeting">The meeting.</param>
 		/// <returns>Returns True if the meeting is over, false otherwise.</returns>
 		internal static bool IsOver(this IMeetingInfo meeting) => meeting.EndTime <= DateTime.Now.CalibrateToMinutes();
 	}

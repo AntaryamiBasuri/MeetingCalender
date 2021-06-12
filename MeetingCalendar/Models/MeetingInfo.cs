@@ -19,7 +19,7 @@ namespace MeetingCalendar.Models
 		public Guid MeetingId { get; set; }
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="MeetingInfo"/>
+		/// Initializes a new instance of the <see cref="MeetingInfo"/> class.
 		/// </summary>
 		/// <param name="startTime">The meeting start time.</param>
 		/// <param name="endTime">The meeting end time.</param>

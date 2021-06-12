@@ -15,17 +15,17 @@ namespace MeetingCalendar.Models
 	public class MeetingDetails : MeetingInfo, IMeetingDetails
 	{
 		/// <summary>
-		/// Gets or sets the title of the <see cref="MeetingDetails"/>.
+		/// Gets the title of the <see cref="MeetingDetails"/>.
 		/// </summary>
 		public string MeetingTitle { get; }
 
 		/// <summary>
-		/// Gets or sets the agenda of the <see cref="MeetingDetails"/>.
+		/// Gets the agenda of the <see cref="MeetingDetails"/>.
 		/// </summary>
 		public string MeetingAgenda { get; }
 
 		/// <summary>
-		/// Gets or sets a list of Attendees associated with the <see cref="MeetingDetails"/>.
+		/// Gets a list of Attendees associated with the <see cref="MeetingDetails"/>.
 		/// </summary>
 		public IList<IAttendee> Attendees { get; }
 
@@ -35,7 +35,7 @@ namespace MeetingCalendar.Models
 		public IList<string> AttachmentFilePaths { get; set; }
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="MeetingDetails"/>
+		/// Initializes a new instance of the <see cref="MeetingDetails"/> class.
 		/// </summary>
 		/// <param name="startTime">The meeting start time.</param>
 		/// <param name="endTime">The meeting end time.</param>
@@ -45,14 +45,14 @@ namespace MeetingCalendar.Models
 		}
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="MeetingDetails"/>
+		/// Initializes a new instance of the <see cref="MeetingDetails"/> class.
 		/// </summary>
 		/// <param name="startTime">The meeting start time.</param>
 		/// <param name="endTime">The meeting end time.</param>
-		/// <param name="meetingTitle">The title of meeting</param>
-		/// <param name="meetingAgenda">The agenda of meeting</param>
-		/// <param name="attendees">A list of Attendees</param>
-		/// <param name="attachmentFilePaths">A list of life paths as attachment files</param>
+		/// <param name="meetingTitle">The title of meeting.</param>
+		/// <param name="meetingAgenda">The agenda of meeting.</param>
+		/// <param name="attendees">A list of Attendees.</param>
+		/// <param name="attachmentFilePaths">A list of life paths as attachment files.</param>
 		public MeetingDetails(DateTime startTime, DateTime endTime, string meetingTitle, string meetingAgenda, IList<IAttendee> attendees, IList<string> attachmentFilePaths = null)
 			: this(startTime, endTime)
 		{
