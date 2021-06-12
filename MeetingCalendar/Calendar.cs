@@ -14,7 +14,7 @@ using System.Linq;
 namespace MeetingCalendar
 {
 	/// <summary>
-	/// Provides an instance of <see cref="ICalendar"/>
+	/// Provides an instance of <see cref="ICalendar"/>.
 	/// </summary>
 	public class Calendar : ICalendar
 	{
@@ -24,11 +24,12 @@ namespace MeetingCalendar
 		private readonly DateTime _endTime;
 		private readonly IList<ITimeSlot> _availableMeetingSlots;
 
+		private static DateTime FutureDateTime => DateTime.MaxValue.AddMinutes(-1);
+
 		#endregion Members
 
 		#region Private computed properties
 
-		private static DateTime FutureDateTime => DateTime.MaxValue.AddMinutes(-1);
 		private double CalendarWindowInMinutes => _endTime.Subtract(_startTime).TotalMinutes;
 
 		//Calculate the availability only from NOW onwards - Performance improvement
@@ -39,12 +40,12 @@ namespace MeetingCalendar
 		#region Public Properties
 
 		/// <summary>
-		/// Gets the start time of <see cref="Calendar"/>
+		/// Gets the start time of <see cref="Calendar"/>.
 		/// </summary>
 		public DateTime StartTime => _startTime;
 
 		/// <summary>
-		/// Gets the end time of <see cref="Calendar"/>
+		/// Gets the end time of <see cref="Calendar"/>.
 		/// </summary>
 		public DateTime EndTime => _endTime;
 
@@ -63,7 +64,7 @@ namespace MeetingCalendar
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Calendar"/>
+		/// Initializes a new instance of the <see cref="Calendar"/> class.
 		/// </summary>
 		/// <param name="startTime">The lower bound of allowed meeting hours.</param>
 		/// <param name="endTime">The upper bound of allowed meeting hours.</param>
@@ -85,11 +86,11 @@ namespace MeetingCalendar
 		}
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Calendar"/>
+		/// Initializes a new instance of the <see cref="Calendar"/> class.
 		/// </summary>
 		/// <param name="startTime">The lower bound of allowed meeting hours.</param>
 		/// <param name="endTime">The upper bound of allowed meeting hours.</param>
-		/// <param name="attendees">A list of <see cref="Attendee"/> along with their <see cref="MeetingInfo"/></param>
+		/// <param name="attendees">A list of <see cref="Attendee"/> along with their <see cref="MeetingInfo"/>.</param>
 		public Calendar(DateTime startTime, DateTime endTime, IEnumerable<IAttendee> attendees)
 			: this(startTime, endTime)
 			=> Attendees = attendees;
@@ -101,12 +102,13 @@ namespace MeetingCalendar
 		/// <summary>
 		/// Add attendees to the calendar.
 		/// </summary>
+		/// <param name="attendees">The list of <see cref="Attendee"/>.</param>
 		public void AddAttendees(IEnumerable<IAttendee> attendees) => Attendees = attendees;
 
 		/// <summary>
 		/// Append additional attendees to existing attendees list.
 		/// </summary>
-		/// <param name="additionalAttendees"></param>
+		/// <param name="additionalAttendees">The additional <see cref="Attendee"/> to append.</param>
 		public void AppendAttendees(IEnumerable<IAttendee> additionalAttendees)
 			=> Attendees = Attendees?.Concat(additionalAttendees) ?? additionalAttendees;
 
@@ -114,7 +116,7 @@ namespace MeetingCalendar
 		/// Finds the first available time slot for the requested meeting duration.
 		/// </summary>
 		/// <param name="meetingDuration">The meeting duration in minutes.</param>
-		/// <returns>A time slot or null</returns>
+		/// <returns>A time slot or null.</returns>
 		public ITimeSlot FindFirstAvailableSlot(int meetingDuration)
 		{
 			var availableMeetingSlots = GetAllAvailableTimeSlots();
@@ -129,12 +131,12 @@ namespace MeetingCalendar
 		/// <param name="fromTime">The lower bound date time for a search.</param>
 		/// <param name="toTime">The upper bound date time for a search.</param>
 		/// <exception cref="ArgumentException">
-		/// Throws argument exception when:
+		/// Thrown when:
 		/// The meeting duration is less than or equal to zero.
 		/// The meeting duration is longer than the search range.
 		/// The search range upper limit is less than current time.
 		/// </exception>
-		/// <returns>A time slot or null</returns>
+		/// <returns>A an instance of <see cref="ITimeSlot"/> or null.</returns>
 		public ITimeSlot FindFirstAvailableSlot(int meetingDuration, DateTime fromTime, DateTime toTime = default)
 		{
 			ValidateSearchRange(meetingDuration, fromTime, toTime);
@@ -154,7 +156,7 @@ namespace MeetingCalendar
 		/// <summary>
 		/// Find all available meeting slots.
 		/// </summary>
-		/// <returns>A list of <see cref="ITimeSlot"/></returns>
+		/// <returns>A list of <see cref="ITimeSlot"/>.</returns>
 		public IEnumerable<ITimeSlot> GetAllAvailableTimeSlots()
 		{
 			_availableMeetingSlots.Clear();
@@ -199,9 +201,23 @@ namespace MeetingCalendar
 		#region Private methods
 
 		/// <summary>
-		/// Find all available <see cref="TimeSlot"/>
+		/// Projects a new time slot.
 		/// </summary>
-		/// <param name="meetingHoursByMinutes"></param>
+		/// <param name="timeSlot">The time slot.</param>
+		/// <param name="lowerBound">The search lower bound.</param>
+		/// <param name="upperBound">The search upper bound.</param>
+		/// <returns> A new instance of <see cref="ITimeSlot"/> mapped to calendar LB and UB.</returns>
+		private static ITimeSlot TimeSlotMapper(ITimeSlot timeSlot, DateTime lowerBound, DateTime upperBound)
+		{
+			return new TimeSlot(
+				timeSlot.StartTime <= lowerBound && lowerBound < timeSlot.EndTime ? lowerBound : timeSlot.StartTime,
+				timeSlot.StartTime < upperBound && upperBound < timeSlot.EndTime ? upperBound : timeSlot.EndTime);
+		}
+
+		/// <summary>
+		/// Find all available <see cref="TimeSlot"/>.
+		/// </summary>
+		/// <param name="meetingHoursByMinutes">The meeting duration converted to a list of minutes.</param>
 		private void GetAllAvailableTimeSlots(IDictionary<DateTime, bool> meetingHoursByMinutes) =>
 			Attendees.ForEach(attendee =>
 			{
@@ -217,8 +233,7 @@ namespace MeetingCalendar
 								{
 									meetingHoursByMinutes[item.Key] = item.Value; //Sets to true - i.e. unavailable
 								}
-							})
-					);
+							}));
 			});
 
 		private void GetAllAvailableTimeSlotsAsParallel(ConcurrentDictionary<DateTime, bool> meetingHoursByMinutes) =>
@@ -234,8 +249,7 @@ namespace MeetingCalendar
 							{
 								// Updates and sets the value to true - i.e. unavailable, only when the minute has not been marked yet - Performance improvement
 								meetingHoursByMinutes.TryUpdate(item.Key, item.Value, false);
-							})
-					);
+							}));
 			});
 
 		private void CalculateAvailableSlots(IEnumerable<KeyValuePair<DateTime, bool>> scheduledHoursByMinutes, ITimeSlot availableTimeSlot = null, bool searchVal = false)
@@ -268,11 +282,11 @@ namespace MeetingCalendar
 		}
 
 		/// <summary>
-		/// Validates search range parameters.
+		/// Validate the search range parameters.
 		/// </summary>
-		/// <param name="meetingDuration"></param>
-		/// <param name="fromTime"></param>
-		/// <param name="toTime"></param>
+		/// <param name="meetingDuration">The meeting duration.</param>
+		/// <param name="fromTime">The fromTime.</param>
+		/// <param name="toTime">The toTime.</param>
 		private void ValidateSearchRange(int meetingDuration, DateTime fromTime, DateTime toTime)
 		{
 			if (meetingDuration <= 0)
@@ -293,20 +307,6 @@ namespace MeetingCalendar
 			{
 				throw new ArgumentException("Search range upper limit can not be less than current time.", nameof(toTime));
 			}
-		}
-
-		/// <summary>
-		/// Projects a new time slot.
-		/// </summary>
-		/// <param name="timeSlot">The time slot.</param>
-		/// <param name="lowerBound">The search lower bound.</param>
-		/// <param name="upperBound">The search upper bound.</param>
-		/// <returns> A new time slot mapped to calendar LB and UB</returns>
-		private static ITimeSlot TimeSlotMapper(ITimeSlot timeSlot, DateTime lowerBound, DateTime upperBound)
-		{
-			return new TimeSlot(
-				((timeSlot.StartTime <= lowerBound && lowerBound < timeSlot.EndTime) ? lowerBound : timeSlot.StartTime),
-				((timeSlot.StartTime < upperBound && upperBound < timeSlot.EndTime) ? upperBound : timeSlot.EndTime));
 		}
 
 		#endregion Private methods

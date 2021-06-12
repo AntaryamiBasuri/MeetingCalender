@@ -1,0 +1,457 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MeetingCalendar</name>
+    </assembly>
+    <members>
+        <member name="T:MeetingCalendar.Calendar">
+            <summary>
+            Provides an instance of <see cref="T:MeetingCalendar.Interfaces.ICalendar"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Calendar.StartTime">
+            <summary>
+            Gets the start time of <see cref="T:MeetingCalendar.Calendar"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Calendar.EndTime">
+            <summary>
+            Gets the end time of <see cref="T:MeetingCalendar.Calendar"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Calendar.CurrentTime">
+            <summary>
+            Gets the current date and time calibrated to minutes.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Calendar.Attendees">
+            <summary>
+            Gets a list of <see cref="T:MeetingCalendar.Interfaces.IAttendee"/>.
+            </summary>
+        </member>
+        <member name="M:MeetingCalendar.Calendar.#ctor(System.DateTime,System.DateTime)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MeetingCalendar.Calendar"/> class.
+            </summary>
+            <param name="startTime">The lower bound of allowed meeting hours.</param>
+            <param name="endTime">The upper bound of allowed meeting hours.</param>
+        </member>
+        <member name="M:MeetingCalendar.Calendar.#ctor(System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{MeetingCalendar.Interfaces.IAttendee})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MeetingCalendar.Calendar"/> class.
+            </summary>
+            <param name="startTime">The lower bound of allowed meeting hours.</param>
+            <param name="endTime">The upper bound of allowed meeting hours.</param>
+            <param name="attendees">A list of <see cref="T:MeetingCalendar.Models.Attendee"/> along with their <see cref="T:MeetingCalendar.Models.MeetingInfo"/>.</param>
+        </member>
+        <member name="M:MeetingCalendar.Calendar.AddAttendees(System.Collections.Generic.IEnumerable{MeetingCalendar.Interfaces.IAttendee})">
+            <summary>
+            Add attendees to the calendar.
+            </summary>
+            <param name="attendees">The attendees.</param>
+        </member>
+        <member name="M:MeetingCalendar.Calendar.AppendAttendees(System.Collections.Generic.IEnumerable{MeetingCalendar.Interfaces.IAttendee})">
+            <summary>
+            Append additional attendees to existing attendees list.
+            </summary>
+            <param name="additionalAttendees">The additional <see cref="T:MeetingCalendar.Models.Attendee"/> to add to the existing list.</param>
+        </member>
+        <member name="M:MeetingCalendar.Calendar.FindFirstAvailableSlot(System.Int32)">
+            <summary>
+            Finds the first available time slot for the requested meeting duration.
+            </summary>
+            <param name="meetingDuration">The meeting duration in minutes.</param>
+            <returns>A time slot or null.</returns>
+        </member>
+        <member name="M:MeetingCalendar.Calendar.FindFirstAvailableSlot(System.Int32,System.DateTime,System.DateTime)">
+            <summary>
+            Finds the first available time slot for the requested meeting duration, optionally within a specific time frame.
+            </summary>
+            <param name="meetingDuration">The meeting duration in minutes.</param>
+            <param name="fromTime">The lower bound date time for a search.</param>
+            <param name="toTime">The upper bound date time for a search.</param>
+            <exception cref="T:System.ArgumentException">
+            Thrown when:
+            The meeting duration is less than or equal to zero.
+            The meeting duration is longer than the search range.
+            The search range upper limit is less than current time.
+            </exception>
+            <returns>A time slot or null.</returns>
+        </member>
+        <member name="M:MeetingCalendar.Calendar.GetAllAvailableTimeSlots">
+            <summary>
+            Find all available meeting slots.
+            </summary>
+            <returns>A list of <see cref="T:MeetingCalendar.Interfaces.ITimeSlot"/>.</returns>
+        </member>
+        <member name="M:MeetingCalendar.Calendar.TimeSlotMapper(MeetingCalendar.Interfaces.ITimeSlot,System.DateTime,System.DateTime)">
+            <summary>
+            Projects a new time slot.
+            </summary>
+            <param name="timeSlot">The time slot.</param>
+            <param name="lowerBound">The search lower bound.</param>
+            <param name="upperBound">The search upper bound.</param>
+            <returns> A new time slot mapped to calendar LB and UB.</returns>
+        </member>
+        <member name="M:MeetingCalendar.Calendar.GetAllAvailableTimeSlots(System.Collections.Generic.IDictionary{System.DateTime,System.Boolean})">
+            <summary>
+            Find all available <see cref="T:MeetingCalendar.Models.TimeSlot"/>.
+            </summary>
+            <param name="meetingHoursByMinutes">The meeting duration converted to a list of minutes.</param>
+        </member>
+        <member name="M:MeetingCalendar.Calendar.ValidateSearchRange(System.Int32,System.DateTime,System.DateTime)">
+            <summary>
+            Validates search range parameters.
+            </summary>
+            <param name="meetingDuration">The meeting duration.</param>
+            <param name="fromTime">The fromTime.</param>
+            <param name="toTime">The toTime.</param>
+        </member>
+        <member name="T:MeetingCalendar.Extensions.DateTimeExtensions">
+            <summary>
+            Extension class for <see cref="T:System.DateTime"/> type.
+            </summary>
+        </member>
+        <member name="M:MeetingCalendar.Extensions.DateTimeExtensions.CalibrateToMinutes(System.DateTime)">
+            <summary>
+            Calibrates the date time without its seconds and milliseconds component.
+            </summary>
+            <param name="dateTime">The date time instance.</param>
+            <returns>A new calibrated date time instance.</returns>
+        </member>
+        <member name="M:MeetingCalendar.Extensions.DateTimeExtensions.IsInvalidDate(System.DateTime)">
+            <summary>
+            Validates a date time against Min and Max value of DateTi.me.
+            </summary>
+            <param name="dateTime">The date time.</param>
+            <returns>True, if the value is not DateTime.MinValue or DateTime.MaxValue, true otherwise.</returns>
+        </member>
+        <member name="T:MeetingCalendar.Extensions.EnumerableExtensions">
+            <summary>
+            Extension method for an Enumerable instance to invoke an action.
+            </summary>
+        </member>
+        <member name="M:MeetingCalendar.Extensions.EnumerableExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+            Iterates over a list to executes the given Action on each of the items.
+            </summary>
+            <param name="source">The instance.</param>
+            <param name="action">The action to execute.</param>
+            <typeparam name="T">The generic type parameter.</typeparam>
+        </member>
+        <member name="T:MeetingCalendar.Extensions.MeetingInfoExtensions">
+            <summary>
+            Extension method for an <see cref="T:MeetingCalendar.Models.MeetingInfo"/>.
+            </summary>
+        </member>
+        <member name="M:MeetingCalendar.Extensions.MeetingInfoExtensions.IsOver(MeetingCalendar.Interfaces.IMeetingInfo)">
+            <summary>
+            Evaluates whether the meeting is over or not.
+            </summary>
+            <param name="meeting">The meeting.</param>
+            <returns>Returns True if the meeting is over, false otherwise.</returns>
+        </member>
+        <member name="T:MeetingCalendar.Extensions.TimeSlotExtensions">
+            <summary>
+            Extension method for an <see cref="T:MeetingCalendar.Interfaces.ITimeSlot"/>.
+            </summary>
+        </member>
+        <member name="M:MeetingCalendar.Extensions.TimeSlotExtensions.GetDuration(MeetingCalendar.Interfaces.ITimeSlot)">
+            <summary>
+            Gets the duration of a <see cref="T:MeetingCalendar.Interfaces.ITimeSlot"/> in minutes.
+            </summary>
+            <param name="timeSlot">The time slot.</param>
+            <returns>The duration.</returns>
+        </member>
+        <member name="M:MeetingCalendar.Extensions.TimeSlotExtensions.GetTimeSlotMappedToCalenderTimeFrame(MeetingCalendar.Interfaces.ITimeSlot,System.DateTime,System.DateTime)">
+            <summary>
+            Maps a <see cref="T:MeetingCalendar.Models.TimeSlot"/> of a meeting to Time frame of the the calendar.
+            </summary>
+            <param name="timeSlot">The Meeting.</param>
+            <param name="calendarStartTime">The start time of the calendar.</param>
+            <param name="calendarEndTime">The end time of the calendar.</param>
+            <returns>A new Time slot mapped to calendar time frame.</returns>
+        </member>
+        <member name="M:MeetingCalendar.Extensions.TimeSlotExtensions.GetTimeSeriesByMinutes(MeetingCalendar.Interfaces.ITimeSlot,System.Boolean,System.DateTime)">
+            <summary>
+            Calculates the scheduled meeting durations only within the time frame of Calendar.
+            </summary>
+            <param name="timeSlot">The Time Slot.</param>
+            <param name="isScheduled">The value indicating whether the time is marked as scheduled or not.</param>
+            <param name="seriesStartTime">The start time of time series.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MeetingCalendar.Extensions.TimeSlotExtensions.FindFirst(System.Collections.Generic.IEnumerable{MeetingCalendar.Interfaces.ITimeSlot},System.Func{MeetingCalendar.Interfaces.ITimeSlot,System.Boolean})">
+            <summary>
+            Finds the first element that matches the search criteria.
+            </summary>
+            <param name="source">The source list.</param>
+            <param name="predicate">The search criteria.</param>
+            <returns>A time slot or null.</returns>
+        </member>
+        <member name="T:MeetingCalendar.Interfaces.IAttendee">
+            <summary>
+            Interface for <see cref="T:MeetingCalendar.Interfaces.IAttendee"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.IAttendee.AttendeeId">
+            <summary>
+            Gets or sets the Id of the <see cref="T:MeetingCalendar.Interfaces.IAttendee"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.IAttendee.AttendeeName">
+            <summary>
+            Gets the name of the <see cref="T:MeetingCalendar.Interfaces.IAttendee"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.IAttendee.AttendeeEmailId">
+            <summary>
+            Gets the email id of the <see cref="T:MeetingCalendar.Interfaces.IAttendee"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.IAttendee.IsOptionalAttendee">
+            <summary>
+            Gets a value indicating whether the <see cref="T:MeetingCalendar.Interfaces.IAttendee"/> as an optional  or mandatory.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.IAttendee.Meetings">
+            <summary>
+            Gets a list of <see cref="T:MeetingCalendar.Interfaces.IMeetingInfo"/> associated with the <see cref="T:MeetingCalendar.Interfaces.IAttendee"/>.
+            </summary>
+        </member>
+        <member name="T:MeetingCalendar.Interfaces.ICalendar">
+            <summary>
+            Interface for <see cref="T:MeetingCalendar.Interfaces.ICalendar"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.ICalendar.CurrentTime">
+            <summary>
+            Gets the current date and time calibrated to minutes.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.ICalendar.Attendees">
+            <summary>
+            Gets the list of attendees.
+            </summary>
+        </member>
+        <member name="M:MeetingCalendar.Interfaces.ICalendar.AddAttendees(System.Collections.Generic.IEnumerable{MeetingCalendar.Interfaces.IAttendee})">
+            <summary>
+            Add attendees to the calendar.
+            </summary>
+            <param name="attendees">The attendees.</param>
+        </member>
+        <member name="M:MeetingCalendar.Interfaces.ICalendar.AppendAttendees(System.Collections.Generic.IEnumerable{MeetingCalendar.Interfaces.IAttendee})">
+            <summary>
+            Appends a list of additional attendees to the existing attendees list.
+            </summary>
+            <param name="additionalAttendees">The additional attendees.</param>
+        </member>
+        <member name="M:MeetingCalendar.Interfaces.ICalendar.FindFirstAvailableSlot(System.Int32)">
+            <summary>
+            Finds the first available time slot for the requested meeting duration.
+            </summary>
+            <param name="meetingDuration">The meeting duration in minutes.</param>
+            <returns>A time slot or null.</returns>
+        </member>
+        <member name="M:MeetingCalendar.Interfaces.ICalendar.FindFirstAvailableSlot(System.Int32,System.DateTime,System.DateTime)">
+            <summary>
+            Finds the first available time slot for the requested meeting duration within a specific time frame.
+            </summary>
+            <param name="meetingDuration">The meeting duration in minutes.</param>
+            <param name="fromTime">The lower bound date time for a search.</param>
+            <param name="toTime">The upper bound date time for a search.</param>
+            <returns>A <see cref="T:MeetingCalendar.Models.TimeSlot"/> or null.</returns>
+        </member>
+        <member name="M:MeetingCalendar.Interfaces.ICalendar.GetAllAvailableTimeSlots">
+            <summary>
+            Find all available meeting slots.
+            </summary>
+            <returns>A list of <see cref="T:MeetingCalendar.Models.TimeSlot"/>.</returns>
+        </member>
+        <member name="T:MeetingCalendar.Interfaces.IMeetingDetails">
+            <summary>
+            Interface for <see cref="T:MeetingCalendar.Interfaces.IMeetingDetails"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.IMeetingDetails.MeetingTitle">
+            <summary>
+            Gets the title of the <see cref="T:MeetingCalendar.Interfaces.IMeetingDetails"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.IMeetingDetails.MeetingAgenda">
+            <summary>
+            Gets the agenda of the <see cref="T:MeetingCalendar.Interfaces.IMeetingDetails"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.IMeetingDetails.Attendees">
+            <summary>
+            Gets a list of Attendees associated with the <see cref="T:MeetingCalendar.Interfaces.IMeetingDetails"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.IMeetingDetails.AttachmentFilePaths">
+            <summary>
+            Gets or sets a list of file paths as Attachment associated with the <see cref="T:MeetingCalendar.Interfaces.IMeetingDetails"/>.
+            </summary>
+        </member>
+        <member name="T:MeetingCalendar.Interfaces.IMeetingInfo">
+            <summary>
+            Interface for <see cref="T:MeetingCalendar.Interfaces.IMeetingInfo"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.IMeetingInfo.MeetingId">
+            <summary>
+            Gets or sets Id of the <see cref="T:MeetingCalendar.Interfaces.IMeetingInfo"/>.
+            </summary>
+        </member>
+        <member name="T:MeetingCalendar.Interfaces.ITimeSlot">
+            <summary>
+            Interface for <see cref="T:MeetingCalendar.Interfaces.ITimeSlot"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.ITimeSlot.StartTime">
+            <summary>
+            Gets the start time of a <see cref="T:MeetingCalendar.Interfaces.ITimeSlot"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Interfaces.ITimeSlot.EndTime">
+            <summary>
+            Gets the end time of a <see cref="T:MeetingCalendar.Interfaces.ITimeSlot"/>.
+            </summary>
+        </member>
+        <member name="T:MeetingCalendar.Models.Attendee">
+            <summary>
+            Provides information about an <see cref="T:MeetingCalendar.Models.Attendee"/> along with its meeting details.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.Attendee.AttendeeId">
+            <summary>
+            Gets or sets the Id of the <see cref="T:MeetingCalendar.Models.Attendee"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.Attendee.AttendeeName">
+            <summary>
+            Gets the name of the <see cref="T:MeetingCalendar.Models.Attendee"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.Attendee.AttendeeEmailId">
+            <summary>
+            Gets the email id of the <see cref="T:MeetingCalendar.Models.Attendee"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.Attendee.IsOptionalAttendee">
+            <summary>
+            Gets a value indicating whether the <see cref="T:MeetingCalendar.Models.Attendee"/> an optional or mandatory.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.Attendee.Meetings">
+            <summary>
+            Gets a list of <see cref="T:MeetingCalendar.Models.MeetingInfo"/> associated with the <see cref="T:MeetingCalendar.Models.Attendee"/>.
+            </summary>
+        </member>
+        <member name="M:MeetingCalendar.Models.Attendee.#ctor(System.String,System.Collections.Generic.IEnumerable{MeetingCalendar.Interfaces.IMeetingInfo})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MeetingCalendar.Models.Attendee"/> class.
+            </summary>
+            <param name="attendeeName">The name of the <see cref="T:MeetingCalendar.Interfaces.IAttendee"/>.</param>
+            <param name="meetings">The list of <see cref="T:MeetingCalendar.Interfaces.IMeetingInfo"/>.</param>
+        </member>
+        <member name="M:MeetingCalendar.Models.Attendee.#ctor(System.String,System.String,System.Boolean,System.Collections.Generic.IEnumerable{MeetingCalendar.Interfaces.IMeetingInfo})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MeetingCalendar.Models.Attendee"/> class.
+            </summary>
+            <param name="attendeeName">The name of the <see cref="T:MeetingCalendar.Interfaces.IAttendee"/>.</param>
+            <param name="isOptionalAttendee">The flag to mark the <see cref="T:MeetingCalendar.Interfaces.IAttendee"/> as optional, mandatory otherwise.</param>
+            <param name="meetings">A list of <see cref="T:MeetingCalendar.Interfaces.IMeetingInfo"/>.</param>
+            <param name="attendeeEmailId">THe email id of the <see cref="T:MeetingCalendar.Interfaces.IAttendee"/>.</param>
+        </member>
+        <member name="T:MeetingCalendar.Models.MeetingDetails">
+            <summary>
+            Provides information about the details of a meeting.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.MeetingDetails.MeetingTitle">
+            <summary>
+            Gets the title of the <see cref="T:MeetingCalendar.Models.MeetingDetails"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.MeetingDetails.MeetingAgenda">
+            <summary>
+            Gets the agenda of the <see cref="T:MeetingCalendar.Models.MeetingDetails"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.MeetingDetails.Attendees">
+            <summary>
+            Gets a list of Attendees associated with the <see cref="T:MeetingCalendar.Models.MeetingDetails"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.MeetingDetails.AttachmentFilePaths">
+            <summary>
+            Gets or sets a list of file paths as Attachment associated with the <see cref="T:MeetingCalendar.Models.MeetingDetails"/>.
+            </summary>
+        </member>
+        <member name="M:MeetingCalendar.Models.MeetingDetails.#ctor(System.DateTime,System.DateTime)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MeetingCalendar.Models.MeetingDetails"/> class.
+            </summary>
+            <param name="startTime">The meeting start time.</param>
+            <param name="endTime">The meeting end time.</param>
+        </member>
+        <member name="M:MeetingCalendar.Models.MeetingDetails.#ctor(System.DateTime,System.DateTime,System.String,System.String,System.Collections.Generic.IList{MeetingCalendar.Interfaces.IAttendee},System.Collections.Generic.IList{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MeetingCalendar.Models.MeetingDetails"/> class.
+            </summary>
+            <param name="startTime">The meeting start time.</param>
+            <param name="endTime">The meeting end time.</param>
+            <param name="meetingTitle">The title of meeting.</param>
+            <param name="meetingAgenda">The agenda of meeting.</param>
+            <param name="attendees">A list of Attendees.</param>
+            <param name="attachmentFilePaths">A list of life paths as attachment files.</param>
+        </member>
+        <member name="T:MeetingCalendar.Models.MeetingInfo">
+            <summary>
+            Provides information about a meeting with a specific start time and end time.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.MeetingInfo.MeetingId">
+            <summary>
+            Gets or sets Id of the <see cref="T:MeetingCalendar.Models.MeetingInfo"/>.
+            </summary>
+        </member>
+        <member name="M:MeetingCalendar.Models.MeetingInfo.#ctor(System.DateTime,System.DateTime)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MeetingCalendar.Models.MeetingInfo"/> class.
+            </summary>
+            <param name="startTime">The meeting start time.</param>
+            <param name="endTime">The meeting end time.</param>
+        </member>
+        <member name="T:MeetingCalendar.Models.TimeSlot">
+            <summary>
+            Provides a <see cref="T:MeetingCalendar.Models.TimeSlot"/> with a specific start time and end time.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.TimeSlot.StartTime">
+            <summary>
+            Gets the start time of a <see cref="T:MeetingCalendar.Models.TimeSlot"/>.
+            </summary>
+        </member>
+        <member name="P:MeetingCalendar.Models.TimeSlot.EndTime">
+            <summary>
+            Gets the end time of a <see cref="T:MeetingCalendar.Models.TimeSlot"/>.
+            </summary>
+        </member>
+        <member name="M:MeetingCalendar.Models.TimeSlot.#ctor(System.DateTime,System.DateTime)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MeetingCalendar.Models.TimeSlot"/> class.
+            </summary>
+            <param name="startTime">The <see cref="T:System.DateTime"/> from where the time slot starts.</param>
+            <param name="endTime">The <see cref="T:System.DateTime"/> where the time slot ends.</param>
+        </member>
+        <member name="M:MeetingCalendar.Models.TimeSlot.Deconstruct(System.DateTime@,System.DateTime@)">
+            <summary>
+            Deconstruct a <see cref="T:MeetingCalendar.Models.TimeSlot"/>.
+            </summary>
+            <param name="startTime">The start time.</param>
+            <param name="endTime">The end time.</param>
+        </member>
+    </members>
+</doc>

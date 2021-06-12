@@ -8,7 +8,7 @@ using System;
 namespace MeetingCalendar.Interfaces
 {
 	/// <summary>
-	/// Interface for <see cref="ITimeSlot"/>
+	/// Interface for <see cref="ITimeSlot"/>.
 	/// </summary>
 	public interface ITimeSlot
 	{

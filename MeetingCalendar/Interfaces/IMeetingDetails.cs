@@ -1,24 +1,29 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * Author: Antaryami Basuri
+ * Email: a.basuri2002@gmail.com
+ */
+
+using System.Collections.Generic;
 
 namespace MeetingCalendar.Interfaces
 {
 	/// <summary>
-	/// Interface for <see cref="IMeetingDetails"/>
+	/// Interface for <see cref="IMeetingDetails"/>.
 	/// </summary>
-	public interface IMeetingDetails
+	public interface IMeetingDetails : IMeetingInfo
 	{
 		/// <summary>
-		/// Gets or sets the title of the <see cref="IMeetingDetails"/>.
+		/// Gets the title of the <see cref="IMeetingDetails"/>.
 		/// </summary>
 		string MeetingTitle { get; }
 
 		/// <summary>
-		/// Gets or sets the agenda of the <see cref="IMeetingDetails"/>.
+		/// Gets the agenda of the <see cref="IMeetingDetails"/>.
 		/// </summary>
 		string MeetingAgenda { get; }
 
 		/// <summary>
-		/// Gets or sets a list of Attendees associated with the <see cref="IMeetingDetails"/>.
+		/// Gets a list of Attendees associated with the <see cref="IMeetingDetails"/>.
 		/// </summary>
 		IList<IAttendee> Attendees { get; }
 

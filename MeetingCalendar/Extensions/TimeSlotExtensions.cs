@@ -16,13 +16,15 @@ using System.Runtime.CompilerServices;
 namespace MeetingCalendar.Extensions
 {
 	/// <summary>
-	/// Extension method for an <see cref="ITimeSlot"/>
+	/// Extension method for an <see cref="ITimeSlot"/>.
 	/// </summary>
 	internal static class TimeSlotExtensions
 	{
 		/// <summary>
 		/// Gets the duration of a <see cref="ITimeSlot"/> in minutes.
 		/// </summary>
+		/// <param name="timeSlot">The time slot.</param>
+		/// <returns>The duration.</returns>
 		internal static double GetDuration(this ITimeSlot timeSlot)
 			=> timeSlot.StartTime.Equals(timeSlot.EndTime) ? 0 : timeSlot.EndTime.Subtract(timeSlot.StartTime).TotalMinutes + 1;
 
@@ -32,7 +34,7 @@ namespace MeetingCalendar.Extensions
 		/// <param name="timeSlot">The Meeting.</param>
 		/// <param name="calendarStartTime">The start time of the calendar.</param>
 		/// <param name="calendarEndTime">The end time of the calendar.</param>
-		/// <returns>A new Time slot mapped to calendar time frame</returns>
+		/// <returns>A new Time slot mapped to calendar time frame.</returns>
 		internal static TimeSlot GetTimeSlotMappedToCalenderTimeFrame(this ITimeSlot timeSlot, DateTime calendarStartTime, DateTime calendarEndTime)
 		{
 			//Outside of calendar time frame
@@ -41,18 +43,17 @@ namespace MeetingCalendar.Extensions
 				return null;
 			}
 
-			return new(
+			return new TimeSlot(
 				(timeSlot.StartTime >= calendarStartTime) ? timeSlot.StartTime : calendarStartTime,
-				(timeSlot.EndTime <= calendarEndTime) ? timeSlot.EndTime : calendarEndTime
-			);
+				(timeSlot.EndTime <= calendarEndTime) ? timeSlot.EndTime : calendarEndTime);
 		}
 
 		/// <summary>
-		/// Calculates the scheduled meeting durations only within the time frame of Calendar
+		/// Calculates the scheduled meeting durations only within the time frame of Calendar.
 		/// </summary>
-		/// <param name="timeSlot">The Time Slot</param>
-		/// <param name="isScheduled">The value indicating whether the time is marked as scheduled or not</param>
-		/// <param name="seriesStartTime">The start time of time series</param>
+		/// <param name="timeSlot">The Time Slot.</param>
+		/// <param name="isScheduled">The value indicating whether the time is marked as scheduled or not.</param>
+		/// <param name="seriesStartTime">The start time of time series.</param>
 		/// <returns></returns>
 		internal static ConcurrentDictionary<DateTime, bool> GetTimeSeriesByMinutes(this ITimeSlot timeSlot, bool isScheduled = false, DateTime seriesStartTime = default)
 		{
@@ -75,7 +76,7 @@ namespace MeetingCalendar.Extensions
 		/// </summary>
 		/// <param name="source">The source list.</param>
 		/// <param name="predicate">The search criteria.</param>
-		/// <returns>A time slot or null</returns>
+		/// <returns>A time slot or null.</returns>
 		internal static ITimeSlot FindFirst(this IEnumerable<ITimeSlot> source, Func<ITimeSlot, bool> predicate)
 		{
 			static bool IncludeAllPredicate(ITimeSlot t) => true;
