@@ -66,13 +66,28 @@ namespace MeetingCalendar
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Calendar"/> class.
 		/// </summary>
+		/// <param name="timeSlot">The <see cref="ITimeSlot"/> as calender window.</param>
+		/// <exception cref="ArgumentException">
+		/// Thrown when:
+		/// The <see cref="ITimeSlot"/> start time is invalid.
+		/// The <see cref="ITimeSlot"/> end time is invalid.
+		/// The <see cref="ITimeSlot"/> start time is greater than or equals to start time.
+		/// </exception>
+		public Calendar(ITimeSlot timeSlot)
+			: this(timeSlot.StartTime, timeSlot.EndTime)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Calendar"/> class.
+		/// </summary>
 		/// <param name="startTime">The lower bound of allowed meeting hours.</param>
 		/// <param name="endTime">The upper bound of allowed meeting hours.</param>
 		/// <exception cref="ArgumentException">
 		/// Thrown when:
-		/// The calendar start time is invalid.
-		/// The calendar end time is invalid.
-		/// The calendar start time is greater than or equals to start time.
+		/// The <see cref="Calendar"/> start time is invalid.
+		/// The <see cref="Calendar"/> end time is invalid.
+		/// The <see cref="Calendar"/> start time is greater than or equals to start time.
 		/// </exception>
 		public Calendar(DateTime startTime, DateTime endTime)
 		{
@@ -99,9 +114,9 @@ namespace MeetingCalendar
 		/// <param name="attendees">A list of <see cref="Attendee"/> along with their <see cref="MeetingInfo"/>.</param>
 		/// <exception cref="ArgumentException">
 		/// Thrown when:
-		/// The calendar start time is invalid.
-		/// The calendar end time is invalid.
-		/// The calendar start time is greater than or equals to start time.
+		/// The <see cref="Calendar"/> start time is invalid.
+		/// The <see cref="Calendar"/> end time is invalid.
+		/// The <see cref="Calendar"/> start time is greater than or equals to start time.
 		/// </exception>
 		public Calendar(DateTime startTime, DateTime endTime, IEnumerable<IAttendee> attendees)
 			: this(startTime, endTime)

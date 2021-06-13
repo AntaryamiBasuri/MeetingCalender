@@ -45,5 +45,15 @@ namespace MeetingCalendarTest.Models
 			Assert.That(meetingDetails.AttachmentFilePaths, Is.Null);
 			Assert.That(meetingDetails.MeetingId, Is.EqualTo(newId));
 		}
+
+		[Test]
+		public void Constructor_With_TimesSlot()
+		{
+			var timeSlot = new TimeSlot(DateTime.Now, DateTime.Now.AddDays(1));
+			var meetingDetails = new MeetingDetails(timeSlot);
+			
+			Assert.That(meetingDetails.StartTime, Is.EqualTo(timeSlot.StartTime));
+			Assert.That(meetingDetails.EndTime, Is.EqualTo(timeSlot.EndTime));
+		}
 	}
 }

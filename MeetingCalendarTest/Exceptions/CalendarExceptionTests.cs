@@ -4,6 +4,7 @@
  */
 
 using MeetingCalendar;
+using MeetingCalendar.Models;
 using NUnit.Framework;
 using System;
 
@@ -24,6 +25,10 @@ namespace MeetingCalendarTest.Exceptions
 		[Test]
 		public void Constructor_Throws_Exception_When_Calendar_StartTime_Is_GreaterThan_EndTime()
 			=> Assert.Throws<ArgumentException>(() => { _ = new Calendar(DateTime.Now.AddMinutes(10), DateTime.Now); });
+
+		[Test]
+		public void Constructor_With_TimeSlot_Throws_Exception_When_TmeSlot_StartTime_Is_GreaterThan_EndTime()
+			=> Assert.Throws<ArgumentException>(() => { _ = new Calendar(new TimeSlot( DateTime.Now.AddMinutes(10), DateTime.Now)); });
 
 		[Test]
 		public void FindFirstAvailableSlot_Throws_Exception_When_Meeting_Duration_Is_Invalid()

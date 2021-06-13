@@ -39,8 +39,29 @@ namespace MeetingCalendar.Models
 		/// </summary>
 		/// <param name="startTime">The meeting start time.</param>
 		/// <param name="endTime">The meeting end time.</param>
+		/// <exception cref="ArgumentException">
+		/// Thrown when:
+		/// The <see cref="MeetingDetails"/> start time is invalid.
+		/// The <see cref="MeetingDetails"/> end time is invalid.
+		/// The <see cref="MeetingDetails"/> start time is greater than or equals to start time.
+		/// </exception>
 		public MeetingDetails(DateTime startTime, DateTime endTime)
 			: base(startTime, endTime)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MeetingDetails"/> class.
+		/// </summary>
+		/// <param name="timeSlot">The <see cref="ITimeSlot"/> for the meeting.</param>
+		/// <exception cref="ArgumentException">
+		/// Thrown when:
+		/// The <see cref="MeetingDetails"/> start time is invalid.
+		/// The <see cref="MeetingDetails"/> end time is invalid.
+		/// The <see cref="MeetingDetails"/> start time is greater than or equals to start time.
+		/// </exception>
+		public MeetingDetails(ITimeSlot timeSlot)
+			: this(timeSlot.StartTime, timeSlot.EndTime)
 		{
 		}
 
@@ -53,6 +74,12 @@ namespace MeetingCalendar.Models
 		/// <param name="meetingAgenda">The agenda of meeting.</param>
 		/// <param name="attendees">A list of Attendees.</param>
 		/// <param name="attachmentFilePaths">A list of life paths as attachment files.</param>
+		/// <exception cref="ArgumentException">
+		/// Thrown when:
+		/// The <see cref="MeetingDetails"/> start time is invalid.
+		/// The <see cref="MeetingDetails"/> end time is invalid.
+		/// The <see cref="MeetingDetails"/> start time is greater than or equals to start time.
+		/// </exception>
 		public MeetingDetails(DateTime startTime, DateTime endTime, string meetingTitle, string meetingAgenda, IList<IAttendee> attendees, IList<string> attachmentFilePaths = null)
 			: this(startTime, endTime)
 		{

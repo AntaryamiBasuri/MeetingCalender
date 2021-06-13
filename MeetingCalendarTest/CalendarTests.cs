@@ -45,6 +45,16 @@ namespace MeetingCalendarTest
 		}
 
 		[Test]
+		public void Constructor_With_TimesSlot()
+		{
+			var timeSlot = new TimeSlot(DateTime.Now, DateTime.Now.AddDays(1));
+			var meetingCalendar = new Calendar(timeSlot);
+			
+			Assert.That(meetingCalendar.StartTime, Is.EqualTo(timeSlot.StartTime));
+			Assert.That(meetingCalendar.EndTime, Is.EqualTo(timeSlot.EndTime));
+		}
+
+		[Test]
 		public void TimeSlotAvailableForRequestedDuration()
 		{
 			var availableSlot = _meetingCalendar.FindFirstAvailableSlot(1);
