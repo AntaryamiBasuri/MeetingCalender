@@ -47,7 +47,7 @@ namespace MeetingCalendar.Models
 		public Attendee(string attendeeName, IEnumerable<IMeetingInfo> meetings)
 		{
 			AttendeeName = attendeeName;
-			Meetings = meetings;
+			Meetings = meetings ?? new List<IMeetingInfo>();
 		}
 
 		/// <summary>

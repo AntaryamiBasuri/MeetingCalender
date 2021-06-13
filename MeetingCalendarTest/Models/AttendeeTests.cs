@@ -8,6 +8,7 @@ using MeetingCalendar.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MeetingCalendarTest.Models
 {
@@ -31,6 +32,17 @@ namespace MeetingCalendarTest.Models
 			Assert.That(attendee.AttendeeEmailId, Is.EqualTo(email));
 			Assert.That(attendee.IsOptionalAttendee, Is.True);
 			Assert.That(attendee.AttendeeId, Is.EqualTo(newId));
+		}
+
+		[Test]
+		public void Constructor_Sets_Empty_Attendees_List_When_Null_Value_Passed()
+		{
+			var name = "Person11";
+			var email = "test@email.com";
+			var attendee = new Attendee(name, email, true, null);
+
+			Assert.That(attendee.Meetings, Is.Not.Null);
+			Assert.That(attendee.Meetings.Count(), Is.EqualTo(0));
 		}
 	}
 }

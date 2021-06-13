@@ -20,20 +20,20 @@ namespace MeetingCalendar.Interfaces
 		DateTime CurrentTime { get; }
 
 		/// <summary>
-		/// Gets the list of attendees.
+		/// Gets the list of <see cref="IAttendee"/>.
 		/// </summary>
 		IEnumerable<IAttendee> Attendees { get; }
 
 		/// <summary>
 		/// Add attendees to the calendar.
 		/// </summary>
-		/// <param name="attendees">The attendees.</param>
+		/// <param name="attendees">The list of <see cref="IAttendee"/>.</param>
 		void AddAttendees(IEnumerable<IAttendee> attendees);
 
 		/// <summary>
 		/// Appends a list of additional attendees to the existing attendees list.
 		/// </summary>
-		/// <param name="additionalAttendees">The additional attendees.</param>
+		/// <param name="additionalAttendees">The list of additional <see cref="IAttendee"/>.</param>
 		void AppendAttendees(IEnumerable<IAttendee> additionalAttendees);
 
 		/// <summary>

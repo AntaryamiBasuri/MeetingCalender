@@ -68,6 +68,12 @@ namespace MeetingCalendar
 		/// </summary>
 		/// <param name="startTime">The lower bound of allowed meeting hours.</param>
 		/// <param name="endTime">The upper bound of allowed meeting hours.</param>
+		/// <exception cref="ArgumentException">
+		/// Thrown when:
+		/// The calendar start time is invalid.
+		/// The calendar end time is invalid.
+		/// The calendar start time is greater than or equals to start time.
+		/// </exception>
 		public Calendar(DateTime startTime, DateTime endTime)
 		{
 			if (startTime.IsInvalidDate())
@@ -91,6 +97,12 @@ namespace MeetingCalendar
 		/// <param name="startTime">The lower bound of allowed meeting hours.</param>
 		/// <param name="endTime">The upper bound of allowed meeting hours.</param>
 		/// <param name="attendees">A list of <see cref="Attendee"/> along with their <see cref="MeetingInfo"/>.</param>
+		/// <exception cref="ArgumentException">
+		/// Thrown when:
+		/// The calendar start time is invalid.
+		/// The calendar end time is invalid.
+		/// The calendar start time is greater than or equals to start time.
+		/// </exception>
 		public Calendar(DateTime startTime, DateTime endTime, IEnumerable<IAttendee> attendees)
 			: this(startTime, endTime)
 			=> Attendees = attendees;
@@ -108,9 +120,9 @@ namespace MeetingCalendar
 		/// <summary>
 		/// Append additional attendees to existing attendees list.
 		/// </summary>
-		/// <param name="additionalAttendees">The additional <see cref="Attendee"/> to append.</param>
+		/// <param name="additionalAttendees">The list of additional <see cref="Attendee"/> to append.</param>
 		public void AppendAttendees(IEnumerable<IAttendee> additionalAttendees)
-			=> Attendees = Attendees?.Concat(additionalAttendees) ?? additionalAttendees;
+			=> Attendees = Attendees?.Concat(additionalAttendees ?? new List<IAttendee>()) ?? additionalAttendees;
 
 		/// <summary>
 		/// Finds the first available time slot for the requested meeting duration.

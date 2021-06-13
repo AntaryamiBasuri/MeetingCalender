@@ -91,6 +91,30 @@ namespace MeetingCalendarTest
 		}
 
 		[Test]
+		public void AppendNullAttendeesToMeeting_Should_Not_Raise_Error()
+		{
+			var meetingCalendar = new Calendar(DateTime.Now, DateTime.Now.AddDays(1));
+			meetingCalendar.AddAttendees(new List<Attendee>()
+			{
+				new("Person4", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
+					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
+				})
+			});
+
+			IList<IAttendee> additionalAttendees = null;
+
+			meetingCalendar.AppendAttendees(additionalAttendees);
+
+			Assert.That(meetingCalendar.Attendees.Count(), Is.EqualTo(1));
+			Assert.That(meetingCalendar.Attendees.First().AttendeeName, Is.EqualTo("Person4"));
+
+			TestDelegate appendAttendees = () => meetingCalendar.AppendAttendees(additionalAttendees);
+			Assert.DoesNotThrow(appendAttendees, "AppendAttendees threw exception.");
+		}
+
+		[Test]
 		public void AppendNewAttendeesToMeeting_When_AttendeeList_Is_Null()
 		{
 			Assert.DoesNotThrow(() =>
