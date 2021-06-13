@@ -26,6 +26,10 @@ This library includes a meeting calendar class having:
       •  Documented code
       •  Unit tested code with code coverage above 99%
 
+Version 2.1
+      •  Bug fixes- AppendAttendees and Attendee.Meetings, null reference error
+      •  XML documentation updated
+      
 Version 2.0
       •  Interfaces for all public methods and model classes introduced
       •  Enforced StyleCop XML documentation rules
