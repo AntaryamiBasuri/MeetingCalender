@@ -9,7 +9,7 @@ using System;
 namespace MeetingCalendar.Models
 {
 	/// <summary>
-	/// Provides information about a meeting with a specific start time and end time.
+	/// Provides information about a meeting with a specific start time and finish time.
 	/// </summary>
 	public class MeetingInfo : TimeSlot, IMeetingInfo
 	{
@@ -22,11 +22,11 @@ namespace MeetingCalendar.Models
 		/// Initializes a new instance of the <see cref="MeetingInfo"/> class.
 		/// </summary>
 		/// <param name="startTime">The meeting start time.</param>
-		/// <param name="endTime">The meeting end time.</param>
+		/// <param name="endTime">The meeting finish time.</param>
 		/// <exception cref="ArgumentException">
 		/// Thrown when:
 		/// The <see cref="MeetingInfo"/> start time is invalid.
-		/// The <see cref="MeetingInfo"/> end time is invalid.
+		/// The <see cref="MeetingInfo"/> finish time is invalid.
 		/// The <see cref="MeetingInfo"/> start time is greater than or equals to start time.
 		/// </exception>
 		public MeetingInfo(DateTime startTime, DateTime endTime)
@@ -41,7 +41,7 @@ namespace MeetingCalendar.Models
 		/// <exception cref="ArgumentException">
 		/// Thrown when:
 		/// The <see cref="MeetingInfo"/> start time is invalid.
-		/// The <see cref="MeetingInfo"/> end time is invalid.
+		/// The <see cref="MeetingInfo"/> finish time is invalid.
 		/// The <see cref="MeetingInfo"/> start time is greater than or equals to start time.
 		/// </exception>
 		public MeetingInfo(ITimeSlot timeSlot)

@@ -29,6 +29,11 @@ namespace MeetingCalendar.Interfaces
 		string AttendeeEmailId { get; }
 
 		/// <summary>
+		/// Gets the mobile number or phone number of the <see cref="IAttendee"/>.
+		/// </summary>
+		public string PhoneNumber { get; }
+
+		/// <summary>
 		/// Gets a value indicating whether the <see cref="IAttendee"/> as an optional  or mandatory.
 		/// </summary>
 		bool IsOptionalAttendee { get; }

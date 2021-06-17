@@ -49,9 +49,43 @@ namespace MeetingCalendarTest
 		{
 			var timeSlot = new TimeSlot(DateTime.Now, DateTime.Now.AddDays(1));
 			var meetingCalendar = new Calendar(timeSlot);
-			
+
 			Assert.That(meetingCalendar.StartTime, Is.EqualTo(timeSlot.StartTime));
 			Assert.That(meetingCalendar.EndTime, Is.EqualTo(timeSlot.EndTime));
+			Assert.That(meetingCalendar.Attendees, Is.Null);
+		}
+
+		[Test]
+		public void Constructor_With_TimesSlot_With_Attendees()
+		{
+			var timeSlot = new TimeSlot(DateTime.Now, DateTime.Now.AddDays(1));
+			var meetingCalendar = new Calendar(timeSlot, new List<Attendee>()
+			{
+				new("Person1", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7))
+				}),
+				new("Person2", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
+				})
+			});
+
+			Assert.That(meetingCalendar.StartTime, Is.EqualTo(timeSlot.StartTime));
+			Assert.That(meetingCalendar.EndTime, Is.EqualTo(timeSlot.EndTime));
+			Assert.That(meetingCalendar.Attendees.Count(), Is.EqualTo(2));
+		}
+
+		[Test]
+		public void Deconstructor_Provides_StartTime_And_EndTime()
+		{
+			var timeSlot = new TimeSlot(DateTime.Now, DateTime.Now.AddDays(1));
+			var meetingCalendar = new Calendar(timeSlot);
+
+			var (startTime, endTime) = meetingCalendar;
+
+			Assert.That(meetingCalendar.StartTime, Is.EqualTo(startTime));
+			Assert.That(meetingCalendar.EndTime, Is.EqualTo(endTime));
 		}
 
 		[Test]
@@ -120,8 +154,8 @@ namespace MeetingCalendarTest
 			Assert.That(meetingCalendar.Attendees.Count(), Is.EqualTo(1));
 			Assert.That(meetingCalendar.Attendees.First().AttendeeName, Is.EqualTo("Person4"));
 
-			TestDelegate appendAttendees = () => meetingCalendar.AppendAttendees(additionalAttendees);
-			Assert.DoesNotThrow(appendAttendees, "AppendAttendees threw exception.");
+			void AppendAttendees() => meetingCalendar.AppendAttendees(additionalAttendees);
+			Assert.DoesNotThrow(AppendAttendees, "AppendAttendees threw exception.");
 		}
 
 		[Test]
@@ -210,6 +244,31 @@ namespace MeetingCalendarTest
 			});
 
 			var availableSlot = meetingCalendar.FindFirstAvailableSlot(15, secondMeetingStartTime);
+			Assert.That(availableSlot, Is.Not.Null);
+			Assert.That(availableSlot.StartTime, Is.GreaterThanOrEqualTo(secondMeetingEndTime));
+		}
+
+		[Test]
+		public void FindFirstAvailableSlot_Returns_TimeSlot_Within_A_Given_Search_Range()
+		{
+			var startTime = DateTime.Now.CalibrateToMinutes();
+			var endTime = startTime.AddHours(8);
+			var secondMeetingStartTime = startTime.AddHours(2.5);
+			var secondMeetingEndTime = startTime.AddHours(3.5);
+
+			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
+			{
+				new("Person1", new List<IMeetingInfo>
+				{
+					new MeetingInfo(startTime.AddHours(1), startTime.AddHours(2)),
+					new MeetingInfo(secondMeetingStartTime, secondMeetingEndTime),
+					//Here is the start time of available slot
+					new MeetingInfo(startTime.AddHours(7), startTime.AddHours(7.5))
+				})
+			});
+
+			var searchRange = new TimeSlot(secondMeetingStartTime, secondMeetingStartTime.AddHours(2));
+			var availableSlot = meetingCalendar.FindFirstAvailableSlot(15, searchRange);
 			Assert.That(availableSlot, Is.Not.Null);
 			Assert.That(availableSlot.StartTime, Is.GreaterThanOrEqualTo(secondMeetingEndTime));
 		}
@@ -399,7 +458,7 @@ namespace MeetingCalendarTest
 				{
 					new MeetingInfo(meetingStartTime, meetingStartTime.AddMinutes(10))
 				}),
-				new("Person11", "test@email.com", true, new List<IMeetingInfo>
+				new("Person11", "test@email.com", "1234567890", true, new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				})

@@ -6,6 +6,7 @@
 using MeetingCalendar.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MeetingCalendar.Models
 {
@@ -14,6 +15,8 @@ namespace MeetingCalendar.Models
 	/// </summary>
 	public class Attendee : IAttendee
 	{
+		private readonly IEnumerable<IMeetingInfo> _meetings;
+
 		/// <summary>
 		/// Gets or sets the Id of the <see cref="Attendee"/>.
 		/// </summary>
@@ -25,6 +28,11 @@ namespace MeetingCalendar.Models
 		public string AttendeeName { get; }
 
 		/// <summary>
+		/// Gets the mobile number or phone number of the <see cref="Attendee"/>.
+		/// </summary>
+		public string PhoneNumber { get; }
+
+		/// <summary>
 		/// Gets the email id of the <see cref="Attendee"/>.
 		/// </summary>
 		public string AttendeeEmailId { get; }
@@ -34,10 +42,11 @@ namespace MeetingCalendar.Models
 		/// </summary>
 		public bool IsOptionalAttendee { get; }
 
+		//TODO: Make it read only
 		/// <summary>
 		/// Gets a list of <see cref="MeetingInfo"/> associated with the <see cref="Attendee"/>.
 		/// </summary>
-		public IEnumerable<IMeetingInfo> Meetings { get; }
+		public IEnumerable<IMeetingInfo> Meetings => _meetings.ToList().AsReadOnly();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Attendee"/> class.
@@ -47,7 +56,7 @@ namespace MeetingCalendar.Models
 		public Attendee(string attendeeName, IEnumerable<IMeetingInfo> meetings)
 		{
 			AttendeeName = attendeeName;
-			Meetings = meetings ?? new List<IMeetingInfo>();
+			_meetings = meetings ?? new List<IMeetingInfo>();
 		}
 
 		/// <summary>
@@ -57,11 +66,28 @@ namespace MeetingCalendar.Models
 		/// <param name="isOptionalAttendee">The flag to mark the <see cref="IAttendee"/> as optional, mandatory otherwise.</param>
 		/// <param name="meetings">A list of <see cref="IMeetingInfo"/>.</param>
 		/// <param name="attendeeEmailId">THe email id of the <see cref="IAttendee"/>.</param>
+		[Obsolete("Use any latest overloaded constructor instead.")]
 		public Attendee(string attendeeName, string attendeeEmailId, bool isOptionalAttendee, IEnumerable<IMeetingInfo> meetings) :
 			this(attendeeName, meetings)
 		{
 			AttendeeEmailId = attendeeEmailId;
 			IsOptionalAttendee = isOptionalAttendee;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Attendee"/> class.
+		/// </summary>
+		/// <param name="attendeeName">The name of the <see cref="IAttendee"/>.</param>
+		/// <param name="isOptionalAttendee">The flag to mark the <see cref="IAttendee"/> as optional, mandatory otherwise.</param>
+		/// <param name="meetings">A list of <see cref="IMeetingInfo"/>.</param>
+		/// <param name="attendeeEmailId">THe email id of the <see cref="IAttendee"/>.</param>
+		/// <param name="phoneNumber">The mobile number of the <see cref="IAttendee"/>.</param>
+		public Attendee(string attendeeName, string attendeeEmailId, string phoneNumber, bool isOptionalAttendee, IEnumerable<IMeetingInfo> meetings) :
+			this(attendeeName, meetings)
+		{
+			AttendeeEmailId = attendeeEmailId;
+			IsOptionalAttendee = isOptionalAttendee;
+			PhoneNumber = phoneNumber;
 		}
 	}
 }

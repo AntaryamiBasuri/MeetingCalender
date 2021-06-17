@@ -12,7 +12,7 @@ namespace MeetingCalendar.Interfaces
 	/// <summary>
 	/// Interface for <see cref="ICalendar"/>.
 	/// </summary>
-	public interface ICalendar : ITimeSlot
+	public interface ICalendar
 	{
 		/// <summary>
 		/// Gets the current date and time calibrated to minutes.

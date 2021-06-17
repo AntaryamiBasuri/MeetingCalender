@@ -37,15 +37,17 @@ namespace MeetingCalendar.Extensions
 		/// <returns>A new Time slot mapped to calendar time frame.</returns>
 		internal static TimeSlot GetTimeSlotMappedToCalenderTimeFrame(this ITimeSlot timeSlot, DateTime calendarStartTime, DateTime calendarEndTime)
 		{
+			var (startTime, endTime) = timeSlot;
+
 			//Outside of calendar time frame
-			if (timeSlot.EndTime <= calendarStartTime || timeSlot.StartTime >= calendarEndTime)
+			if (endTime <= calendarStartTime || startTime >= calendarEndTime)
 			{
 				return null;
 			}
 
 			return new TimeSlot(
-				(timeSlot.StartTime >= calendarStartTime) ? timeSlot.StartTime : calendarStartTime,
-				(timeSlot.EndTime <= calendarEndTime) ? timeSlot.EndTime : calendarEndTime);
+				(startTime >= calendarStartTime) ? startTime : calendarStartTime,
+				(endTime <= calendarEndTime) ? endTime : calendarEndTime);
 		}
 
 		/// <summary>

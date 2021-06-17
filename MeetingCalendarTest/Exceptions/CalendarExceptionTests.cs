@@ -28,7 +28,7 @@ namespace MeetingCalendarTest.Exceptions
 
 		[Test]
 		public void Constructor_With_TimeSlot_Throws_Exception_When_TmeSlot_StartTime_Is_GreaterThan_EndTime()
-			=> Assert.Throws<ArgumentException>(() => { _ = new Calendar(new TimeSlot( DateTime.Now.AddMinutes(10), DateTime.Now)); });
+			=> Assert.Throws<ArgumentException>(() => { _ = new Calendar(new TimeSlot(DateTime.Now.AddMinutes(10), DateTime.Now)); });
 
 		[Test]
 		public void FindFirstAvailableSlot_Throws_Exception_When_Meeting_Duration_Is_Invalid()
@@ -36,6 +36,23 @@ namespace MeetingCalendarTest.Exceptions
 			{
 				_ = new Calendar(DateTime.Now, DateTime.Now.AddHours(8))
 					.FindFirstAvailableSlot(0, DateTime.Now.AddMinutes(30), DateTime.Now.AddMinutes(60));
+			});
+
+		//FindFirstAvailableSlot(int meetingDuration, DateTime fromTime, DateTime toTime = default)
+		[Test]
+		public void FindFirstAvailableSlot_Throws_Exception_When_Search_Duration_StartTime_Is_Invalid()
+			=> Assert.Throws<ArgumentException>(() =>
+			{
+				_ = new Calendar(DateTime.Now, DateTime.Now.AddHours(8))
+					.FindFirstAvailableSlot(0, DateTime.MinValue, DateTime.Now.AddMinutes(60));
+			});
+
+		[Test]
+		public void FindFirstAvailableSlot_Throws_Exception_When_Invalid_Search_Range()
+			=> Assert.Throws<ArgumentException>(() =>
+			{
+				_ = new Calendar(DateTime.Now, DateTime.Now.AddHours(8))
+					.FindFirstAvailableSlot(10, DateTime.Now.AddHours(10), DateTime.Now.AddMinutes(60));
 			});
 
 		[Test]
