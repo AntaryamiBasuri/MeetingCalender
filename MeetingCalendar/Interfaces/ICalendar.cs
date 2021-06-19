@@ -22,7 +22,7 @@ namespace MeetingCalendar.Interfaces
 		/// <summary>
 		/// Gets the list of <see cref="IAttendee"/>.
 		/// </summary>
-		IEnumerable<IAttendee> Attendees { get; }
+		IReadOnlyCollection<IAttendee> Attendees { get; }
 
 		/// <summary>
 		/// Add attendees to the calendar.

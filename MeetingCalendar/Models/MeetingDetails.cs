@@ -32,17 +32,17 @@ namespace MeetingCalendar.Models
 		/// </summary>
 		public string MeetingAgenda { get; }
 
-		//TODO: Make it read only
 		/// <summary>
 		/// Gets a list of Attendees associated with the <see cref="MeetingDetails"/>.
 		/// </summary>
-		public IList<IAttendee> Attendees => _attendees?.ToList().AsReadOnly();
+		public IReadOnlyCollection<IAttendee> Attendees => _attendees?.ToList().AsReadOnly();
 
 		/// <summary>
 		/// Gets or sets a list of file paths as Attachment associated with the <see cref="MeetingDetails"/>.
 		/// </summary>
 		public IList<string> AttachmentFilePaths { get; set; }
 
+		//TODO: Make it Private
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MeetingDetails"/> class.
 		/// </summary>
@@ -60,6 +60,7 @@ namespace MeetingCalendar.Models
 		{
 		}
 
+		//TODO: Make it Private
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MeetingDetails"/> class.
 		/// </summary>
@@ -76,6 +77,7 @@ namespace MeetingCalendar.Models
 		{
 		}
 
+		//TODO: Remove the below constructor
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MeetingDetails"/> class.
 		/// </summary>

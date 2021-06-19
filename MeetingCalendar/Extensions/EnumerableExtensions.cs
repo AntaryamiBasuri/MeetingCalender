@@ -24,6 +24,11 @@ namespace MeetingCalendar.Extensions
 		/// <typeparam name="T">The generic type parameter.</typeparam>
 		internal static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
 		{
+			if (action == null)
+			{
+				throw new ArgumentNullException(nameof(action), "Action parameter can not be null.");
+			}
+
 			foreach (var item in source)
 				action(item);
 		}

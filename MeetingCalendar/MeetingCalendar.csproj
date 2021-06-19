@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Features>strict</Features>
     <Description>A package that can provide information about available appointment slots within a specific time duration for zero or more attendees.</Description>
-    <Version>2.3.0.0</Version>
+    <Version>2.4.0.0</Version>
     <Company />
     <PackageProjectUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</RepositoryUrl>
@@ -25,6 +25,11 @@ This library includes a meeting calendar class having:
       •  Overloaded methods to find an available time slot for a given duration, within a given time frame
       •  Documented code
       •  Unit tested code with code coverage above 99%
+
+
+Version 2.4
+      •  Attendees property of Calendar and MeetingDetails class now returns IReadOnlyCollection
+      •  Meetings property of Attendee class now returns IReadOnlyCollection
 
 Version 2.3
       •  FindFirstAvailableSlot overloaded method with TimeSlot to search
@@ -54,9 +59,10 @@ Version 1.0
 Version 0.x.0
        •  Written from ground up using .NETStandard 2.1
        •  No external dependencies
+
     </PackageReleaseNotes>
-    <AssemblyVersion>2.3.0.0</AssemblyVersion>
-    <FileVersion>2.3.0.0</FileVersion>
+    <AssemblyVersion>2.4.0.0</AssemblyVersion>
+    <FileVersion>2.4.0.0</FileVersion>
     <PackageId>MeetingCalender</PackageId>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>

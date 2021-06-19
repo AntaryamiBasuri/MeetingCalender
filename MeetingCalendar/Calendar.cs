@@ -56,11 +56,10 @@ namespace MeetingCalendar
 		/// </summary>
 		public DateTime CurrentTime => DateTime.Now.CalibrateToMinutes();
 
-		//TODO: Make it read only
 		/// <summary>
 		/// Gets the list of <see cref="IAttendee"/>.
 		/// </summary>
-		public IEnumerable<IAttendee> Attendees => _attendees?.ToList().AsReadOnly();
+		public IReadOnlyCollection<IAttendee> Attendees => _attendees?.ToList().AsReadOnly();
 
 		#endregion Public Properties
 

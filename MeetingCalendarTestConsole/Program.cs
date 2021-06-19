@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using static System.Math;
 
 namespace MeetingCalendarTestConsole
 {
@@ -63,19 +64,22 @@ namespace MeetingCalendarTestConsole
 					var firstAvailableMeetingSlot = meetingCalendar.FindFirstAvailableSlot(duration);
 					sw.Stop();
 
-					Console.WriteLine($"Number of Attendees in the meeting: { meetingCalendar.Attendees.Count() }");
-					Console.WriteLine($"Time taken to calculate: { sw.ElapsedMilliseconds }ms.");
+					Console.WriteLine($"Number of Attendees in the meeting: { meetingCalendar.Attendees.Count }");
+					meetingCalendar.Attendees.ToList().ForEach(attendee => Console.WriteLine(attendee.AttendeeName));
+
+					Console.WriteLine("");
 
 					if (firstAvailableMeetingSlot != null)
 					{
-						Console.WriteLine($"A meeting slot for {duration} minutes is available between:" +
+						Console.WriteLine($"A meeting slot for {GetHoursAndMinutes(duration)} is available between:" +
 										  $"{firstAvailableMeetingSlot.StartTime:hh:mm tt} and {firstAvailableMeetingSlot.EndTime:hh:mm tt}.");
 					}
 					else
 					{
 						Console.WriteLine(
-							$"Sorry ! There is no meeting slot of {duration} minutes is available for today. Please check for tomorrow.");
+							$"Sorry ! There is no meeting slot of {GetHoursAndMinutes(duration)} minutes is available for today. Please check for tomorrow.");
 					}
+					Console.WriteLine($"Time taken to calculate the result is: { sw.ElapsedMilliseconds }ms.");
 				}
 				else
 				{
@@ -83,6 +87,13 @@ namespace MeetingCalendarTestConsole
 				}
 				Console.ReadLine();
 			}
+		}
+
+		private static string GetHoursAndMinutes(double totalMinutes)
+		{
+			var ts = TimeSpan.FromMinutes(Abs(totalMinutes));
+
+			return $"{ts.Hours} {(ts.Hours > 1 ? "hours" : "hour")} and {ts.Minutes} {(ts.Minutes > 1 ? "minutes" : "minute")}";
 		}
 	}
 }

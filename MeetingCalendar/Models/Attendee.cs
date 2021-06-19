@@ -42,11 +42,10 @@ namespace MeetingCalendar.Models
 		/// </summary>
 		public bool IsOptionalAttendee { get; }
 
-		//TODO: Make it read only
 		/// <summary>
 		/// Gets a list of <see cref="MeetingInfo"/> associated with the <see cref="Attendee"/>.
 		/// </summary>
-		public IEnumerable<IMeetingInfo> Meetings => _meetings.ToList().AsReadOnly();
+		public IReadOnlyCollection<IMeetingInfo> Meetings => _meetings.ToList().AsReadOnly();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Attendee"/> class.
@@ -59,6 +58,7 @@ namespace MeetingCalendar.Models
 			_meetings = meetings ?? new List<IMeetingInfo>();
 		}
 
+		//TODO: Remove the below constructor
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Attendee"/> class.
 		/// </summary>

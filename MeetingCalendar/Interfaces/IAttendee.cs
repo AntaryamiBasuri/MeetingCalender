@@ -41,6 +41,6 @@ namespace MeetingCalendar.Interfaces
 		/// <summary>
 		/// Gets a list of <see cref="IMeetingInfo"/> associated with the <see cref="IAttendee"/>.
 		/// </summary>
-		IEnumerable<IMeetingInfo> Meetings { get; }
+		IReadOnlyCollection<IMeetingInfo> Meetings { get; }
 	}
 }

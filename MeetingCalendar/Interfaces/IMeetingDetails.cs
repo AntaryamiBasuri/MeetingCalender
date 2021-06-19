@@ -30,7 +30,7 @@ namespace MeetingCalendar.Interfaces
 		/// <summary>
 		/// Gets a list of Attendees associated with the <see cref="IMeetingDetails"/>.
 		/// </summary>
-		IList<IAttendee> Attendees { get; }
+		IReadOnlyCollection<IAttendee> Attendees { get; }
 
 		/// <summary>
 		/// Gets or sets a list of file paths as Attachment associated with the <see cref="IMeetingDetails"/>.
