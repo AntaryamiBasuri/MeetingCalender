@@ -72,9 +72,9 @@ namespace MeetingCalendarTest.Extensions
 
 			var forthMeetingEndTime = startTime.AddHours(4.75);
 
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>
 			{
-				new("Person10", new List<IMeetingInfo>
+				new Attendee("Person10", new List<IMeetingInfo>
 				{
 					new MeetingInfo(startTime.AddHours(1), startTime.AddHours(1.5)),
 					new MeetingInfo(startTime.AddHours(2), startTime.AddHours(2.7)),
@@ -98,9 +98,9 @@ namespace MeetingCalendarTest.Extensions
 
 			var secondMeetingEndTime = startTime.AddHours(2.7);
 
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>()
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>()
 			{
-				new("Person10", new List<IMeetingInfo>
+				new Attendee("Person10", new List<IMeetingInfo>
 				{
 					new MeetingInfo(startTime.AddHours(1), startTime.AddHours(1.5)),
 					new MeetingInfo(startTime.AddHours(2), secondMeetingEndTime),

@@ -30,13 +30,14 @@ This library includes a meeting calendar class having:
 Version 2.4
       •  Attendees property of Calendar and MeetingDetails class now returns IReadOnlyCollection
       •  Meetings property of Attendee class now returns IReadOnlyCollection
+      •  AddAttendees and AppendAttendees accepts ICollection
 
 Version 2.3
       •  FindFirstAvailableSlot overloaded method with TimeSlot to search
       •  Deconstructor added to TimeSlot class
       •  Overloaded constructors added to Calendar, Attendee, MeetingDetails class using TimeSlot
       •  Few older overloaded constructors of Attendee, MeetingDetails marked as Obsolete
-      •  New properties added - PhoneNumber to Attendee class and MeetingLocation to MeetingDetails class
+      •  Properties added - PhoneNumber to Attendee class and MeetingLocation to MeetingDetails class
 
 Version 2.2
       •  Overloaded constructors added to Calendar, MeetingInfo, and MeetingDetails class

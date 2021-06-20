@@ -6,6 +6,7 @@
 using MeetingCalendar.Extensions;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MeetingCalendarTest.Exceptions
@@ -14,6 +15,14 @@ namespace MeetingCalendarTest.Exceptions
 	[Author("A Basuri", "a.basuri2002@gmail.com")]
 	public class EnumerableExtensionExceptionTests
 	{
+		[Test]
+		public void Throws_Exception_When_Source_Collection_IsNull()
+		{
+			IEnumerable<int> sut = null;
+
+			Assert.Throws<ArgumentNullException>(() => sut.ForEach(i => { }));
+		}
+
 		[Test]
 		public void Throws_Exception_When_Action_IsNull()
 		{

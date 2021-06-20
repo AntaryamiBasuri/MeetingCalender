@@ -26,7 +26,7 @@ namespace MeetingCalendar
 		private readonly DateTime _endTime;
 		private readonly IList<ITimeSlot> _availableMeetingSlots;
 
-		private IEnumerable<IAttendee> _attendees;
+		private ICollection<IAttendee> _attendees;
 
 		#endregion Members
 
@@ -119,7 +119,7 @@ namespace MeetingCalendar
 		/// The <see cref="Calendar"/> end time is invalid.
 		/// The <see cref="Calendar"/> start time is greater than or equals to start time.
 		/// </exception>
-		public Calendar(ITimeSlot timeSlot, IEnumerable<IAttendee> attendees)
+		public Calendar(ITimeSlot timeSlot, ICollection<IAttendee> attendees)
 			: this(timeSlot.StartTime, timeSlot.EndTime)
 			=> _attendees = attendees;
 
@@ -135,7 +135,7 @@ namespace MeetingCalendar
 		/// The <see cref="Calendar"/> end time is invalid.
 		/// The <see cref="Calendar"/> start time is greater than or equals to start time.
 		/// </exception>
-		public Calendar(DateTime startTime, DateTime endTime, IEnumerable<IAttendee> attendees)
+		public Calendar(DateTime startTime, DateTime endTime, ICollection<IAttendee> attendees)
 			: this(startTime, endTime)
 			=> _attendees = attendees;
 
@@ -147,13 +147,13 @@ namespace MeetingCalendar
 		/// Add attendees to the calendar.
 		/// </summary>
 		/// <param name="attendees">The list of <see cref="Attendee"/>.</param>
-		public void AddAttendees(IEnumerable<IAttendee> attendees) => _attendees = attendees;
+		public void AddAttendees(ICollection<IAttendee> attendees) => _attendees = attendees;
 
 		/// <summary>
 		/// Append additional attendees to existing attendees list.
 		/// </summary>
 		/// <param name="additionalAttendees">The list of additional <see cref="Attendee"/> to append.</param>
-		public void AppendAttendees(IEnumerable<IAttendee> additionalAttendees)
+		public void AppendAttendees(ICollection<IAttendee> additionalAttendees)
 			=> _attendees = _attendees?.Concat(additionalAttendees ?? new List<IAttendee>()) ?? additionalAttendees;
 
 		/// <summary>
@@ -236,9 +236,9 @@ namespace MeetingCalendar
 			var meetingHoursByMinutes = this.GetTimeSeriesByMinutes(false, TimeSlotComputationStartTime);
 
 			//Map the meeting timings of each attendees
-			if (_attendees != null && _attendees.Any())
+			if (Attendees != null && Attendees.Any())
 			{
-				if (_attendees.Count() <= 8 && CalendarWindowInMinutes <= 960)
+				if (Attendees.Count <= 8 && CalendarWindowInMinutes <= 960)
 				{
 					GetAllAvailableTimeSlots(meetingHoursByMinutes);
 				}
@@ -298,7 +298,7 @@ namespace MeetingCalendar
 		/// </summary>
 		/// <param name="meetingHoursByMinutes">The meeting duration converted to a list of minutes.</param>
 		private void GetAllAvailableTimeSlots(IDictionary<DateTime, bool> meetingHoursByMinutes) =>
-			_attendees.ForEach(attendee =>
+			Attendees.ForEach(attendee =>
 			{
 				attendee.Meetings.Where(meeting => !meeting.IsOver())
 					.ForEach(scheduledMeeting =>
@@ -316,7 +316,7 @@ namespace MeetingCalendar
 			});
 
 		private void GetAllAvailableTimeSlotsAsParallel(ConcurrentDictionary<DateTime, bool> meetingHoursByMinutes) =>
-			_attendees.ForEach(attendee =>
+			Attendees.ForEach(attendee =>
 			{
 				attendee.Meetings
 					.Where(meeting => !meeting.IsOver())

@@ -28,13 +28,13 @@ namespace MeetingCalendar.Interfaces
 		/// Add attendees to the calendar.
 		/// </summary>
 		/// <param name="attendees">The list of <see cref="IAttendee"/>.</param>
-		void AddAttendees(IEnumerable<IAttendee> attendees);
+		void AddAttendees(ICollection<IAttendee> attendees);
 
 		/// <summary>
 		/// Appends a list of additional attendees to the existing attendees list.
 		/// </summary>
 		/// <param name="additionalAttendees">The list of additional <see cref="IAttendee"/>.</param>
-		void AppendAttendees(IEnumerable<IAttendee> additionalAttendees);
+		void AppendAttendees(ICollection<IAttendee> additionalAttendees);
 
 		/// <summary>
 		/// Finds the first available time slot for the requested meeting duration.

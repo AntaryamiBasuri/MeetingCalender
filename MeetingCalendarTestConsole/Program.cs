@@ -22,26 +22,26 @@ namespace MeetingCalendarTestConsole
 			var startTime = DateTime.Now;
 			var endTime = startTime.AddHours(8);
 
-			var attendeesWithMeetingTimings = new List<Attendee>
+			var attendeesWithMeetingTimings = new List<IAttendee>
 			{
-				new("Person1", new List<IMeetingInfo>
+				new Attendee("Person1", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
 					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
 				}),
-				new("Person2", new List<IMeetingInfo>
+				new Attendee("Person2", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(6),DateTime.Now.AddMinutes(10)),
 					new MeetingInfo(DateTime.Now.AddMinutes(15),DateTime.Now.AddMinutes(20))
 				}),
-				new("Person3", new List<IMeetingInfo>
+				new Attendee("Person3", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(25),DateTime.Now.AddMinutes(27)),
 					new MeetingInfo(DateTime.Now.AddMinutes(32),DateTime.Now.AddMinutes(48)),
 					new MeetingInfo(DateTime.Now.AddMinutes(65),DateTime.Now.AddMinutes(120)),
 					new MeetingInfo(DateTime.Now.AddMinutes(130),DateTime.Now.AddMinutes(160))
 				}),
-				new("Person4", new List<IMeetingInfo>
+				new Attendee("Person4", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(46),DateTime.Now.AddMinutes(50)),
 					new MeetingInfo(DateTime.Now.AddMinutes(55),DateTime.Now.AddMinutes(60)),
@@ -76,9 +76,10 @@ namespace MeetingCalendarTestConsole
 					}
 					else
 					{
-						Console.WriteLine(
-							$"Sorry ! There is no meeting slot of {GetHoursAndMinutes(duration)} minutes is available for today. Please check for tomorrow.");
+						Console.WriteLine($"Sorry ! There is no meeting slot of {GetHoursAndMinutes(duration)} is available between:" +
+										  $"{((ITimeSlot)meetingCalendar).StartTime:hh:mm tt} and {((ITimeSlot)meetingCalendar).EndTime:hh:mm tt}.");
 					}
+					Console.WriteLine("");
 					Console.WriteLine($"Time taken to calculate the result is: { sw.ElapsedMilliseconds }ms.");
 				}
 				else

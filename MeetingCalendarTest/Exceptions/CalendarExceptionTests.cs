@@ -38,7 +38,6 @@ namespace MeetingCalendarTest.Exceptions
 					.FindFirstAvailableSlot(0, DateTime.Now.AddMinutes(30), DateTime.Now.AddMinutes(60));
 			});
 
-		//FindFirstAvailableSlot(int meetingDuration, DateTime fromTime, DateTime toTime = default)
 		[Test]
 		public void FindFirstAvailableSlot_Throws_Exception_When_Search_Duration_StartTime_Is_Invalid()
 			=> Assert.Throws<ArgumentException>(() =>

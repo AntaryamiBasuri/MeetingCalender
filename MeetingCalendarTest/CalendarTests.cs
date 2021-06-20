@@ -27,14 +27,14 @@ namespace MeetingCalendarTest
 			var startTime = DateTime.Now;
 			var endTime = startTime.AddHours(3);
 
-			var attendeesWithMeetingTimings = new List<Attendee>
+			var attendeesWithMeetingTimings = new List<IAttendee>
 			{
-				new ("Person1", new List<IMeetingInfo>
+				new Attendee("Person1", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
 					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
 				}),
-				new ("Person2", new List<IMeetingInfo>
+				new Attendee("Person2", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(6),DateTime.Now.AddMinutes(10)),
 					new MeetingInfo(DateTime.Now.AddMinutes(15),DateTime.Now.AddMinutes(20))
@@ -59,13 +59,13 @@ namespace MeetingCalendarTest
 		public void Constructor_With_TimesSlot_With_Attendees()
 		{
 			var timeSlot = new TimeSlot(DateTime.Now, DateTime.Now.AddDays(1));
-			var meetingCalendar = new Calendar(timeSlot, new List<Attendee>()
+			var meetingCalendar = new Calendar(timeSlot, new List<IAttendee>()
 			{
-				new("Person1", new List<IMeetingInfo>
+				new Attendee("Person1", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7))
 				}),
-				new("Person2", new List<IMeetingInfo>
+				new Attendee("Person2", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
 				})
@@ -106,9 +106,9 @@ namespace MeetingCalendarTest
 		public void AddNewAttendeesToMeeting()
 		{
 			var meetingCalendar = new Calendar(DateTime.Now, DateTime.Now.AddDays(1));
-			meetingCalendar.AddAttendees(new List<Attendee>()
+			meetingCalendar.AddAttendees(new List<IAttendee>()
 			{
-				new("Person4", new List<IMeetingInfo>
+				new Attendee("Person4", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
 					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
@@ -122,12 +122,12 @@ namespace MeetingCalendarTest
 		[Test]
 		public void AppendNewAttendeesToMeeting()
 		{
-			_meetingCalendar.AppendAttendees(new List<Attendee>()
+			_meetingCalendar.AppendAttendees(new List<IAttendee>()
 			{
-				new("Person3", new List<IMeetingInfo>
+				new Attendee("Person3", new List<IMeetingInfo>
 				{
-					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
-					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
+					new MeetingInfo(DateTime.Now.AddMinutes(5), DateTime.Now.AddMinutes(7)),
+					new MeetingInfo(DateTime.Now.AddMinutes(12), DateTime.Now.AddMinutes(18))
 				})
 			});
 
@@ -138,9 +138,9 @@ namespace MeetingCalendarTest
 		public void AppendNullAttendeesToMeeting_Should_Not_Raise_Error()
 		{
 			var meetingCalendar = new Calendar(DateTime.Now, DateTime.Now.AddDays(1));
-			meetingCalendar.AddAttendees(new List<Attendee>()
+			meetingCalendar.AddAttendees(new List<IAttendee>()
 			{
-				new("Person4", new List<IMeetingInfo>
+				new Attendee("Person4", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
 					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
@@ -164,9 +164,9 @@ namespace MeetingCalendarTest
 			Assert.DoesNotThrow(() =>
 			{
 				_meetingCalendar.AddAttendees(null);
-				_meetingCalendar.AppendAttendees(new List<Attendee>()
+				_meetingCalendar.AppendAttendees(new List<IAttendee>()
 				{
-					new("Person3", new List<IMeetingInfo>
+					new Attendee("Person3", new List<IMeetingInfo>
 					{
 						new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
 						new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
@@ -179,9 +179,9 @@ namespace MeetingCalendarTest
 		[Test]
 		public void GetAllAvailableTimeSlots_Returns_No_TimeSlot_When_Calendar_Upper_Limit_Approaches_Current_Time()
 		{
-			var calendar = new Calendar(DateTime.Now.AddHours(-8), DateTime.Now.AddMinutes(1), new List<Attendee>()
+			var calendar = new Calendar(DateTime.Now.AddHours(-8), DateTime.Now.AddMinutes(1), new List<IAttendee>()
 			{
-				new ("Attendee1", new List<IMeetingInfo>())
+				new Attendee("Attendee1", new List<IMeetingInfo>())
 			});
 
 			var source = calendar.GetAllAvailableTimeSlots().ToList();
@@ -200,9 +200,9 @@ namespace MeetingCalendarTest
 		{
 			var startTime = DateTime.Now;
 			var endTime = startTime.AddHours(8);
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>
 			{
-				new("Person1", new List<IMeetingInfo>
+				new Attendee("Person1", new List<IMeetingInfo>
 				{
 					new MeetingInfo(startTime, endTime)
 				})
@@ -218,7 +218,7 @@ namespace MeetingCalendarTest
 			var endTime = DateTime.Now;
 			var startTime = endTime.AddHours(-8);
 
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>());
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>());
 
 			var availableSlot = meetingCalendar.FindFirstAvailableSlot(1);
 			Assert.That(availableSlot, Is.Null);
@@ -232,9 +232,9 @@ namespace MeetingCalendarTest
 			var secondMeetingStartTime = startTime.AddHours(2.5);
 			var secondMeetingEndTime = startTime.AddHours(3.5);
 
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>
 			{
-				new("Person1", new List<IMeetingInfo>
+				new Attendee("Person1", new List<IMeetingInfo>
 				{
 					new MeetingInfo(startTime.AddHours(1), startTime.AddHours(2)),
 					new MeetingInfo(secondMeetingStartTime, secondMeetingEndTime),
@@ -256,9 +256,9 @@ namespace MeetingCalendarTest
 			var secondMeetingStartTime = startTime.AddHours(2.5);
 			var secondMeetingEndTime = startTime.AddHours(3.5);
 
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>
 			{
-				new("Person1", new List<IMeetingInfo>
+				new Attendee("Person1", new List<IMeetingInfo>
 				{
 					new MeetingInfo(startTime.AddHours(1), startTime.AddHours(2)),
 					new MeetingInfo(secondMeetingStartTime, secondMeetingEndTime),
@@ -314,9 +314,9 @@ namespace MeetingCalendarTest
 			var startTime = DateTime.Now.CalibrateToMinutes();
 			var endTime = startTime.AddHours(4).CalibrateToMinutes();
 			var firstMeetingEndTime = startTime.AddHours(2);
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>
 			{
-				new("Person1", new List<IMeetingInfo>
+				new Attendee("Person1", new List<IMeetingInfo>
 				{
 					new MeetingInfo(startTime, firstMeetingEndTime),
 				})
@@ -358,9 +358,9 @@ namespace MeetingCalendarTest
 			var startTime = DateTime.Now.CalibrateToMinutes();
 			var endTime = startTime.AddHours(8);
 
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>()
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>()
 			{
-				new("Person10", new List<IMeetingInfo>
+				new Attendee("Person10", new List<IMeetingInfo>
 				{
 					new MeetingInfo(startTime.AddHours(-2), startTime.AddHours(-1)),
 					new MeetingInfo(endTime.AddHours(1), endTime.AddHours(2))
@@ -379,7 +379,7 @@ namespace MeetingCalendarTest
 			var now = DateTime.Now;
 			var meetingCalendar = new Calendar(now.AddHours(-1), now.AddHours(1));
 
-			meetingCalendar.AddAttendees(new List<Attendee>());
+			meetingCalendar.AddAttendees(new List<IAttendee>());
 			var firstAvailableTimeSlot = meetingCalendar.FindFirstAvailableSlot(10);
 
 			Assert.That(firstAvailableTimeSlot.StartTime, Is.GreaterThanOrEqualTo(now.CalibrateToMinutes()));
@@ -394,9 +394,9 @@ namespace MeetingCalendarTest
 			var meetingStartTime = DateTime.Now.AddMinutes(-15);
 			var meetingEndTime = DateTime.Now.AddMinutes(15);
 
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>
 			{
-				new("Person1", new List<IMeetingInfo>
+				new Attendee("Person1", new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				})
@@ -416,49 +416,49 @@ namespace MeetingCalendarTest
 			var meetingStartTime = DateTime.Now.AddMinutes(-15);
 			var meetingEndTime = DateTime.Now.AddMinutes(15);
 
-			var meetingCalendar = new Calendar(startTime, endTime, new List<Attendee>
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>
 			{
-				new("Person1", new List<IMeetingInfo>
+				new Attendee("Person1", new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				}),
-				new("Person2", new List<IMeetingInfo>
+				new Attendee("Person2", new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				}),
-				new("Person3", new List<IMeetingInfo>
+				new Attendee("Person3", new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				}),
-				new("Person4", new List<IMeetingInfo>
+				new Attendee("Person4", new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				}),
-				new("Person5", new List<IMeetingInfo>
+				new Attendee("Person5", new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				}),
-				new("Person6", new List<IMeetingInfo>
+				new Attendee("Person6", new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				}),
-				new("Person7", new List<IMeetingInfo>
+				new Attendee("Person7", new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				}),
-				new("Person8", new List<IMeetingInfo>
+				new Attendee("Person8", new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				}),
-				new("Person9", new List<IMeetingInfo>
+				new Attendee("Person9", new List<IMeetingInfo>
 				{
 					new MeetingInfo(endTime.AddMinutes(-15), endTime.AddMinutes(15))
 				}),
-				new("Person10", new List<IMeetingInfo>
+				new Attendee("Person10", new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingStartTime.AddMinutes(10))
 				}),
-				new("Person11", "test@email.com", "1234567890", true, new List<IMeetingInfo>
+				new Attendee("Person11", "test@email.com", "1234567890", true, new List<IMeetingInfo>
 				{
 					new MeetingInfo(meetingStartTime, meetingEndTime)
 				})
