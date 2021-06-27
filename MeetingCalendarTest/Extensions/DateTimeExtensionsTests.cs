@@ -6,8 +6,9 @@
 using MeetingCalendar.Extensions;
 using NUnit.Framework;
 using System;
+using System.Globalization;
 
-namespace MeetingCalendarTest.Extensions
+namespace MeetingCalendar.Tests.Extensions
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]
@@ -19,7 +20,7 @@ namespace MeetingCalendarTest.Extensions
 			var input = DateTime.Now;
 
 			var expected = input.AddSeconds(-input.Second).AddMilliseconds(-input.Millisecond);
-			var secondExpectedValue = DateTime.Parse(input.ToString("f"));
+			var secondExpectedValue = DateTime.Parse(input.ToString("f", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
 			var actual = input.CalibrateToMinutes();
 

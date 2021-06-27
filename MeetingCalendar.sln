@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetingCalendar", "MeetingCalendar\MeetingCalendar.csproj", "{4B897CE6-62A8-4D95-B9FF-65A536CAD686}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetingCalendarTest", "MeetingCalendarTest\MeetingCalendarTest.csproj", "{6CF2301B-BB62-45F8-891D-D02397562A27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetingCalendar.Tests", "MeetingCalendarTest\MeetingCalendar.Tests.csproj", "{6CF2301B-BB62-45F8-891D-D02397562A27}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetingCalendarTestConsole", "MeetingCalendarTestConsole\MeetingCalendarTestConsole.csproj", "{1C1E3680-62AF-490D-A5B8-7FC2F46867E6}"
 EndProject

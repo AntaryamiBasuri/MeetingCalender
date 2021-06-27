@@ -3,7 +3,6 @@
  * Email: a.basuri2002@gmail.com
  */
 
-using MeetingCalendar;
 using MeetingCalendar.Extensions;
 using MeetingCalendar.Interfaces;
 using MeetingCalendar.Models;
@@ -12,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MeetingCalendarTest
+namespace MeetingCalendar.Tests
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]
@@ -31,13 +30,13 @@ namespace MeetingCalendarTest
 			{
 				new Attendee("Person1", new List<IMeetingInfo>
 				{
-					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
-					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
+					new MeetingInfo(DateTime.Now.AddMinutes(5), DateTime.Now.AddMinutes(7)),
+					new MeetingInfo(DateTime.Now.AddMinutes(12), DateTime.Now.AddMinutes(18))
 				}),
 				new Attendee("Person2", new List<IMeetingInfo>
 				{
-					new MeetingInfo(DateTime.Now.AddMinutes(6),DateTime.Now.AddMinutes(10)),
-					new MeetingInfo(DateTime.Now.AddMinutes(15),DateTime.Now.AddMinutes(20))
+					new MeetingInfo(DateTime.Now.AddMinutes(6), DateTime.Now.AddMinutes(10)),
+					new MeetingInfo(DateTime.Now.AddMinutes(15), DateTime.Now.AddMinutes(20))
 				})
 			};
 
@@ -63,17 +62,17 @@ namespace MeetingCalendarTest
 			{
 				new Attendee("Person1", new List<IMeetingInfo>
 				{
-					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7))
+					new MeetingInfo(DateTime.Now.AddMinutes(5), DateTime.Now.AddMinutes(7))
 				}),
 				new Attendee("Person2", new List<IMeetingInfo>
 				{
-					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
+					new MeetingInfo(DateTime.Now.AddMinutes(12), DateTime.Now.AddMinutes(18))
 				})
 			});
 
 			Assert.That(meetingCalendar.StartTime, Is.EqualTo(timeSlot.StartTime));
 			Assert.That(meetingCalendar.EndTime, Is.EqualTo(timeSlot.EndTime));
-			Assert.That(meetingCalendar.Attendees.Count(), Is.EqualTo(2));
+			Assert.That(meetingCalendar.Attendees.Count, Is.EqualTo(2));
 		}
 
 		[Test]
@@ -93,14 +92,11 @@ namespace MeetingCalendarTest
 		{
 			var availableSlot = _meetingCalendar.FindFirstAvailableSlot(1);
 			Assert.That(availableSlot, Is.Not.Null);
-			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(1));
+			Assert.That(availableSlot.GetDuration(), Is.EqualTo(1));
 		}
 
 		[Test]
-		public void FetchAttendees()
-		{
-			Assert.That(_meetingCalendar.Attendees.Count(), Is.EqualTo(2));
-		}
+		public void FetchAttendees() => Assert.That(_meetingCalendar.Attendees.Count, Is.EqualTo(2));
 
 		[Test]
 		public void AddNewAttendeesToMeeting()
@@ -110,12 +106,12 @@ namespace MeetingCalendarTest
 			{
 				new Attendee("Person4", new List<IMeetingInfo>
 				{
-					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
-					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
+					new MeetingInfo(DateTime.Now.AddMinutes(5), DateTime.Now.AddMinutes(7)),
+					new MeetingInfo(DateTime.Now.AddMinutes(12), DateTime.Now.AddMinutes(18))
 				})
 			});
 
-			Assert.That(meetingCalendar.Attendees.Count(), Is.EqualTo(1));
+			Assert.That(meetingCalendar.Attendees.Count, Is.EqualTo(1));
 			Assert.That(meetingCalendar.Attendees.First().AttendeeName, Is.EqualTo("Person4"));
 		}
 
@@ -131,7 +127,7 @@ namespace MeetingCalendarTest
 				})
 			});
 
-			Assert.That(_meetingCalendar.Attendees.Count(), Is.EqualTo(3));
+			Assert.That(_meetingCalendar.Attendees.Count, Is.EqualTo(3));
 		}
 
 		[Test]
@@ -142,19 +138,17 @@ namespace MeetingCalendarTest
 			{
 				new Attendee("Person4", new List<IMeetingInfo>
 				{
-					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
-					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
+					new MeetingInfo(DateTime.Now.AddMinutes(5), DateTime.Now.AddMinutes(7)),
+					new MeetingInfo(DateTime.Now.AddMinutes(12), DateTime.Now.AddMinutes(18))
 				})
 			});
 
-			IList<IAttendee> additionalAttendees = null;
+			meetingCalendar.AppendAttendees(null);
 
-			meetingCalendar.AppendAttendees(additionalAttendees);
-
-			Assert.That(meetingCalendar.Attendees.Count(), Is.EqualTo(1));
+			Assert.That(meetingCalendar.Attendees.Count, Is.EqualTo(1));
 			Assert.That(meetingCalendar.Attendees.First().AttendeeName, Is.EqualTo("Person4"));
 
-			void AppendAttendees() => meetingCalendar.AppendAttendees(additionalAttendees);
+			void AppendAttendees() => meetingCalendar.AppendAttendees(null);
 			Assert.DoesNotThrow(AppendAttendees, "AppendAttendees threw exception.");
 		}
 
@@ -168,12 +162,12 @@ namespace MeetingCalendarTest
 				{
 					new Attendee("Person3", new List<IMeetingInfo>
 					{
-						new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
-						new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
+						new MeetingInfo(DateTime.Now.AddMinutes(5), DateTime.Now.AddMinutes(7)),
+						new MeetingInfo(DateTime.Now.AddMinutes(12), DateTime.Now.AddMinutes(18))
 					})
 				});
 			});
-			Assert.That(_meetingCalendar.Attendees.Count(), Is.EqualTo(1));
+			Assert.That(_meetingCalendar.Attendees.Count, Is.EqualTo(1));
 		}
 
 		[Test]
@@ -274,14 +268,16 @@ namespace MeetingCalendarTest
 		}
 
 		[Test]
-		public void FindFirstAvailableSlot_Returns_TimeSlot_Equals_To_Calendar_TimeFrame_When_Search_Range_Longer_Than_Calendar_TimeFrame()
+		public void
+			FindFirstAvailableSlot_Returns_TimeSlot_Equals_To_Calendar_TimeFrame_When_Search_Range_Longer_Than_Calendar_TimeFrame()
 		{
 			var startTime = DateTime.Now;
 			var endTime = startTime.AddHours(4);
 			var meetingCalendar = new Calendar(startTime, endTime);
 
 			const int meetingDuration = 120;
-			var availableSlot = meetingCalendar.FindFirstAvailableSlot(meetingDuration, startTime.AddHours(-1), endTime.AddHours(1));
+			var availableSlot =
+				meetingCalendar.FindFirstAvailableSlot(meetingDuration, startTime.AddHours(-1), endTime.AddHours(1));
 
 			Assert.That(availableSlot, Is.Not.Null);
 			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(meetingDuration));
@@ -290,7 +286,8 @@ namespace MeetingCalendarTest
 		}
 
 		[Test]
-		public void FindFirstAvailableSlot_Returns_TimeSlot_Equals_To_Search_Range_When_Range_Shorter_Than_Calendar_TimeFrame()
+		public void
+			FindFirstAvailableSlot_Returns_TimeSlot_Equals_To_Search_Range_When_Range_Shorter_Than_Calendar_TimeFrame()
 		{
 			var startTime = DateTime.Now.CalibrateToMinutes();
 			var endTime = startTime.AddHours(4).CalibrateToMinutes();
@@ -300,7 +297,8 @@ namespace MeetingCalendarTest
 			var searchEndTime = startTime.AddHours(3.75);
 
 			const int meetingDuration = 60;
-			var availableSlot = meetingCalendar.FindFirstAvailableSlot(meetingDuration, searchRangeStartTime, searchEndTime);
+			var availableSlot =
+				meetingCalendar.FindFirstAvailableSlot(meetingDuration, searchRangeStartTime, searchEndTime);
 
 			Assert.That(availableSlot, Is.Not.Null);
 			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(meetingDuration));
@@ -309,7 +307,8 @@ namespace MeetingCalendarTest
 		}
 
 		[Test]
-		public void FindFirstAvailableSlot_Returns_TimeSlot_Having_EndTime_Shorter_Than_Calendar_EndTime_When_SearchRange_UB_Longer_Than_Calender_TimeFrame()
+		public void
+			FindFirstAvailableSlot_Returns_TimeSlot_Having_EndTime_Shorter_Than_Calendar_EndTime_When_SearchRange_UB_Longer_Than_Calendar_TimeFrame()
 		{
 			var startTime = DateTime.Now.CalibrateToMinutes();
 			var endTime = startTime.AddHours(4).CalibrateToMinutes();
@@ -326,7 +325,8 @@ namespace MeetingCalendarTest
 			var searchEndTime = endTime.AddMinutes(-15);
 
 			const int meetingDuration = 60;
-			var availableSlot = meetingCalendar.FindFirstAvailableSlot(meetingDuration, searchRangeStartTime, searchEndTime);
+			var availableSlot =
+				meetingCalendar.FindFirstAvailableSlot(meetingDuration, searchRangeStartTime, searchEndTime);
 
 			Assert.That(availableSlot, Is.Not.Null);
 			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(meetingDuration));
@@ -335,7 +335,8 @@ namespace MeetingCalendarTest
 		}
 
 		[Test]
-		public void FindFirstAvailableSlot_Returns_TimeSlot_StartTime_Equals_To_Search_Range_Starting_Time_When_SearchRange_Is_Longer()
+		public void
+			FindFirstAvailableSlot_Returns_TimeSlot_StartTime_Equals_To_Search_Range_Starting_Time_When_SearchRange_Is_Longer()
 		{
 			var startTime = DateTime.Now.CalibrateToMinutes();
 			var endTime = startTime.AddHours(4).CalibrateToMinutes();
@@ -344,7 +345,8 @@ namespace MeetingCalendarTest
 			var searchRangeStartTime = startTime.AddHours(1.5);
 
 			const int meetingDuration = 120;
-			var availableSlot = meetingCalendar.FindFirstAvailableSlot(meetingDuration, searchRangeStartTime, endTime.AddHours(1));
+			var availableSlot =
+				meetingCalendar.FindFirstAvailableSlot(meetingDuration, searchRangeStartTime, endTime.AddHours(1));
 
 			Assert.That(availableSlot, Is.Not.Null);
 			Assert.That(availableSlot.GetDuration(), Is.GreaterThanOrEqualTo(meetingDuration));
@@ -411,7 +413,7 @@ namespace MeetingCalendarTest
 		public void GetFirstAvailableSlot_When_Attendees_Count_Greater_Than_Eight()
 		{
 			var startTime = DateTime.Now;
-			var endTime = startTime.AddHours(9);
+			var endTime = startTime.AddHours(17);
 
 			var meetingStartTime = DateTime.Now.AddMinutes(-15);
 			var meetingEndTime = DateTime.Now.AddMinutes(15);
@@ -467,6 +469,232 @@ namespace MeetingCalendarTest
 			var availableSlot = meetingCalendar.FindFirstAvailableSlot(10);
 
 			Assert.That(availableSlot.StartTime, Is.GreaterThanOrEqualTo(meetingEndTime.CalibrateToMinutes()));
+		}
+
+		[Test()]
+		public void RemoveAttendee_Returns_True_When_Attendee_Removed_Successfully()
+		{
+			var startTime = DateTime.Now;
+			var endTime = startTime.AddHours(8);
+
+			var attendee = new Attendee("Person1", new List<IMeetingInfo>
+			{
+				new MeetingInfo(startTime.AddHours(-2), startTime.AddHours(-1)),
+				new MeetingInfo(endTime.AddHours(1), endTime.AddHours(2))
+			});
+
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>() { attendee });
+
+			var isRemoved = meetingCalendar.RemoveAttendee(attendee);
+
+			Assert.That(meetingCalendar.Attendees.Count, Is.Zero);
+			Assert.That(isRemoved, Is.True);
+		}
+
+		[Test()]
+		public void RemoveAttendee_Returns_False_When_No_Matching_Attendee_Found()
+		{
+			var startTime = DateTime.Now;
+			var endTime = startTime.AddHours(8);
+			var meetings = new List<IMeetingInfo>
+			{
+				new MeetingInfo(startTime.AddHours(-2), startTime.AddHours(-1)),
+				new MeetingInfo(endTime.AddHours(1), endTime.AddHours(2))
+			};
+
+			var attendee = new Attendee("Person1", meetings);
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>() { attendee });
+
+			var attendeeCopy = new Attendee("Person1", meetings);
+			var attendeeId = Guid.NewGuid();
+			attendeeCopy.AttendeeId = attendeeId;
+
+			var isRemoved = meetingCalendar.RemoveAttendee(attendeeCopy);
+
+			var attendeeFound = meetingCalendar.Attendees.FirstOrDefault(a => a.AttendeeId == attendeeId);
+
+			Assert.That(attendeeFound, Is.Null);
+			Assert.That(meetingCalendar.Attendees.Count, Is.Not.Zero);
+			Assert.That(isRemoved, Is.False);
+		}
+
+		[Test()]
+		public void RemoveAttendee_By_Id_Returns_True_When_Matching_Attendee_Removed()
+		{
+			var startTime = DateTime.Now;
+			var endTime = startTime.AddHours(8);
+			var meetings = new List<IMeetingInfo>
+			{
+				new MeetingInfo(startTime.AddHours(-2), startTime.AddHours(-1)),
+				new MeetingInfo(endTime.AddHours(1), endTime.AddHours(2))
+			};
+			var attendeeId = Guid.NewGuid();
+			var attendee = new Attendee("Person1", meetings) { AttendeeId = attendeeId };
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>() { attendee });
+
+			var attendeeFound = meetingCalendar.Attendees.FirstOrDefault(a => a.AttendeeId == attendeeId);
+
+			var isRemoved = meetingCalendar.RemoveAttendee(attendeeId);
+
+			Assert.That(attendeeFound, Is.Not.Null);
+			Assert.That(meetingCalendar.Attendees.Count, Is.Zero);
+			Assert.That(isRemoved, Is.True);
+		}
+
+		[Test()]
+		public void RemoveAttendee_By_Id_Returns_False_When_No_Matching_Attendee_Found()
+		{
+			var startTime = DateTime.Now;
+			var endTime = startTime.AddHours(8);
+			var meetings = new List<IMeetingInfo>
+			{
+				new MeetingInfo(startTime.AddHours(-2), startTime.AddHours(-1)),
+				new MeetingInfo(endTime.AddHours(1), endTime.AddHours(2))
+			};
+			var attendeeId = Guid.NewGuid();
+			var attendee = new Attendee("Person1", meetings) { AttendeeId = attendeeId };
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>() { attendee });
+
+			var anotherAttendeeId = Guid.NewGuid();
+			var attendeeFound = meetingCalendar.Attendees.FirstOrDefault(a => a.AttendeeId == anotherAttendeeId);
+
+			var isRemoved = meetingCalendar.RemoveAttendee(anotherAttendeeId);
+
+			Assert.That(attendeeFound, Is.Null);
+			Assert.That(meetingCalendar.Attendees.Count, Is.Not.Zero);
+			Assert.That(isRemoved, Is.False);
+		}
+
+		[Test()]
+		public void RemoveAttendee_Using_Name_And_EmailId_Returns_True_When_Matching_Attendee_Removed()
+		{
+			var startTime = DateTime.Now;
+			var endTime = startTime.AddHours(8);
+			var meetings = new List<IMeetingInfo>
+			{
+				new MeetingInfo(startTime.AddHours(-2), startTime.AddHours(-1)),
+				new MeetingInfo(endTime.AddHours(1), endTime.AddHours(2))
+			};
+			const string attendeeName = "John Doe";
+			const string attendeeEmailId = "JohnDoe@test.com";
+
+			var attendee = new Attendee(attendeeName, attendeeEmailId, "", false, meetings);
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>() { attendee });
+
+			var attendeeCopy = new Attendee(attendeeName, attendeeEmailId, "", false, meetings);
+
+			var attendeeFound = meetingCalendar.Attendees.FirstOrDefault(a =>
+				a.AttendeeName == attendeeName && a.AttendeeEmailId == attendeeEmailId);
+
+			var isRemoved = meetingCalendar.RemoveAttendee(attendeeCopy.AttendeeName, attendeeCopy.AttendeeEmailId);
+
+			Assert.That(attendeeFound, Is.Not.Null);
+			Assert.That(meetingCalendar.Attendees.Count, Is.Zero);
+			Assert.That(isRemoved, Is.True);
+		}
+
+		[Test()]
+		public void RemoveAttendee_Using_Name_EmailId_Returns_False_When_No_Matching_Attendee_Found()
+		{
+			var startTime = DateTime.Now;
+			var endTime = startTime.AddHours(8);
+			var meetings = new List<IMeetingInfo>
+			{
+				new MeetingInfo(startTime.AddHours(-2), startTime.AddHours(-1)),
+				new MeetingInfo(endTime.AddHours(1), endTime.AddHours(2))
+			};
+			const string attendeeName = "John Doe";
+			const string attendeeEmailId = "JohnDoe@test.com";
+			const string anotherAttendeeEmailId = "John_Doe@test.com";
+
+			var attendee = new Attendee(attendeeName, attendeeEmailId, "", false, meetings);
+			var meetingCalendar = new Calendar(startTime, endTime, new List<IAttendee>() { attendee });
+
+			var anotherAttendee = new Attendee(attendeeName, anotherAttendeeEmailId, "", false, meetings);
+			var attendeeFound = meetingCalendar.Attendees.FirstOrDefault(a =>
+				a.AttendeeName == attendeeName && a.AttendeeEmailId == anotherAttendeeEmailId);
+
+			var isRemoved = meetingCalendar.RemoveAttendee(anotherAttendee.AttendeeName, anotherAttendee.AttendeeEmailId);
+
+			Assert.That(attendeeFound, Is.Null);
+			Assert.That(meetingCalendar.Attendees.Count, Is.Not.Zero);
+			Assert.That(isRemoved, Is.False);
+		}
+
+		[Test()]
+		public void MoveForwardTest()
+		{
+			var calendarEndTime = DateTime.Now.AddHours(8);
+			var meetingCalendar = new Calendar(DateTime.Now, calendarEndTime, new List<IAttendee>()
+			{
+				new Attendee("Person1", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now, DateTime.Now.AddHours(2))
+				})
+			});
+
+			meetingCalendar.MoveForward();
+
+			Assert.That(meetingCalendar.Attendees.Count, Is.Zero);
+			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes()));
+			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes().AddMinutes(meetingCalendar.GetDuration())));
+		}
+
+		[Test()]
+		public void MoveForward_With_Retaining_Attendees()
+		{
+			var calendarEndTime = DateTime.Now.AddHours(8);
+			var meetingCalendar = new Calendar(DateTime.Now, calendarEndTime, new List<IAttendee>()
+			{
+				new Attendee("Person1", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now, DateTime.Now.AddHours(2))
+				})
+			});
+
+			meetingCalendar.MoveForward(false);
+
+			Assert.That(meetingCalendar.Attendees.Count, Is.Not.Zero);
+			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes()));
+			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes().AddMinutes(meetingCalendar.GetDuration())));
+		}
+
+		[Test()]
+		public void MoveBackwardNext()
+		{
+			var calendarStartTime = DateTime.Now;
+			var meetingCalendar = new Calendar(calendarStartTime, DateTime.Now.AddHours(8), new List<IAttendee>()
+			{
+				new Attendee("Person1", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now, DateTime.Now.AddHours(2))
+				})
+			});
+
+			meetingCalendar.MoveBackward();
+
+			Assert.That(meetingCalendar.Attendees.Count, Is.Zero);
+			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes().AddMinutes(-1 * meetingCalendar.GetDuration())));
+			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes()));
+		}
+
+		[Test()]
+		public void MoveBackward_With_Retaining_Attendees()
+		{
+			var calendarStartTime = DateTime.Now;
+			var meetingCalendar = new Calendar(calendarStartTime, DateTime.Now.AddHours(8), new List<IAttendee>()
+			{
+				new Attendee("Person1", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now, DateTime.Now.AddHours(2))
+				})
+			});
+
+			meetingCalendar.MoveBackward(false);
+
+			Assert.That(meetingCalendar.Attendees.Count, Is.Not.Zero);
+			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes().AddMinutes(-1 * meetingCalendar.GetDuration())));
+			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes()));
 		}
 	}
 }

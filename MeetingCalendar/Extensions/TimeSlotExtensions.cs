@@ -6,12 +6,11 @@
 using MeetingCalendar.Interfaces;
 using MeetingCalendar.Models;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MeetingCalendarTest")]
+[assembly: InternalsVisibleTo("MeetingCalendar.Tests")]
 
 namespace MeetingCalendar.Extensions
 {
@@ -26,16 +25,16 @@ namespace MeetingCalendar.Extensions
 		/// <param name="timeSlot">The time slot.</param>
 		/// <returns>The duration.</returns>
 		internal static double GetDuration(this ITimeSlot timeSlot)
-			=> timeSlot.StartTime.Equals(timeSlot.EndTime) ? 0 : timeSlot.EndTime.Subtract(timeSlot.StartTime).TotalMinutes + 1;
+			=> timeSlot.StartTime.Equals(timeSlot.EndTime) ? 0 : timeSlot.EndTime.Subtract(timeSlot.StartTime).TotalMinutes;
 
 		/// <summary>
-		/// Maps a <see cref="TimeSlot"/> of a meeting to Time frame of the the calendar.
+		/// Maps a <see cref="TimeSlot"/> of a meeting to Time frame of the calendar.
 		/// </summary>
 		/// <param name="timeSlot">The Meeting.</param>
 		/// <param name="calendarStartTime">The start time of the calendar.</param>
 		/// <param name="calendarEndTime">The end time of the calendar.</param>
 		/// <returns>A new Time slot mapped to calendar time frame.</returns>
-		internal static TimeSlot GetTimeSlotMappedToCalenderTimeFrame(this ITimeSlot timeSlot, DateTime calendarStartTime, DateTime calendarEndTime)
+		internal static TimeSlot GetTimeSlotMappedToCalendarTimeFrame(this ITimeSlot timeSlot, DateTime calendarStartTime, DateTime calendarEndTime)
 		{
 			var (startTime, endTime) = timeSlot;
 
@@ -51,22 +50,39 @@ namespace MeetingCalendar.Extensions
 		}
 
 		/// <summary>
+		/// Projects a new time slot mapped to lower bound and upper bound.
+		/// </summary>
+		/// <param name="timeSlot">The time slot.</param>
+		/// <param name="lowerBound">The search lower bound.</param>
+		/// <param name="upperBound">The search upper bound.</param>
+		/// <returns> A new instance of <see cref="ITimeSlot"/> mapped to calendar LB and UB.</returns>
+		internal static ITimeSlot TimeSlotMapper(this ITimeSlot timeSlot, DateTime lowerBound, DateTime upperBound)
+		{
+			var (startTime, endTime) = timeSlot;
+			var lb = lowerBound.CalibrateToMinutes();
+			var ub = upperBound.CalibrateToMinutes();
+
+			return new TimeSlot(
+				startTime <= lb && lb < endTime ? lb : startTime,
+				startTime < ub && ub < endTime ? ub : endTime);
+		}
+
+		/// <summary>
 		/// Calculates the scheduled meeting durations only within the time frame of Calendar.
 		/// </summary>
 		/// <param name="timeSlot">The Time Slot.</param>
-		/// <param name="isScheduled">The value indicating whether the time is marked as scheduled or not.</param>
 		/// <param name="seriesStartTime">The start time of time series.</param>
 		/// <returns></returns>
-		internal static ConcurrentDictionary<DateTime, bool> GetTimeSeriesByMinutes(this ITimeSlot timeSlot, bool isScheduled = false, DateTime seriesStartTime = default)
+		internal static IDictionary<DateTime, AvailabilityTypes> GetTimeSeriesByMinutes(this ITimeSlot timeSlot, DateTime seriesStartTime = default)
 		{
-			var timeRange = new ConcurrentDictionary<DateTime, bool>();
+			var timeRange = new Dictionary<DateTime, AvailabilityTypes>();
 
 			if (timeSlot == null) return timeRange;
 
 			var temp = (seriesStartTime == default) ? timeSlot.StartTime : seriesStartTime;
 			while (temp < timeSlot.EndTime)
 			{
-				timeRange.TryAdd(temp, isScheduled);
+				timeRange.TryAdd(temp, AvailabilityTypes.Available);
 				temp = temp.AddMinutes(1);
 			}
 

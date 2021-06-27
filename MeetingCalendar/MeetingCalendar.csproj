@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Features>strict</Features>
     <Description>A package that can provide information about available appointment slots within a specific time duration for zero or more attendees.</Description>
-    <Version>2.4.0.0</Version>
+    <Version>2.5.0.0</Version>
     <Company />
     <PackageProjectUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AntaryamiBasuri/MeetingCalendar</RepositoryUrl>
@@ -17,15 +17,23 @@
 
 This library includes a meeting calendar class having:
       •  A read-only property to get the list of attendees
+      •  A read-only property to get the calendar time frame in minutes
       •  Read-only properties to get the current date-time, calendar start date-time and end date-time
       •  A method to get the list of attendees from the Meeting Calendar
       •  A method to add a list of attendees to the Meeting Calendar
       •  A method to append additional attendees to the Meeting Calendar
-      •  A method to find all available meeting slots
+      •  Overloaded methods of RemoveAttendee to remove attendee(s) from the Meeting Calendar
       •  Overloaded methods to find an available time slot for a given duration, within a given time frame
+      •  A method to find all available meeting slots
+      •  MoveBack and MoveNext methods to shift the time frame of the Meeting Calendar
+      •  Overloaded Deconstructors for the Meeting Calendar
       •  Documented code
       •  Unit tested code with code coverage above 99%
 
+Version 2.5
+      •  MoveForward and MoveBackward methods added to shift the time frame of the Meeting Calendar
+      •  RemoveAttendee method added with ICalendar to remove attendees from read-only collection
+      •  Obsolete marked older overloaded constructors of Attendee, MeetingDetails removed
 
 Version 2.4
       •  Attendees property of Calendar and MeetingDetails class now returns IReadOnlyCollection
@@ -62,9 +70,9 @@ Version 0.x.0
        •  No external dependencies
 
     </PackageReleaseNotes>
-    <AssemblyVersion>2.4.0.0</AssemblyVersion>
-    <FileVersion>2.4.0.0</FileVersion>
-    <PackageId>MeetingCalender</PackageId>
+    <AssemblyVersion>2.5.0.0</AssemblyVersion>
+    <FileVersion>2.5.0.0</FileVersion>
+    <PackageId>MeetingCalendar</PackageId>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 

@@ -3,7 +3,6 @@
  * Email: a.basuri2002@gmail.com
  */
 
-using MeetingCalendar;
 using MeetingCalendar.Extensions;
 using MeetingCalendar.Interfaces;
 using MeetingCalendar.Models;
@@ -12,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MeetingCalendarTest.Extensions
+namespace MeetingCalendar.Tests.Extensions
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]
@@ -32,12 +31,9 @@ namespace MeetingCalendarTest.Extensions
 				Is.EqualTo(5));
 
 		[Test]
-		public void GetTimeSeriesByMinutes_Fills_True_Values()
-			=> Assert.That(new TimeSlot(DateTime.Now, DateTime.Now.AddMinutes(5)).GetTimeSeriesByMinutes(true).Values.All(t => t), Is.True);
-
-		[Test]
-		public void GetTimeSeriesByMinutes_Fills_False_Values()
-			=> Assert.That(new TimeSlot(DateTime.Now, DateTime.Now.AddMinutes(5)).GetTimeSeriesByMinutes().Values.All(t => !t), Is.True);
+		public void FillWith_Fill_All_Values_With_Available_As_Default()
+			=> Assert.That(new TimeSlot(DateTime.Now, DateTime.Now.AddMinutes(5)).GetTimeSeriesByMinutes()
+				.Values.All(t => t == AvailabilityTypes.Available), Is.True);
 
 		[Test]
 		public void GetTimeSeriesByMinutes_Includes_LB_And_Exclude_UB_Value()
@@ -52,6 +48,17 @@ namespace MeetingCalendarTest.Extensions
 		}
 
 		[Test]
+		public void GetTimeSeriesByMinutes_Returns_A_Time_Series_By_Minutes()
+		{
+			var startTime = DateTime.Now;
+			var endTime = DateTime.Now.AddHours(1);
+
+			var timeSlot = new TimeSlot(startTime, endTime);
+
+			Assert.That(timeSlot.GetTimeSeriesByMinutes().Count, Is.EqualTo(60));
+		}
+
+		[Test]
 		public void FindFirst_Returns_Null_When_Source_Is_Null()
 			=> Assert.That(((IEnumerable<TimeSlot>)null).FindFirst(default), Is.Null);
 
@@ -62,6 +69,35 @@ namespace MeetingCalendarTest.Extensions
 
 			var source = calendar.GetAllAvailableTimeSlots().ToList();
 			Assert.That(source.FindFirst(null), Is.Not.Null);
+		}
+
+		[Test]
+		public void TimeSlotMapper_Returns_TimeSlot_Mapped_LB_And_UB()
+		{
+			var startTime = DateTime.Now.AddHours(1);
+			var endTime = DateTime.Now.AddHours(9);
+
+			var (calendarStartTime, calendarEndTime) = new Calendar(startTime, endTime);
+
+			var timeSlotStartTime = startTime.AddMinutes(-30);
+			var timeSlotEndTime = endTime.AddMinutes(30);
+
+			var timeSlot = new TimeSlot(timeSlotStartTime, timeSlotEndTime);
+
+			var mappedTimeSlot = timeSlot.TimeSlotMapper(calendarStartTime, calendarEndTime);
+
+			Assert.That(mappedTimeSlot.StartTime, Is.EqualTo(calendarStartTime));
+			Assert.That(mappedTimeSlot.EndTime, Is.EqualTo(calendarEndTime));
+
+			timeSlotStartTime = startTime.AddMinutes(30);
+			timeSlotEndTime = endTime.AddMinutes(-30);
+
+			timeSlot = new TimeSlot(timeSlotStartTime, timeSlotEndTime);
+
+			mappedTimeSlot = timeSlot.TimeSlotMapper(calendarStartTime, calendarEndTime);
+
+			Assert.That(mappedTimeSlot.StartTime, Is.EqualTo(timeSlot.StartTime));
+			Assert.That(mappedTimeSlot.EndTime, Is.EqualTo(timeSlot.EndTime));
 		}
 
 		[Test]

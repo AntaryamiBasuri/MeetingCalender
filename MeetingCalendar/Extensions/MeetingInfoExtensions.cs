@@ -8,7 +8,7 @@ using MeetingCalendar.Models;
 using System;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MeetingCalendarTest")]
+[assembly: InternalsVisibleTo("MeetingCalendar.Tests")]
 
 namespace MeetingCalendar.Extensions
 {
@@ -17,11 +17,19 @@ namespace MeetingCalendar.Extensions
 	/// </summary>
 	internal static class MeetingInfoExtensions
 	{
-		/// <summary>
+		/// <summary> 
 		/// Evaluates whether the meeting is over or not.
 		/// </summary>
 		/// <param name="meeting">The meeting.</param>
-		/// <returns>Returns True if the meeting is over, false otherwise.</returns>
-		internal static bool IsOver(this IMeetingInfo meeting) => meeting.EndTime <= DateTime.Now.CalibrateToMinutes();
+		/// <returns>Returns <c>true</c> if the meeting is over, <c>false</c> otherwise.</returns>
+		internal static bool IsOver(this IMeetingInfo meeting)
+		{
+			if (meeting == null)
+			{
+				throw new ArgumentNullException(nameof(meeting), "The meeting parameter can not be null.");
+			}
+
+			return meeting.EndTime <= DateTime.Now.CalibrateToMinutes();
+		}
 	}
 }

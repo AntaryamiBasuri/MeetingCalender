@@ -32,16 +32,16 @@ namespace MeetingCalendar.Models
 		public TimeSlot(DateTime startTime, DateTime endTime)
 		{
 			if (startTime.IsInvalidDate())
-				throw new ArgumentException("Invalid TimeSlot start time.", nameof(startTime));
+				throw new ArgumentException("Invalid start time.", nameof(startTime));
 
 			if (endTime.IsInvalidDate())
-				throw new ArgumentException("Invalid TimeSlot end time.", nameof(endTime));
+				throw new ArgumentException("Invalid end time.", nameof(endTime));
 
 			StartTime = startTime.CalibrateToMinutes();
 			EndTime = endTime.CalibrateToMinutes();
 
 			if (StartTime > EndTime)
-				throw new ArgumentException("The TimeSlot End time must be greater than the start time.", nameof(endTime));
+				throw new ArgumentException("The End time must be greater than the start time.", nameof(endTime));
 		}
 
 		/// <summary>

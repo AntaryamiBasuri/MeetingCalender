@@ -58,22 +58,6 @@ namespace MeetingCalendar.Models
 			_meetings = meetings ?? new List<IMeetingInfo>();
 		}
 
-		//TODO: Remove the below constructor
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Attendee"/> class.
-		/// </summary>
-		/// <param name="attendeeName">The name of the <see cref="IAttendee"/>.</param>
-		/// <param name="isOptionalAttendee">The flag to mark the <see cref="IAttendee"/> as optional, mandatory otherwise.</param>
-		/// <param name="meetings">A list of <see cref="IMeetingInfo"/>.</param>
-		/// <param name="attendeeEmailId">THe email id of the <see cref="IAttendee"/>.</param>
-		[Obsolete("Use any latest overloaded constructor instead.")]
-		public Attendee(string attendeeName, string attendeeEmailId, bool isOptionalAttendee, IEnumerable<IMeetingInfo> meetings) :
-			this(attendeeName, meetings)
-		{
-			AttendeeEmailId = attendeeEmailId;
-			IsOptionalAttendee = isOptionalAttendee;
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Attendee"/> class.
 		/// </summary>
@@ -88,6 +72,40 @@ namespace MeetingCalendar.Models
 			AttendeeEmailId = attendeeEmailId;
 			IsOptionalAttendee = isOptionalAttendee;
 			PhoneNumber = phoneNumber;
+		}
+
+		/// <summary>
+		/// Determines whether the specified <see cref="Attendee"/> is equal to this <see cref="Attendee"/>.
+		/// </summary>
+		/// <param name="obj">The <see cref="Attendee"/> instance.</param>
+		/// <returns>
+		/// <c>true</c> if the specified <see cref="Attendee"/> is equal to the current <see cref="Attendee"/>; otherwise <c>false</c>.
+		/// </returns>
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as Attendee);
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="other">The <see cref="Attendee"/> instance for comparison.</param>
+		/// <returns>
+		/// <c>true</c> if the specified <see cref="Attendee"/> is equal to the current <see cref="Attendee"/>; otherwise <c>false</c>.
+		/// </returns>
+		public bool Equals(Attendee other)
+		{
+			return ReferenceEquals(this, other) ||
+				   (other != null && AttendeeId == other.AttendeeId && AttendeeName == other.AttendeeName && AttendeeEmailId == other.AttendeeEmailId);
+		}
+
+		/// <summary>
+		/// Gets a hash code for this <see cref="Attendee"/> instance.
+		/// </summary>
+		/// <returns>An <see cref="Int32"/> that contains the hash code for the <see cref="Attendee"/>.</returns>
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(AttendeeId, AttendeeName, AttendeeEmailId);
 		}
 	}
 }

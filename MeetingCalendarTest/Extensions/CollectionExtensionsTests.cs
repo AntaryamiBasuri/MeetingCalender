@@ -7,7 +7,7 @@ using MeetingCalendar.Extensions;
 using NUnit.Framework;
 using System.Collections.ObjectModel;
 
-namespace MeetingCalendarTest.Extensions
+namespace MeetingCalendar.Tests.Extensions
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]

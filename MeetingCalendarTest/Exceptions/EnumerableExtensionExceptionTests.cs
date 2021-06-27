@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MeetingCalendarTest.Exceptions
+namespace MeetingCalendar.Tests.Exceptions
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]
@@ -26,10 +26,9 @@ namespace MeetingCalendarTest.Exceptions
 		[Test]
 		public void Throws_Exception_When_Action_IsNull()
 		{
-			Action<int> mockAction = null;
 			var mock = Enumerable.Range(1, 10);
 
-			Assert.Throws<ArgumentNullException>(() => mock.ForEach(mockAction));
+			Assert.Throws<ArgumentNullException>(() => mock.ForEach(null));
 		}
 	}
 }

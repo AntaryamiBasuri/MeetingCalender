@@ -42,7 +42,6 @@ namespace MeetingCalendar.Models
 		/// </summary>
 		public IList<string> AttachmentFilePaths { get; set; }
 
-		//TODO: Make it Private
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MeetingDetails"/> class.
 		/// </summary>
@@ -54,13 +53,11 @@ namespace MeetingCalendar.Models
 		/// The <see cref="MeetingDetails"/> finish time is invalid.
 		/// The <see cref="MeetingDetails"/> start time is greater than or equals to start time.
 		/// </exception>
-		[Obsolete("Use any latest overloaded constructor instead.")]
-		public MeetingDetails(DateTime startTime, DateTime endTime)
+		private MeetingDetails(DateTime startTime, DateTime endTime)
 			: base(startTime, endTime)
 		{
 		}
 
-		//TODO: Make it Private
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MeetingDetails"/> class.
 		/// </summary>
@@ -71,37 +68,9 @@ namespace MeetingCalendar.Models
 		/// The <see cref="MeetingDetails"/> finish time is invalid.
 		/// The <see cref="MeetingDetails"/> start time is greater than or equals to start time.
 		/// </exception>
-		[Obsolete("Use any latest overloaded constructor instead.")]
-		public MeetingDetails(ITimeSlot timeSlot)
+		private MeetingDetails(ITimeSlot timeSlot)
 			: this(timeSlot.StartTime, timeSlot.EndTime)
 		{
-		}
-
-		//TODO: Remove the below constructor
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MeetingDetails"/> class.
-		/// </summary>
-		/// <param name="startTime">The start time of the <see cref="MeetingDetails"/>.</param>
-		/// <param name="endTime">The finish time of the <see cref="MeetingDetails"/>.</param>
-		/// <param name="meetingTitle">The title of <see cref="MeetingDetails"/>.</param>
-		/// <param name="meetingAgenda">The agenda of <see cref="MeetingDetails"/>.</param>
-		/// <param name="attendees">A list of <see cref="IAttendee"/>.</param>
-		/// <param name="attachmentFilePaths">A list of file paths as attachment files.</param>
-		/// <exception cref="ArgumentException">
-		/// Thrown when:
-		/// The <see cref="MeetingDetails"/> start time is invalid.
-		/// The <see cref="MeetingDetails"/> finish time is invalid.
-		/// The <see cref="MeetingDetails"/> start time is greater than or equals to start time.
-		/// </exception>
-		[Obsolete("Use any latest overloaded constructor instead.")]
-		public MeetingDetails(DateTime startTime, DateTime endTime, string meetingTitle, string meetingAgenda, IEnumerable<IAttendee> attendees, IList<string> attachmentFilePaths = null)
-			: this(startTime, endTime)
-		{
-			MeetingTitle = meetingTitle;
-			MeetingAgenda = meetingAgenda;
-			AttachmentFilePaths = attachmentFilePaths;
-
-			_attendees = attendees;
 		}
 
 		/// <summary>
@@ -147,7 +116,7 @@ namespace MeetingCalendar.Models
 		/// The <see cref="MeetingDetails"/> start time is greater than or equals to start time.
 		/// </exception>
 		public MeetingDetails(ITimeSlot timeSlot, string meetingTitle, string meetingLocation, string meetingAgenda, IEnumerable<IAttendee> attendees, IList<string> attachmentFilePaths = null)
-			: this(timeSlot.StartTime, timeSlot.EndTime)
+			: this(timeSlot)
 		{
 			MeetingTitle = meetingTitle;
 			MeetingAgenda = meetingAgenda;

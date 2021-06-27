@@ -6,7 +6,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MeetingCalendarTest")]
+[assembly: InternalsVisibleTo("MeetingCalendar.Tests")]
 
 namespace MeetingCalendar.Extensions
 {

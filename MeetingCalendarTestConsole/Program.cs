@@ -22,13 +22,15 @@ namespace MeetingCalendarTestConsole
 			var startTime = DateTime.Now;
 			var endTime = startTime.AddHours(8);
 
-			var attendeesWithMeetingTimings = new List<IAttendee>
+			IList<IMeetingInfo> meetings = new List<IMeetingInfo>
 			{
-				new Attendee("Person1", new List<IMeetingInfo>
-				{
-					new MeetingInfo(DateTime.Now.AddMinutes(5),DateTime.Now.AddMinutes(7)),
-					new MeetingInfo(DateTime.Now.AddMinutes(12),DateTime.Now.AddMinutes(18))
-				}),
+				new MeetingInfo(DateTime.Now.AddMinutes(5), DateTime.Now.AddMinutes(7)),
+				new MeetingInfo(DateTime.Now.AddMinutes(12), DateTime.Now.AddMinutes(18))
+			};
+
+			IList<IAttendee> attendeesWithMeetingTimings = new List<IAttendee>
+			{
+				new Attendee("Person1", meetings ),
 				new Attendee("Person2", new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(6),DateTime.Now.AddMinutes(10)),
@@ -52,6 +54,8 @@ namespace MeetingCalendarTestConsole
 
 			ICalendar meetingCalendar = new Calendar(startTime, endTime, attendeesWithMeetingTimings);
 
+			var (calendarStartTime, calendarEndTime, _, calendarWindowInMinutes, attendees) = meetingCalendar;
+
 			while (true)
 			{
 				Console.WriteLine("Please provide the duration (in minutes) of the meeting that you want to reserve.");
@@ -60,12 +64,13 @@ namespace MeetingCalendarTestConsole
 				if (int.TryParse(meetingRequestDuration, out var duration) && duration > 0)
 				{
 					var sw = new Stopwatch();
+
 					sw.Start();
 					var firstAvailableMeetingSlot = meetingCalendar.FindFirstAvailableSlot(duration);
 					sw.Stop();
 
 					Console.WriteLine($"Number of Attendees in the meeting: { meetingCalendar.Attendees.Count }");
-					meetingCalendar.Attendees.ToList().ForEach(attendee => Console.WriteLine(attendee.AttendeeName));
+					attendees.ToList().ForEach(attendee => Console.WriteLine(attendee.AttendeeName));
 
 					Console.WriteLine("");
 
@@ -76,8 +81,10 @@ namespace MeetingCalendarTestConsole
 					}
 					else
 					{
-						Console.WriteLine($"Sorry ! There is no meeting slot of {GetHoursAndMinutes(duration)} is available between:" +
-										  $"{((ITimeSlot)meetingCalendar).StartTime:hh:mm tt} and {((ITimeSlot)meetingCalendar).EndTime:hh:mm tt}.");
+						Console.WriteLine(
+							$"Sorry ! There is no meeting slot available for {GetHoursAndMinutes(duration)}. The Meeting Calendar time frame is: " +
+							$"{calendarStartTime:hh:mm tt} to {calendarEndTime:hh:mm tt} having total duration of " +
+							$"{GetHoursAndMinutes(calendarWindowInMinutes)}.");
 					}
 					Console.WriteLine("");
 					Console.WriteLine($"Time taken to calculate the result is: { sw.ElapsedMilliseconds }ms.");

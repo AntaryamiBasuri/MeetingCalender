@@ -4,13 +4,11 @@
  */
 
 using MeetingCalendar.Extensions;
-using MeetingCalendar.Interfaces;
 using MeetingCalendar.Models;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 
-namespace MeetingCalendarTest.Models
+namespace MeetingCalendar.Tests.Models
 {
 	[TestFixture]
 	[Author("A Basuri", "a.basuri2002@gmail.com")]
@@ -33,7 +31,7 @@ namespace MeetingCalendarTest.Models
 		{
 			var timeSlot = new TimeSlot(DateTime.Now, DateTime.Now.AddDays(1));
 			var meetingInfo = new MeetingInfo(timeSlot);
-			
+
 			Assert.That(meetingInfo.StartTime, Is.EqualTo(timeSlot.StartTime));
 			Assert.That(meetingInfo.EndTime, Is.EqualTo(timeSlot.EndTime));
 		}
