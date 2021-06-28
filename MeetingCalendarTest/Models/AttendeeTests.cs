@@ -74,18 +74,19 @@ namespace MeetingCalendar.Tests.Models
 		{
 			var guid = Guid.NewGuid();
 
-			var attendee = new Attendee("", "this@test.com", "1234567890", true, new List<MeetingInfo>());
-			attendee.AttendeeId = guid;
+			var attendee1 = new Attendee("Attendee FullName", "this@test.com", "1234567890", true,
+				new List<MeetingInfo>())
+			{ AttendeeId = guid };
 
-			var attendee2 = new Attendee("", "this@test.com", "1234567890", true,
+			var attendee2 = new Attendee("Attendee FullName", "this@test.com", "1234567890", true,
 				new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now, DateTime.Now.AddMinutes(30)),
 					new MeetingInfo(DateTime.Now.AddMinutes(30), DateTime.Now.AddHours(2))
-				});
-			attendee2.AttendeeId = guid;
+				})
+			{ AttendeeId = guid };
 
-			Assert.That(attendee.Equals(attendee2), Is.True);
+			Assert.That(attendee1.Equals(attendee2), Is.True);
 		}
 
 		[Test()]
@@ -97,16 +98,18 @@ namespace MeetingCalendar.Tests.Models
 		[Test()]
 		public void Equals_Returns_False_When_Type_Is_Same_And_Property_Values_Are_Different()
 		{
-			var attendee1 = new Attendee("Person1", "this@test.com", "1234567890", true, new List<MeetingInfo>());
-			attendee1.AttendeeId = Guid.NewGuid();
+			var attendee1 = new Attendee("Person1", "this@test.com", "1234567890", true, new List<MeetingInfo>())
+			{
+				AttendeeId = Guid.NewGuid()
+			};
 
 			var attendee2 = new Attendee("Person2", "another@test.com", "0123456789", true,
 				new List<IMeetingInfo>
 				{
 					new MeetingInfo(DateTime.Now, DateTime.Now.AddMinutes(30)),
 					new MeetingInfo(DateTime.Now.AddMinutes(30), DateTime.Now.AddHours(2))
-				});
-			attendee2.AttendeeId = Guid.NewGuid();
+				})
+			{ AttendeeId = Guid.NewGuid() };
 
 			Assert.That(attendee1.Equals(attendee2), Is.False);
 		}

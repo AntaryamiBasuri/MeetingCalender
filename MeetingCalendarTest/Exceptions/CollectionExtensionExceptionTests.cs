@@ -16,12 +16,8 @@ namespace MeetingCalendar.Tests.Exceptions
 	public class CollectionExtensionExceptionTests
 	{
 		[Test]
-		public void Throws_Exception_When_Source_Collection_IsNull()
-		{
-			ICollection<int> collection = null;
-
-			Assert.Throws<ArgumentNullException>(() => collection.Concat(new List<int>()));
-		}
+		public void Throws_Exception_When_Source_Collection_IsNull() =>
+			Assert.Throws<ArgumentNullException>(() => ((ICollection<int>)null).Concat(new List<int>()));
 
 		[Test]
 		public void Throws_Exception_When_Second_Collection_IsNull()

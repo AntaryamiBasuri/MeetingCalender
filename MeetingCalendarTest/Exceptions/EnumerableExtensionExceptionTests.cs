@@ -16,12 +16,8 @@ namespace MeetingCalendar.Tests.Exceptions
 	public class EnumerableExtensionExceptionTests
 	{
 		[Test]
-		public void Throws_Exception_When_Source_Collection_IsNull()
-		{
-			IEnumerable<int> sut = null;
-
-			Assert.Throws<ArgumentNullException>(() => sut.ForEach(i => { }));
-		}
+		public void Throws_Exception_When_Source_Collection_IsNull() =>
+			Assert.Throws<ArgumentNullException>(() => ((IEnumerable<int>)null).ForEach(i => { }));
 
 		[Test]
 		public void Throws_Exception_When_Action_IsNull()

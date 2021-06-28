@@ -17,7 +17,7 @@ namespace MeetingCalendar.Extensions
 	/// </summary>
 	internal static class MeetingInfoExtensions
 	{
-		/// <summary> 
+		/// <summary>
 		/// Evaluates whether the meeting is over or not.
 		/// </summary>
 		/// <param name="meeting">The meeting.</param>

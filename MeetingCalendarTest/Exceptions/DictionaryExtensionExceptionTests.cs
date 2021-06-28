@@ -8,7 +8,6 @@ using MeetingCalendar.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace MeetingCalendar.Tests.Exceptions
 {
@@ -19,13 +18,15 @@ namespace MeetingCalendar.Tests.Exceptions
 		[Test]
 		public void FillWith_Throws_Exception_When_Source_Is_IsNull()
 		{
-			Assert.Throws<ArgumentNullException>(() => ((IDictionary<DateTime, AvailabilityTypes>)null).FillWith(AvailabilityTypes.Available));
+			Assert.Throws<ArgumentNullException>(() =>
+				((IDictionary<DateTime, AvailabilityTypes>)null).FillWith(AvailabilityTypes.Available));
 		}
 
 		[Test]
 		public void ToConcurrentDictionary_Throws_Exception_When_Source_Is_IsNull()
 		{
-			Assert.Throws<ArgumentNullException>(() => ((IDictionary<DateTime, AvailabilityTypes>)null).ToConcurrentDictionary());
+			Assert.Throws<ArgumentNullException>(() =>
+				((IDictionary<DateTime, AvailabilityTypes>)null).ToConcurrentDictionary());
 		}
 	}
 }

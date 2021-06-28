@@ -53,17 +53,6 @@ namespace MeetingCalendar.Tests.Models
 			Assert.That(meetingDetails.MeetingId, Is.EqualTo(newId));
 		}
 
-		//[Test]
-		//[Obsolete]
-		//public void Constructor_Sets_Using_TimeSlot()
-		//{
-		//	var timeSlot = new TimeSlot(DateTime.Now, DateTime.Now.AddHours(1));
-		//	var meetingDetails = new MeetingDetails(timeSlot);
-
-		//	Assert.That(meetingDetails.StartTime, Is.EqualTo(timeSlot.StartTime));
-		//	Assert.That(meetingDetails.EndTime, Is.EqualTo(timeSlot.EndTime));
-		//}
-
 		[Test]
 		public void Constructor_Sets_Using_TimeSlot_And_Other_Properties()
 		{

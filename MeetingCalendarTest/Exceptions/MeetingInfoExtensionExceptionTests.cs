@@ -15,9 +15,7 @@ namespace MeetingCalendar.Tests.Exceptions
 	public class MeetingInfoExtensionExceptionTests
 	{
 		[Test]
-		public void IsOver_Throws_Exception_When_Source_Collection_IsNull()
-		{
+		public void IsOver_Throws_Exception_When_Source_Collection_IsNull() =>
 			Assert.Throws<ArgumentNullException>(() => ((IMeetingInfo)null).IsOver());
-		}
 	}
 }

@@ -25,28 +25,28 @@ namespace MeetingCalendar.Tests.Extensions
 		[Test]
 		public void GetTimeSlotMappedToCalendarTimeFrame_Returns_A_New_TimeSlot_Mapped_To_Calendar_Time()
 		{
-			var calendar = new Calendar(DateTime.Now.AddHours(1), DateTime.Now.AddHours(3));
+			var (startTime, endTime) = new Calendar(DateTime.Now.AddHours(1), DateTime.Now.AddHours(3));
 
 			var meeting1 = new MeetingInfo(DateTime.Now.AddMinutes(75), DateTime.Now.AddMinutes(105));  //T	T
 			var meeting2 = new MeetingInfo(DateTime.Now.AddMinutes(75), DateTime.Now.AddHours(4));      //T	F
 			var meeting3 = new MeetingInfo(DateTime.Now.AddHours(-1), DateTime.Now.AddMinutes(105));    //F	T
 			var meeting4 = new MeetingInfo(DateTime.Now.AddHours(-1), DateTime.Now.AddHours(4));        //F	F
 
-			var mappedTime = meeting1.GetTimeSlotMappedToCalendarTimeFrame(calendar.StartTime, calendar.EndTime);
+			var mappedTime = meeting1.GetTimeSlotMappedToCalendarTimeFrame(startTime, endTime);
 			Assert.That(mappedTime.StartTime, Is.EqualTo(meeting1.StartTime));
 			Assert.That(mappedTime.EndTime, Is.EqualTo(meeting1.EndTime));
 
-			mappedTime = meeting2.GetTimeSlotMappedToCalendarTimeFrame(calendar.StartTime, calendar.EndTime);
+			mappedTime = meeting2.GetTimeSlotMappedToCalendarTimeFrame(startTime, endTime);
 			Assert.That(mappedTime.StartTime, Is.EqualTo(meeting2.StartTime));
-			Assert.That(mappedTime.EndTime, Is.EqualTo(calendar.EndTime));
+			Assert.That(mappedTime.EndTime, Is.EqualTo(endTime));
 
-			mappedTime = meeting3.GetTimeSlotMappedToCalendarTimeFrame(calendar.StartTime, calendar.EndTime);
-			Assert.That(mappedTime.StartTime, Is.EqualTo(calendar.StartTime));
+			mappedTime = meeting3.GetTimeSlotMappedToCalendarTimeFrame(startTime, endTime);
+			Assert.That(mappedTime.StartTime, Is.EqualTo(startTime));
 			Assert.That(mappedTime.EndTime, Is.EqualTo(meeting3.EndTime));
 
-			mappedTime = meeting4.GetTimeSlotMappedToCalendarTimeFrame(calendar.StartTime, calendar.EndTime);
-			Assert.That(mappedTime.StartTime, Is.EqualTo(calendar.StartTime));
-			Assert.That(mappedTime.EndTime, Is.EqualTo(calendar.EndTime));
+			mappedTime = meeting4.GetTimeSlotMappedToCalendarTimeFrame(startTime, endTime);
+			Assert.That(mappedTime.StartTime, Is.EqualTo(startTime));
+			Assert.That(mappedTime.EndTime, Is.EqualTo(endTime));
 		}
 
 		[Test]
