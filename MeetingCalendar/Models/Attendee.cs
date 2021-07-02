@@ -105,7 +105,16 @@ namespace MeetingCalendar.Models
 		/// <returns>An <see cref="Int32"/> that contains the hash code for the <see cref="Attendee"/>.</returns>
 		public override int GetHashCode()
 		{
-			return HashCode.Combine(AttendeeId, AttendeeName, AttendeeEmailId);
+			unchecked
+			{
+				var hash = (int)2166136261;
+
+				hash = (hash * 16777619) ^ AttendeeId.GetHashCode();
+				hash = (hash * 16777619) ^ AttendeeName.GetHashCode();
+				hash = (hash * 16777619) ^ AttendeeEmailId.GetHashCode();
+
+				return hash;
+			}
 		}
 	}
 }

@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("MeetingCalendar.Tests")]
@@ -34,7 +35,9 @@ namespace MeetingCalendar.Extensions
 				throw new ArgumentNullException(nameof(action), "Action parameter can not be null.");
 			}
 
-			foreach (var item in source)
+			var tempSource = source.ToList();
+
+			foreach (var item in tempSource)
 				action(item);
 		}
 	}
