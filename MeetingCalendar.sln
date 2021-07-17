@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetingCalendarTestConsoleF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetingCalendarTestForUWP", "MeetingCalendarTestForUWP\MeetingCalendarTestForUWP.csproj", "{51FBAF55-C357-47AF-BE6D-0888CC1D9191}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetingCalendarTestForAndroidAndiOS", "MeetingCalendarTestForAndroid\MeetingCalendarTestForAndroidAndiOS.csproj", "{29FC194E-86B4-4A70-9E86-0D47F9740654}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -268,6 +270,34 @@ Global
 		{51FBAF55-C357-47AF-BE6D-0888CC1D9191}.Release|x86.ActiveCfg = Release|x86
 		{51FBAF55-C357-47AF-BE6D-0888CC1D9191}.Release|x86.Build.0 = Release|x86
 		{51FBAF55-C357-47AF-BE6D-0888CC1D9191}.Release|x86.Deploy.0 = Release|x86
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|ARM.Build.0 = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|x64.Build.0 = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Debug|x86.Build.0 = Debug|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|ARM.ActiveCfg = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|ARM.Build.0 = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|ARM64.Build.0 = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|iPhone.Build.0 = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|x64.ActiveCfg = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|x64.Build.0 = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|x86.ActiveCfg = Release|Any CPU
+		{29FC194E-86B4-4A70-9E86-0D47F9740654}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

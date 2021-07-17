@@ -30,19 +30,21 @@ This library includes a meeting calendar class having:
       •  Documented code
       •  Unit tested code with code coverage above 99%
 
-This library is based on .NetStandard 2.0 framework to support .net Core 2.0 to 5.0, Xamarin based iOS, Mac, Android and UWP applications. Please visit https://www.nuget.org/packages/MeetingCalendar/ that is based on .net5.0 framework.
+This library is based on .NetStandard 2.0 framework to support .net Core 2.0 to 5.0, Xamarin based iOS, Mac, Android and UWP applications. Please visit https://dotnet.microsoft.com/platform/dotnet-standard to check .NETStandard 2.0 version compatibility with other applications.  
+Also visit https://www.nuget.org/packages/MeetingCalendar/ package that is based on .net Core 5.0 framework.
 
 Version 2.7
       •  Overloaded MoveForward and MoveBackward methods added
+      •  Few Unit Test projects added to verify application compatibility 
+                  >•  .net Framework 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2 or 4.8
+                  >•  .net Core 2.1, 2.2, 3.0, 3.1 or 5.0
+                  >•  UWP 10.0.19041.0 
+                  >•  Xamarin.iOS
+                  >•  Xamarin.Mac
+                  >•  Xamarin.Android
 
 Version 2.6
-      •  Framework version downgraded to .NETStandard 2.0 to make it compatible with:
-                  •  .net Framework 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2 or 4.8
-                  •  .net Core 2.1, 2.2, 3.0, 3.1 or 5.0
-                  •  Xamarin.iOS 10.14 or 12.16
-                  •  Xamarin.Mac 3.8
-                  •  Xamarin.Android 8.0 or 10.0
-                  •  UWP 10.0.16299 applications
+      •  Framework version downgraded to .NETStandard 2.0 to support both LTS Core 2.1/3.1
       •  Bug fixed - InvalidOperationException while looping through IEnumerable
       •  MoveForward and MoveBackward methods added to shift the time frame of ICalendar
       •  RemoveAttendee method added with ICalendar to remove attendees from read-only collection
