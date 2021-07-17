@@ -58,7 +58,7 @@ namespace MeetingCalendar.Tests
 		public void Constructor_With_TimesSlot_With_Attendees()
 		{
 			var timeSlot = new TimeSlot(DateTime.Now, DateTime.Now.AddDays(1));
-			var meetingCalendar = new Calendar(timeSlot, new List<IAttendee>
+			var attendees = new List<IAttendee>
 			{
 				new Attendee("Person1", new List<IMeetingInfo>
 				{
@@ -68,11 +68,15 @@ namespace MeetingCalendar.Tests
 				{
 					new MeetingInfo(DateTime.Now.AddMinutes(12), DateTime.Now.AddMinutes(18))
 				})
-			});
+			};
+			var meetingCalendar = new Calendar(timeSlot, attendees);
 
 			Assert.That(meetingCalendar.StartTime, Is.EqualTo(timeSlot.StartTime));
 			Assert.That(meetingCalendar.EndTime, Is.EqualTo(timeSlot.EndTime));
 			Assert.That(meetingCalendar.Attendees.Count, Is.EqualTo(2));
+			Assert.That(meetingCalendar.Attendees.First(), Is.EqualTo(attendees.First()));
+			Assert.That(meetingCalendar.Attendees.Last(), Is.EqualTo(attendees.Last()));
+			Assert.That(meetingCalendar.Attendees, Is.EqualTo(attendees));
 		}
 
 		[Test]
@@ -658,6 +662,34 @@ namespace MeetingCalendar.Tests
 			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes()));
 			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes().AddMinutes(meetingCalendar.GetDuration())));
 		}
+		
+		[Test]
+		public void MoveForward_With_Attendees()
+		{
+			var calendarEndTime = DateTime.Now.AddHours(8);
+			var meetingCalendar = new Calendar(DateTime.Now, calendarEndTime, new List<IAttendee>
+			{
+				new Attendee("Person1", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now, DateTime.Now.AddHours(2))
+				})
+			});
+
+			var newAttendees = new List<IAttendee>
+			{
+				new Attendee("Person2", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now, DateTime.Now.AddHours(2))
+				})
+			};
+
+			meetingCalendar.MoveForward(newAttendees);
+
+			Assert.That(meetingCalendar.Attendees.Count, Is.EqualTo(newAttendees.Count));
+			Assert.That(meetingCalendar.Attendees.First(), Is.EqualTo(newAttendees.First()));
+			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes()));
+			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes().AddMinutes(meetingCalendar.GetDuration())));
+		}
 
 		[Test]
 		public void MoveBackwardNext()
@@ -693,6 +725,34 @@ namespace MeetingCalendar.Tests
 			meetingCalendar.MoveBackward(false);
 
 			Assert.That(meetingCalendar.Attendees.Count, Is.Not.Zero);
+			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes().AddMinutes(-1 * meetingCalendar.GetDuration())));
+			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes()));
+		}
+
+		[Test]
+		public void MoveBackward_With_Attendees()
+		{
+			var calendarStartTime = DateTime.Now;
+			var meetingCalendar = new Calendar(calendarStartTime, DateTime.Now.AddHours(8), new List<IAttendee>
+			{
+				new Attendee("Person1", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now, DateTime.Now.AddHours(2))
+				})
+			});
+
+			var newAttendees = new List<IAttendee>
+			{
+				new Attendee("Person2", new List<IMeetingInfo>
+				{
+					new MeetingInfo(DateTime.Now, DateTime.Now.AddHours(2))
+				})
+			};
+
+			meetingCalendar.MoveBackward(newAttendees);
+
+			Assert.That(meetingCalendar.Attendees.Count, Is.EqualTo(newAttendees.Count));
+			Assert.That(meetingCalendar.Attendees.First(), Is.EqualTo(newAttendees.First()));
 			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes().AddMinutes(-1 * meetingCalendar.GetDuration())));
 			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes()));
 		}
