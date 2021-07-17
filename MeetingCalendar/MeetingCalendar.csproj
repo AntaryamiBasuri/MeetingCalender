@@ -30,7 +30,7 @@ This library includes a meeting calendar class having:
       •  Documented code
       •  Unit tested code with code coverage above 99%
 
-This library is based on .NetStandard 2.0 framework to support .net Core 2.0 to 5.0, Xamarin based iOS, Mac, Android and UWP applications. Please visit https://dotnet.microsoft.com/platform/dotnet-standard to check .NETStandard 2.0 version compatibility with other applications.  
+This library is based on .NetStandard 2.0 framework to support .net Core 2.1 to 5.0, Xamarin based iOS, Mac, Android and UWP applications. Please visit https://dotnet.microsoft.com/platform/dotnet-standard to check .NETStandard 2.0 version compatibility with other applications.  
 Also visit https://www.nuget.org/packages/MeetingCalendar/ package that is based on .net Core 5.0 framework.
 
 Version 2.7
