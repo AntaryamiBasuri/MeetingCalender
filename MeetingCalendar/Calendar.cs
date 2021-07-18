@@ -219,10 +219,7 @@ namespace MeetingCalendar
 		/// </exception>
 		/// <returns>A an instance of <see cref="ITimeSlot"/> or null.</returns>
 		public ITimeSlot FindFirstAvailableSlot(int meetingDuration, ITimeSlot timeSlot)
-		{
-			var (fromTime, toTime) = timeSlot;
-			return FindFirstAvailableSlot(meetingDuration, fromTime, toTime);
-		}
+			=> FindFirstAvailableSlot(meetingDuration, timeSlot.StartTime, timeSlot.EndTime);
 
 		/// <summary>
 		/// Finds the first available time slot for the requested meeting duration, optionally within a specific time frame.
@@ -488,7 +485,7 @@ namespace MeetingCalendar
 				meetingDuration > toTime.CalibrateToMinutes().Subtract(fromTime.CalibrateToMinutes()).TotalMinutes)
 			{
 				throw new ArgumentException(
-					"The meeting duration can not be longer than the search range.Consider to increase the search range.",
+					"The meeting duration can not be longer than the search range. Consider to increase the search range.",
 					nameof(meetingDuration));
 			}
 

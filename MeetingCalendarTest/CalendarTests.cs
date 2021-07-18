@@ -688,7 +688,7 @@ namespace MeetingCalendar.Tests
 			Assert.That(meetingCalendar.Attendees.Count, Is.EqualTo(newAttendees.Count));
 			Assert.That(meetingCalendar.Attendees.First(), Is.EqualTo(newAttendees.First()));
 			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes()));
-			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes().AddMinutes(meetingCalendar.GetDuration())));
+			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarEndTime.CalibrateToMinutes().AddMinutes(meetingCalendar.CalendarWindowInMinutes)));
 		}
 
 		[Test]
@@ -725,7 +725,7 @@ namespace MeetingCalendar.Tests
 			meetingCalendar.MoveBackward(false);
 
 			Assert.That(meetingCalendar.Attendees.Count, Is.Not.Zero);
-			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes().AddMinutes(-1 * meetingCalendar.GetDuration())));
+			Assert.That(meetingCalendar.StartTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes().AddMinutes(-1 * meetingCalendar.CalendarWindowInMinutes)));
 			Assert.That(meetingCalendar.EndTime, Is.EqualTo(calendarStartTime.CalibrateToMinutes()));
 		}
 
